@@ -1,16 +1,16 @@
 <template>
-    <div>
-        <header>
+    <div class="flex flex-col min-h-screen">
+        <header class="bg-gray-100 p-4 text-center border-b border-gray-300">
             <!-- Header content -->
-            <nav>
-                <Link href="/">Home</Link>
-                <Link href="/restaurants">Restaurants</Link>
+            <nav class="space-x-4">
+                <a href="/" class="text-blue-500 hover:underline">Home</a>
+                <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>
             </nav>
         </header>
-        <main>
+        <main class="flex-grow p-4">
             <slot></slot>
         </main>
-        <footer>
+        <footer class="bg-gray-100 p-4 text-center border-t border-gray-300">
             <!-- Footer content -->
         </footer>
     </div>
@@ -23,20 +23,4 @@ export default {
 </script>
 
 <style scoped>
-header {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    text-align: center;
-    border-bottom: 1px solid #dee2e6;
-}
-
-nav a {
-    margin: 0 1rem;
-    text-decoration: none;
-    color: #007bff;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
 </style>

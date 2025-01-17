@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id('id_restaurant');
-            $table->foreignId('id_ubicacio')->constrained('ubicacions');
+            //$table->foreignId('id_ubicacio')->constrained('ubicacions');
+            $table->unsignedBigInteger('id_ubicacio');
             $table->string('nom');
             $table->string('horari');
             $table->text('descripcio');

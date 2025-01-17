@@ -21,7 +21,7 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_ubicacio' => 'required|exists:ubicacions,id_ubicacio',
+            'id_ubicacio' => 'exists:ubicacions,id_ubicacio',
             'nom' => 'required|string|max:255',
             'horari' => 'required|string|max:255',
             'descripcio' => 'required|string',
@@ -42,7 +42,7 @@ class RestaurantController extends Controller
     public function update(Request $request, Restaurant $restaurant)
     {
         $request->validate([
-            'id_ubicacio' => 'required|exists:ubicacions,id_ubicacio',
+            'id_ubicacio' => 'exists:ubicacions,id_ubicacio',
             'nom' => 'required|string|max:255',
             'horari' => 'required|string|max:255',
             'descripcio' => 'required|string',

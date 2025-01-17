@@ -15,7 +15,6 @@ Route::get('/', function () {
 });
 
 //Route::resource('restaurants', RestaurantController::class);
-//Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants');
 //Route::get('/restaurants', [RestaurantController::class, 'index'])->middleware(['auth', 'verified'])->name('restaurants.index');
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 
