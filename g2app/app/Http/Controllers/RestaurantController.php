@@ -15,7 +15,9 @@ class RestaurantController extends Controller
 
     public function create()
     {
-        return Inertia::render('Restaurants/Create');
+        return Inertia::render('Restaurants/Create', [
+            'tipusCuinaOptions' => Restaurant::TIPUS_CUINA,
+        ]);
     }
 
     public function store(Request $request)
@@ -37,6 +39,12 @@ class RestaurantController extends Controller
     public function edit(Restaurant $restaurant)
     {
         return Inertia::render('Restaurants/Edit', ['restaurant' => $restaurant]);
+    }
+
+    public function show($id): Response
+    {
+        $restaurant = Restaurant::findOrFail($id);
+        return Inertia::render('Restaurants/Show', ['restaurant' => $restaurant]);
     }
 
     public function update(Request $request, Restaurant $restaurant)

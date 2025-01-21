@@ -4,7 +4,7 @@
             <!-- Header content -->
             <nav class="space-x-4">
                 <a href="/" class="text-blue-500 hover:underline">Home</a>
-                <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>
+<!--                <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>-->
             </nav>
         </header>
         <main class="flex-grow p-4">

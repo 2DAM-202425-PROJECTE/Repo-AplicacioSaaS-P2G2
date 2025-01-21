@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('restaurants', function (Blueprint $table) {
-            $table->id('id_restaurant');
+            $table->id();
             //$table->foreignId('id_ubicacio')->constrained('ubicacions');
             $table->unsignedBigInteger('id_ubicacio');
             $table->string('nom');
-            $table->string('horari');
             $table->text('descripcio');
             $table->string('telefon');
             $table->json('tipus_cuina');
-            $table->timestamps();
+
         });
     }
 
