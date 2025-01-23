@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('taules', function (Blueprint $table) {
-            $table->id('id_taula');
-            $table->foreignId('id_restaurant')->constrained('restaurants');
+            $table->id();
+            $table->foreignId('id_restaurant')->constrained('restaurants')->index();
             $table->boolean('terrassa')->default(false);
-            $table->integer('capacitat');
+            $table->integer('capacitat')->default(1);
             $table->boolean('disponible')->default(true);
             $table->timestamps();
         });
