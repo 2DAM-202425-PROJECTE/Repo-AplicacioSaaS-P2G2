@@ -24,7 +24,7 @@ Route::get('/', [RestaurantController::class, 'index'])->name('home');
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
 Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
-Route::post('/reservations', [ReservaController::class, 'store'])->name('reservations.store');
+Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 
 Route::middleware([

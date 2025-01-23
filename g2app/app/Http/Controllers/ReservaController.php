@@ -18,18 +18,20 @@ class ReservaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'id_restaurant' => 'required|exists:restaurants,id',
             'telefon' => 'required|string|max:20',
             'data' => 'required|date',
             'hora' => 'required|date_format:H:i',
-            'num_persones' => 'required|integer|min:1',
+            'num_persones' => 'required|integer|min:1|max:20',
+            'id_taula' => 'required|exists:taules,id',
             'estat' => 'required|string|max:255',
         ]);
 
-        Reserva::create($request->all());
+        $reserva = Reserva::create($validated);
 
-        return redirect()->route('restaurants.show', $request->id_restaurant)
-            ->with('success', 'Reservation created successfully.');
+        return Inertia::render('Reserves/Show', [
+            'reserva' => $reserva,
+        ]);
     }
 }
