@@ -16,7 +16,9 @@ class RestaurantFactory extends Factory
             'nom' => $this->faker->company,
             'descripcio' => $this->faker->paragraph,
             'telefon' => $this->faker->phoneNumber,
-            'tipus_cuina' => json_encode($this->faker->randomElements(Restaurant::TIPUS_CUINA, 2)),
+            'tipus_cuina' => $this->faker->randomElements(Restaurant::$TIPUS_CUINA, 2),
+            'hora_obertura' => $this->faker->time(),
+            'hora_tancament' => $this->faker->time(),
         ];
     }
 }

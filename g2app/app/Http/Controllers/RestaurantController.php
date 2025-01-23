@@ -16,7 +16,7 @@ class RestaurantController extends Controller
     public function create()
     {
         return Inertia::render('Restaurants/Create', [
-            'tipusCuinaOptions' => Restaurant::TIPUS_CUINA,
+            'tipusCuinaOptions' => Restaurant::$TIPUS_CUINA,
         ]);
     }
 

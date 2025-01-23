@@ -23,8 +23,13 @@ class Restaurant extends Model
         'descripcio',
         'telefon',
         'tipus_cuina',
+        'hora_obertura',
+        'hora_tancament',
     ];
-    const TIPUS_CUINA = [
+
+    public $timestamps = false;
+
+    public static $TIPUS_CUINA = [
         'mediterrania',
         'italiana',
         'japonesa',
@@ -32,6 +37,4 @@ class Restaurant extends Model
         'mexicana',
         'francesa',
     ];
-
-    public $timestamps = false;
 }

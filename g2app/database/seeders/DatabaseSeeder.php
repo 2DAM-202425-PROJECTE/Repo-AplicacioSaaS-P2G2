@@ -21,7 +21,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 */
-        //$this->call([LevelSeeder::class, RoleSeeder::class, UserSeeder::class]);
-        Restaurant::factory()->count(10)->create();
+//Restaurant::factory()->count(10)->create();
+
+        $this->call([
+            RestaurantSeeder::class,
+            TaulaSeeder::class,
+        ]);
+
     }
 }

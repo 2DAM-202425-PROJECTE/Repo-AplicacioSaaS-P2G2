@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\TaulaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +24,8 @@ Route::get('/', [RestaurantController::class, 'index'])->name('home');
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
 Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
+Route::post('/reservations', [ReservaController::class, 'store'])->name('reservations.store');
+Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 
 Route::middleware([
     'auth:sanctum',
