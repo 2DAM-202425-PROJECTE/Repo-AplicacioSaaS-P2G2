@@ -1,64 +1,57 @@
 <template>
-    <layout>
-        <form @submit.prevent="submit" class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Crear Restaurant</h1>
+        <form @submit.prevent="submitForm">
             <div class="mb-4">
-                <label for="nom" class="block text-gray-700 font-bold mb-2">Nom</label>
-                <input v-model="form.nom" id="nom" type="text" class="form-input w-full border border-gray-300 p-2 rounded" />
+                <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                <input type="text" v-model="form.nom" id="nom" class="mt-1 block w-full" required>
             </div>
             <div class="mb-4">
-                <label for="horari" class="block text-gray-700 font-bold mb-2">Horari</label>
-                <input v-model="form.horari" id="horari" type="text" class="form-input w-full border border-gray-300 p-2 rounded" />
+                <label for="descripcio" class="block text-sm font-medium text-gray-700">Descripció</label>
+                <textarea v-model="form.descripcio" id="descripcio" class="mt-1 block w-full" required></textarea>
             </div>
             <div class="mb-4">
-                <label for="descripcio" class="block text-gray-700 font-bold mb-2">Descripció</label>
-                <textarea v-model="form.descripcio" id="descripcio" class="form-textarea w-full border border-gray-300 p-2 rounded"></textarea>
+                <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
+                <input type="text" v-model="form.telefon" id="telefon" class="mt-1 block w-full" required>
             </div>
             <div class="mb-4">
-                <label for="telefon" class="block text-gray-700 font-bold mb-2">Telèfon</label>
-                <input v-model="form.telefon" id="telefon" type="text" class="form-input w-full border border-gray-300 p-2 rounded" />
+                <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
+                <input type="text" v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
             </div>
             <div class="mb-4">
-                <label for="tipus_cuina" class="block text-gray-700 font-bold mb-2">Tipus de Cuina</label>
-                <select v-model="form.tipus_cuina" id="tipus_cuina" class="form-select w-full border border-gray-300 p-2 rounded">
-                    <option v-for="option in tipusCuinaOptions" :key="option" :value="option">
-                        {{ option }}
-                    </option>
-                </select>
+                <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora Obertura</label>
+                <input type="time" v-model="form.hora_obertura" id="hora_obertura" class="mt-1 block w-full" required step="60">
             </div>
-            <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Crear Restaurant</button>
+            <div class="mb-4">
+                <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora Tancament</label>
+                <input type="time" v-model="form.hora_tancament" id="hora_tancament" class="mt-1 block w-full" required step="60">
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Crear</button>
         </form>
-    </layout>
+    </div>
 </template>
 
-<script>
-import Layout from '@/Layouts/Layout.vue';
-import { ref } from 'vue';
+<script setup>
+import { reactive } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
-export default {
-    components: {
-        Layout,
-    },
-    props: {
-        tipusCuinaOptions: Array,
-    },
-    setup(props) {
-        const form = ref({
-            nom: '',
-            horari: '',
-            descripcio: '',
-            telefon: '',
-            tipus_cuina: '',
-        });
+const form = reactive({
+    nom: '',
+    descripcio: '',
+    telefon: '',
+    tipus_cuina: '',
+    hora_obertura: '',
+    hora_tancament: '',
+});
 
-        const submit = () => {
-            // Logic to submit the form
-        };
-
-        return {
-            form,
-            tipusCuinaOptions: props.tipusCuinaOptions,
-            submit,
-        };
-    },
+const submitForm = () => {
+    Inertia.post(route('restaurants.store'), form, {
+        onSuccess: () => {
+            console.log('Restaurant creat amb èxit');
+        },
+        onError: (errors) => {
+            console.error('Error creant el restaurant:', errors);
+        }
+    });
 };
 </script>

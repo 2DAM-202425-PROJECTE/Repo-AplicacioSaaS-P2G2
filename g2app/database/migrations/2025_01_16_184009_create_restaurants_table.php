@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nom');
             $table->text('descripcio');
             $table->string('telefon');
-            $table->json('tipus_cuina');
+            $table->string('tipus_cuina');
             $table->time('hora_obertura');
             $table->time('hora_tancament');
         });

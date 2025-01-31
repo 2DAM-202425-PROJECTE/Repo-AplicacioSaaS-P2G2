@@ -14,7 +14,7 @@ class Restaurant extends Model
     use HasFactory;
 
     protected $casts = [
-        'tipus_cuina' => 'array',
+        'tipus_cuina' => 'string',
     ];
     protected $fillable = [
         'id_ubicacio',
@@ -29,7 +29,7 @@ class Restaurant extends Model
 
     public $timestamps = false;
 
-    public static $TIPUS_CUINA = [
+    public static array $TIPUS_CUINA = [
         'mediterrania',
         'italiana',
         'japonesa',

@@ -9,20 +9,43 @@
                     </a>
                 </li>
             </ul>
-            <a href="/restaurants/create" class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Crear Restaurant</a>
+            <div class="mt-4">
+                <button @click="showCreateForm = !showCreateForm" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    {{ showCreateForm ? 'Cancel' : 'Crear Restaurant' }}
+                </button>
+                <div v-if="showCreateForm" class="mt-4">
+                    <AdminView :adminData="newRestaurantData" :tipusCuinaOptions="tipusCuinaOptions" mode="create" />
+                </div>
+            </div>
         </div>
     </layout>
 </template>
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
+import AdminView from './AdminView.vue';
 
 export default {
     props: {
         restaurants: Array,
+        tipusCuinaOptions: Array,
     },
     components: {
         Layout,
+        AdminView,
+    },
+    data() {
+        return {
+            showCreateForm: false,
+            newRestaurantData: {
+                nom: '',
+                descripcio: '',
+                telefon: '',
+                tipus_cuina: '',
+                hora_obertura: '',
+                hora_tancament: '',
+            },
+        };
     },
 }
 </script>
