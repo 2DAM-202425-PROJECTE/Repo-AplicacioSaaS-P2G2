@@ -2,10 +2,10 @@
     <layout>
         <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
             <button @click="toggleAdmin" class="bg-green-500 text-white px-4 py-2 rounded mb-4">
-                {{ showAdmin ? 'Veure Restaurant' : 'Administrar' }}
+                {{ showAdmin ? 'Veure Restaurant' : 'Modificar' }}
             </button>
 
-            <AdminView
+            <AdminEdit
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
@@ -76,7 +76,7 @@
 <script setup>
 import { defineProps, reactive, ref, onMounted } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
-import AdminView from './AdminView.vue';
+import AdminEdit from './AdminEdit.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { route } from "ziggy-js";
 import axios from 'axios';
@@ -164,3 +164,5 @@ const submitReservation = () => {
 };
 
 </script>
+
+

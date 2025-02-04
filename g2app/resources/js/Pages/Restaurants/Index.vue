@@ -14,7 +14,7 @@
                     {{ showCreateForm ? 'Cancel' : 'Crear Restaurant' }}
                 </button>
                 <div v-if="showCreateForm" class="mt-4">
-                    <AdminView :adminData="newRestaurantData" :tipusCuinaOptions="tipusCuinaOptions" mode="create" />
+                    <Create :tipusCuinaOptions="tipusCuinaOptions" />
                 </div>
             </div>
         </div>
@@ -23,29 +23,26 @@
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
-import AdminView from './AdminView.vue';
+import Create from './Create.vue';
 
 export default {
-    props: {
-        restaurants: Array,
-        tipusCuinaOptions: Array,
-    },
-    components: {
-        Layout,
-        AdminView,
-    },
     data() {
         return {
             showCreateForm: false,
-            newRestaurantData: {
-                nom: '',
-                descripcio: '',
-                telefon: '',
-                tipus_cuina: '',
-                hora_obertura: '',
-                hora_tancament: '',
-            },
+            tipusCuinaOptions: [],
         };
     },
+    components: {
+        Layout,
+        Create,
+    },
+    props: {
+        tipusCuinaOptions: {
+            type: Array,
+            required: true,
+        },
+        restaurants: Array,
+    },
+
 }
 </script>

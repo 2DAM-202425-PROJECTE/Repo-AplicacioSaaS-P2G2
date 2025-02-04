@@ -27,6 +27,8 @@ Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('re
 Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
+Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
+
 
 Route::middleware([
     'auth:sanctum',

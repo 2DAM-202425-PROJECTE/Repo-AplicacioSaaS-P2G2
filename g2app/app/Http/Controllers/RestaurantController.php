@@ -10,15 +10,21 @@ class RestaurantController extends Controller
     public function index(): Response
     {
         $restaurants = Restaurant::all();
-        return Inertia::render('Restaurants/Index', ['restaurants' => $restaurants]);
+        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        return Inertia::render('Restaurants/Index', [
+            'restaurants' => $restaurants,
+            'tipusCuinaOptions' => $tipusCuinaOptions,
+        ]);
     }
 
     public function create()
     {
+        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         return Inertia::render('Restaurants/Create', [
-            'tipusCuinaOptions' => Restaurant::$TIPUS_CUINA,
+            'tipusCuinaOptions' => $tipusCuinaOptions,
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -26,7 +32,7 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'tipus_cuina' => 'required|array',
+            'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
         ]);
@@ -50,6 +56,7 @@ class RestaurantController extends Controller
             'tipusCuinaOptions' => $tipusCuinaOptions,
         ]);
     }
+
 
     public function update(Request $request, $id)
     {
