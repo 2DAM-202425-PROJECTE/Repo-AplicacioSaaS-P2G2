@@ -12,13 +12,14 @@ class RestaurantFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_ubicacio' => $this->faker->numberBetween(1, 100),
+//            'id_ubicacio' => $this->faker->numberBetween(1, 10),
             'nom' => $this->faker->company,
             'descripcio' => $this->faker->paragraph,
             'telefon' => $this->faker->phoneNumber,
-            'tipus_cuina' => $this->faker->randomElements(Restaurant::$TIPUS_CUINA, 2),
-            'hora_obertura' => $this->faker->time(),
-            'hora_tancament' => $this->faker->time(),
+            'tipus_cuina' => $this->faker->randomElement(Restaurant::$TIPUS_CUINA),
+            'hora_obertura' => $this->faker->time('H:i'),
+            'hora_tancament' => $this->faker->time('H:i'),
         ];
     }
 }
+
