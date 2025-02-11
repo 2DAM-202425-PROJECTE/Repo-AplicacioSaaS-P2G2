@@ -1,17 +1,16 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <header class="bg-gray-100 p-4 text-center border-b border-gray-300">
-            <!-- Header content -->
-            <nav class="space-x-4">
-                <a href="/" class="text-blue-500 hover:underline">Home</a>
-<!--                <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>-->
+        <header class="bg-[#1B1B1B] p-6 text-center border-b border-[#3D3D3D] shadow-lg">
+            <nav class="flex justify-center space-x-6">
+                <a href="/" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Home</a>
+                <!--<a href="/restaurants" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Restaurants</a>-->
             </nav>
         </header>
-        <main class="flex-grow p-4">
+        <main class="flex-grow p-6 bg-[#1B1B1B] text-white">
             <slot></slot>
         </main>
-        <footer class="bg-gray-100 p-4 text-center border-t border-gray-300">
-            <!-- Footer content -->
+        <footer class="bg-[#1B1B1B] p-4 text-center border-t border-[#3D3D3D] text-gold-500 text-sm">
+            &copy; 2025 - Tots els drets reservats
         </footer>
     </div>
 </template>
@@ -23,4 +22,11 @@ export default {
 </script>
 
 <style scoped>
+.text-gold-500 {
+    color: #FFD700;
+}
+
+.text-gold-400 {
+    color: #FFC300;
+}
 </style>
