@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
-//            $table->unsignedBigInteger('id_ubicacio');
             $table->string('nom');
+            $table->foreignId('municipi_id')->nullable()->constrained('municipis');
             $table->text('descripcio');
             $table->string('telefon');
             $table->string('tipus_cuina');
             $table->time('hora_obertura');
             $table->time('hora_tancament');
-        });
+            $table->string('carrer');});
     }
 
     /**

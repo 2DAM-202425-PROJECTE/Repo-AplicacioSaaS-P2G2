@@ -34,6 +34,16 @@
                         <p><strong>Horari:</strong></p>
                         <p>Dilluns - Dissabte ({{ horaObertura }} - {{ horaTancament }})</p>
                     </div>
+
+                    <div class="mb-4">
+                        <p><strong>Ubicació:</strong></p>
+                        <p>
+                            {{ restaurant.carrer }},
+                            {{ restaurant.ubicacio?.municipi }},
+                            {{ restaurant.ubicacio?.provincia }},
+                            {{ restaurant.ubicacio?.codi_postal }}
+                        </p>
+                    </div>
                 </div>
                 <div class="w-1/3 pl-4">
                     <div class="mt-8">
@@ -126,11 +136,11 @@ const toggleAdmin = () => {
 const updateRestaurantData = (updatedRestaurant) => {
     Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-            // Update the original restaurant prop:
+
             Object.assign(props.restaurant, response.props.restaurant);
-            // Update the editable copy:
+
             Object.assign(editableAdminData, response.props.restaurant);
-            showAdmin.value = false; // Close the admin view
+            showAdmin.value = false;
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);

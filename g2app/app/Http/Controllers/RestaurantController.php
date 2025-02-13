@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Restaurant;
+use App\Models\Ubicacio;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -11,19 +12,25 @@ class RestaurantController extends Controller
     {
         $restaurants = Restaurant::all();
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        $ubicacioOptions = Ubicacio::all();
         return Inertia::render('Restaurants/Index', [
             'restaurants' => $restaurants,
             'tipusCuinaOptions' => $tipusCuinaOptions,
+            'ubicacioOptions' => $ubicacioOptions,
         ]);
     }
 
     public function create()
     {
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        $ubicacioOptions = Ubicacio::all(); // Fetch all locations
+
         return Inertia::render('Restaurants/Create', [
             'tipusCuinaOptions' => $tipusCuinaOptions,
+            'ubicacioOptions' => $ubicacioOptions, // Pass locations to the view
         ]);
     }
+
 
 
     public function store(Request $request)
@@ -35,6 +42,10 @@ class RestaurantController extends Controller
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
+            'provincia' => 'required|string',
+            'municipi' => 'required|string',
+            'carrer' => 'required|string',
+            'codi_postal' => 'required|string',
         ]);
 
         Restaurant::create($request->all());
@@ -49,7 +60,7 @@ class RestaurantController extends Controller
 
     public function show($id): Response
     {
-        $restaurant = Restaurant::findOrFail($id);
+        $restaurant = Restaurant::with('ubicacio')->findOrFail($id);
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurant,

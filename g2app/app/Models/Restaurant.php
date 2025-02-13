@@ -13,9 +13,12 @@ class Restaurant extends Model
 {
     use HasFactory;
 
-
+    public function municipi()
+    {
+        return $this->belongsTo(Municipi::class);
+    }
     protected $fillable = [
-//        'id_ubicacio',
+        'id_municipi',
         'nom',
         'horari',
         'descripcio',
@@ -23,9 +26,11 @@ class Restaurant extends Model
         'tipus_cuina',
         'hora_obertura',
         'hora_tancament',
+        'carrer',
     ];
 
     public $timestamps = false;
+
 
     public static array $TIPUS_CUINA = [
         'Mediterrania',
@@ -35,6 +40,27 @@ class Restaurant extends Model
         'Mexicana',
         'Francesa',
         'India',
+    ];
+    public static array $noms = [
+
+        "El Rincón de la Paella",
+        "La Tasquita Andaluza",
+        "Restaurante Japonés Sakura",
+        "Pizzeria Italiana Bella Napoli",
+        "El Vegetariano Feliz",
+        "El Far de la Costa Brava",
+        "La Bodega del Sol",
+        "Casa Pepe",
+        "Restaurante La Rambla",
+        "El Mesón de Don Quijote",
+        "La Taberna del Puerto",
+        "El Jardí de l'Àvia",
+        "Can Culleretes",
+        "Els Quatre Gats",
+        "La Fonda de la Plaça",
+        "Trattoria Romana",
+        "Pizzeria Il Forno",
+        "Ristorante La Piazza",
     ];
 
 }

@@ -1,0 +1,150 @@
+[
+    {
+        "id": 1,
+        "name": "Comunidad de Madrid"
+    },
+    {
+        "id": 2,
+        "name": "Barcelona"
+    },
+    {
+        "id": 3,
+        "name": "Valencia"
+    },
+    {
+        "id": 4,
+        "name": "Sevilla"
+    },
+    {
+        "id": 5,
+        "name": "Zaragoza"
+    },
+    {
+        "id": 6,
+        "name": "Málaga"
+    },
+    {
+        "id": 7,
+        "name": "Región de Murcia"
+    },
+    {
+        "id": 8,
+        "name": "Islas Baleares"
+    },
+    {
+        "id": 9,
+        "name": "Las Palmas"
+    },
+    {
+        "id": 10,
+        "name": "Alicante"
+    },
+    {
+        "id": 11,
+        "name": "Vizcaya"
+    },
+    {
+        "id": 12,
+        "name": "Córdoba"
+    },
+    {
+        "id": 13,
+        "name": "Valladolid"
+    },
+    {
+        "id": 14,
+        "name": "Pontevedra"
+    },
+    {
+        "id": 15,
+        "name": "Principado de Asturias"
+    },
+    {
+        "id": 16,
+        "name": "Álava"
+    },
+    {
+        "id": 17,
+        "name": "La Coruña"
+    },
+    {
+        "id": 18,
+        "name": "Granada"
+    },
+    {
+        "id": 19,
+        "name": "Cádiz"
+    },
+    {
+        "id": 20,
+        "name": "Santa Cruz de Tenerife"
+    },
+    {
+        "id": 21,
+        "name": "Navarra"
+    },
+    {
+        "id": 22,
+        "name": "Almería"
+    },
+    {
+        "id": 23,
+        "name": "Guipúzcoa"
+    },
+    {
+        "id": 24,
+        "name": "Castellón"
+    },
+    {
+        "id": 25,
+        "name": "Burgos"
+    },
+    {
+        "id": 26,
+        "name": "Albacete"
+    },
+    {
+        "id": 27,
+        "name": "Cantabria"
+    },
+    {
+        "id": 28,
+        "name": "La Rioja"
+    },
+    {
+        "id": 29,
+        "name": "Badajoz"
+    },
+    {
+        "id": 30,
+        "name": "Salamanca"
+    },
+    {
+        "id": 31,
+        "name": "Lérida"
+    },
+    {
+        "id": 32,
+        "name": "Huelva"
+    },
+    {
+        "id": 33,
+        "name": "Tarragona"
+    },
+    {
+        "id": 34,
+        "name": "León"
+    },
+    {
+        "id": 35,
+        "name": "Jaén"
+    },
+    {
+        "id": 36,
+        "name": "Gerona"
+    },
+    {
+        "id": 37,
+        "name": "Orense"
+    }
+]
