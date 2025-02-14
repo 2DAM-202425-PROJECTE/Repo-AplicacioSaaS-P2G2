@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->foreignId('municipi_id')->nullable()->constrained('municipis');
+            $table->foreignId('municipio_id')->nullable()->constrained('municipios');
             $table->text('descripcio');
             $table->string('telefon');
             $table->string('tipus_cuina');

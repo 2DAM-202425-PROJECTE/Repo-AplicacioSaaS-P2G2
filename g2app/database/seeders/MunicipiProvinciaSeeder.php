@@ -40,7 +40,7 @@ class MunicipiProvinciaSeeder extends Seeder
                 'name' => $province['name'],
             ];
         }, $provinces);
-        DB::table('provincies')->insert($provinces);
-        DB::table('municipis')->insert($municipalities);
+        DB::table('provincias')->insert($provinces);
+        DB::table('municipios')->insert($municipalities);
     }
 }

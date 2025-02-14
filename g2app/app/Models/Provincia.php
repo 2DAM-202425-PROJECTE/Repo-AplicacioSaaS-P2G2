@@ -16,8 +16,8 @@ class Provincia extends Model
 
     public $timestamps = false;
 
-    public function municipis(): HasMany
+    public function municipio(): HasMany
     {
-        return $this->hasMany(Municipi::class);
+        return $this->hasMany(Municipio::class);
     }
 }

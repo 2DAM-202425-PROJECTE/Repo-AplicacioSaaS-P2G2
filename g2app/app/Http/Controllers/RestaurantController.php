@@ -12,11 +12,10 @@ class RestaurantController extends Controller
     {
         $restaurants = Restaurant::all();
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
-        $ubicacioOptions = Ubicacio::all();
         return Inertia::render('Restaurants/Index', [
             'restaurants' => $restaurants,
             'tipusCuinaOptions' => $tipusCuinaOptions,
-            'ubicacioOptions' => $ubicacioOptions,
+
         ]);
     }
 
@@ -60,7 +59,7 @@ class RestaurantController extends Controller
 
     public function show($id): Response
     {
-        $restaurant = Restaurant::with('ubicacio')->findOrFail($id);
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurant,

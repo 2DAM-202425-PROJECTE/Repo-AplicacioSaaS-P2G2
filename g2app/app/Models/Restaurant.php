@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -13,13 +14,13 @@ class Restaurant extends Model
 {
     use HasFactory;
 
-    public function municipi()
+    public function municipio(): BelongsTo
     {
-        return $this->belongsTo(Municipi::class);
+        return $this->belongsTo(Municipio::class);
     }
     protected $fillable = [
-        'id_municipi',
         'nom',
+        'municipio_id',
         'horari',
         'descripcio',
         'telefon',

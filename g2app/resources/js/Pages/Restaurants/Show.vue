@@ -39,9 +39,8 @@
                         <p><strong>Ubicació:</strong></p>
                         <p>
                             {{ restaurant.carrer }},
-                            {{ restaurant.ubicacio?.municipi }},
-                            {{ restaurant.ubicacio?.provincia }},
-                            {{ restaurant.ubicacio?.codi_postal }}
+                            {{ restaurant.municipio?.name || 'Municipi no disponible' }},
+                            {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
                         </p>
                     </div>
                 </div>
