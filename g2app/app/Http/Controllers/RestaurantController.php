@@ -10,25 +10,31 @@ class RestaurantController extends Controller
     public function index(): Response
     {
         $restaurants = Restaurant::all();
-        return Inertia::render('Restaurants/Index', ['restaurants' => $restaurants]);
+        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        return Inertia::render('Restaurants/Index', [
+            'restaurants' => $restaurants,
+            'tipusCuinaOptions' => $tipusCuinaOptions,
+        ]);
     }
 
     public function create()
     {
+        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         return Inertia::render('Restaurants/Create', [
-            'tipusCuinaOptions' => Restaurant::$TIPUS_CUINA,
+            'tipusCuinaOptions' => $tipusCuinaOptions,
         ]);
     }
 
+
     public function store(Request $request)
     {
-        $request->validate([
-            'id_ubicacio' => 'exists:ubicacions,id_ubicacio',
+        $validatedData = $request->validate([
             'nom' => 'required|string|max:255',
-            'horari' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'tipus_cuina' => 'required|array',
+            'tipus_cuina' => 'required|string',
+            'hora_obertura' => 'required|date_format:H:i',
+            'hora_tancament' => 'required|date_format:H:i',
         ]);
 
         Restaurant::create($request->all());
@@ -44,24 +50,32 @@ class RestaurantController extends Controller
     public function show($id): Response
     {
         $restaurant = Restaurant::findOrFail($id);
-        return Inertia::render('Restaurants/Show', ['restaurant' => $restaurant]);
+        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        return Inertia::render('Restaurants/Show', [
+            'restaurant' => $restaurant,
+            'tipusCuinaOptions' => $tipusCuinaOptions,
+        ]);
     }
 
-    public function update(Request $request, Restaurant $restaurant)
+
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'id_ubicacio' => 'exists:ubicacions,id_ubicacio',
+        $restaurant = Restaurant::findOrFail($id);
+
+        $validatedData = $request->validate([
             'nom' => 'required|string|max:255',
-            'horari' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'tipus_cuina' => 'required|array',
+            'tipus_cuina' => 'required|string', // Single string for cuisine type
+            'hora_obertura' => 'required|date_format:H:i',
+            'hora_tancament' => 'required|date_format:H:i',
         ]);
 
-        $restaurant->update($request->all());
 
-        return redirect()->route('restaurants.index');
+        $restaurant->update($validatedData);
+
     }
+
 
     public function destroy(Restaurant $restaurant)
     {
@@ -69,4 +83,6 @@ class RestaurantController extends Controller
 
         return redirect()->route('restaurants.index');
     }
+
+
 }
