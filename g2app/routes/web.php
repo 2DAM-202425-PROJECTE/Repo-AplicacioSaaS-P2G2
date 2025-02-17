@@ -19,7 +19,7 @@ Route::get('/register', function () {
 //Protegir totes les rutes perquè només siguin accessibles després del login
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return redirect()->route('restaurants.index');
     })->name('dashboard');
 
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
