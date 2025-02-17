@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+use App\Models\Municipio;
+use App\Models\Provincia;
 use App\Models\Restaurant;
 use App\Models\Ubicacio;
 use Illuminate\Http\Request;
@@ -22,11 +24,13 @@ class RestaurantController extends Controller
     public function create()
     {
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
-        $ubicacioOptions = Ubicacio::all(); // Fetch all locations
+        $provincias = Provincia::all();
+        $municipios = Municipio::all();
 
         return Inertia::render('Restaurants/Create', [
             'tipusCuinaOptions' => $tipusCuinaOptions,
-            'ubicacioOptions' => $ubicacioOptions, // Pass locations to the view
+            'provincias' => $provincias,
+            'municipios' => $municipios,
         ]);
     }
 
