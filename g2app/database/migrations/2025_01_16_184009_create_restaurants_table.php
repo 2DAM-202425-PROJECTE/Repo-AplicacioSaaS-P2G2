@@ -20,7 +20,11 @@ return new class extends Migration
             $table->string('tipus_cuina');
             $table->time('hora_obertura');
             $table->time('hora_tancament');
-            $table->string('carrer');});
+            $table->string('carrer');
+            $table->integer('durada_reserves');
+            $table->integer('pers_max');
+            $table->integer('temps_antelacio');
+        });
     }
 
     /**
