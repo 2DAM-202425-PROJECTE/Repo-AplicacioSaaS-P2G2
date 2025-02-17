@@ -21,9 +21,9 @@ return new class extends Migration
             $table->time('hora_obertura');
             $table->time('hora_tancament');
             $table->string('carrer');
-            $table->integer('durada_reserves');
-            $table->integer('pers_max');
-            $table->integer('temps_antelacio');
+            $table->integer('durada_reserves')->nullable();
+            $table->integer('pers_max')->nullable();
+            $table->integer('temps_antelacio')->nullable();
         });
     }
 

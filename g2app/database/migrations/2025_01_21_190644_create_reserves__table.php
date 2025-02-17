@@ -22,6 +22,7 @@ return new class extends Migration
             $table->time('hora');
             $table->integer('num_persones');
             $table->string('estat');
+            $table->text('solicituds');
         });
     }
 

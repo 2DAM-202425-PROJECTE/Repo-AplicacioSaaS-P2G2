@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MunicipiProvinciaSeeder::class,
             RestaurantSeeder::class,
-            //UbicacioSeeder::class,
+            TaulaSeeder::class,
         ]);
 
     }
