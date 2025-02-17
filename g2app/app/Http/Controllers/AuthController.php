@@ -27,19 +27,29 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // Converteix el valor d'empresa a boolean
+        $empresa = $request->input('empresa') ? true : false;
+
+        // Validació de les dades
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
+            //'empresa' => 'required|boolean',
         ]);
 
+        // Crear l'usuari amb les dades
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'empresa' => $empresa, // Assignem el valor bool per a que no pete
         ]);
 
+        // Iniciar la sessió de l'usuari
         Auth::login($user);
+
+        // Redirigir a la vista
         return Redirect::route('dashboard');
     }
 
