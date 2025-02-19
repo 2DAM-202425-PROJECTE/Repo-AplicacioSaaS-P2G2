@@ -14,23 +14,33 @@ class RestaurantController extends Controller
     {
         $restaurants = Restaurant::all();
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        $provincias = Provincia::all();
+        $municipios = Municipio::all();
+
         return Inertia::render('Restaurants/Index', [
             'restaurants' => $restaurants,
             'tipusCuinaOptions' => $tipusCuinaOptions,
-
+            'provincias' => $provincias,
+            'municipios' => $municipios,
         ]);
     }
 
-    public function create()
+    public function create(Request $request) // Add the Request object
     {
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
-        $municipios = Municipio::all();
+        $municipios = [];  // Initialize an empty array for municipios
+
+        // Check if a province_id is provided in the request (e.g., from a previous selection)
+        if ($request->has('provincia_id')) {
+            $provinciaId = $request->input('provincia_id');
+            $municipios = Municipio::where('provincia_id', $provinciaId)->get();
+        }
 
         return Inertia::render('Restaurants/Create', [
             'tipusCuinaOptions' => $tipusCuinaOptions,
             'provincias' => $provincias,
-            'municipios' => $municipios,
+            'municipios' => $municipios, // Pass the municipios to the view
         ]);
     }
 
@@ -45,29 +55,34 @@ class RestaurantController extends Controller
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
-            'provincia' => 'required|string',
-            'municipi' => 'required|string',
+            'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-            'codi_postal' => 'required|string',
+
         ]);
 
-        Restaurant::create($request->all());
+
+        Restaurant::create($validatedData);
 
         return redirect()->route('restaurants.index');
     }
-
+/*
     public function edit(Restaurant $restaurant)
     {
         return Inertia::render('Restaurants/Edit', ['restaurant' => $restaurant]);
     }
-
+*/
     public function show($id): Response
     {
-        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id); // Eager load provincia
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+        $provincias = Provincia::all();
+        $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
+
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurant,
             'tipusCuinaOptions' => $tipusCuinaOptions,
+            'provincias' => $provincias,
+            'municipios' => $municipios,
         ]);
     }
 
@@ -80,9 +95,12 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'tipus_cuina' => 'required|string', // Single string for cuisine type
+            'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
+            'municipio_id' => 'required|integer|exists:municipios,id',
+            'provincia_id' => 'required|integer|exists:provincias,id',
+            'carrer' => 'required|string',
         ]);
 
 

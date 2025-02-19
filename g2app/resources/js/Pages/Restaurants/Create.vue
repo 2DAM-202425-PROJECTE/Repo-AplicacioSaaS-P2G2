@@ -25,18 +25,17 @@
                 </select>
             </div>
 
-
             <div class="mb-4">
                 <label for="provincia" class="block text-sm font-medium text-gray-700">Província</label>
                 <select v-model="selectedProvinciaId" id="provincia" class="mt-1 block w-full" required>
-                    <option v-for="provincia in props.provincias" :key="provincia.id" :value="provincia.id">{{ provincia.nom }}</option>
+                    <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{ provincia.name }}</option>
                 </select>
             </div>
 
-            <div class="mb-4" v-if="form.provincia">
+            <div class="mb-4" v-if="selectedProvinciaId">
                 <label for="municipi" class="block text-sm font-medium text-gray-700">Municipi</label>
-                <select v-model="form.municipi" id="municipi" class="mt-1 block w-full" required>
-                    <option v-for="municipi in filteredMunicipis" :key="municipi.id" :value="municipi.nom">{{ municipi.nom }}</option>
+                <select v-model="form.municipio_id" id="municipi" class="mt-1 block w-full" required>
+                    <option v-for="municipio in filteredMunicipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
                 </select>
             </div>
 
@@ -45,19 +44,15 @@
                 <input v-model="form.carrer" id="carrer" type="text" class="mt-1 block w-full" required />
             </div>
 
-            <div class="mb-4">
-                <label for="codi_postal" class="block text-sm font-medium text-gray-700">Codi Postal</label>
-                <input v-model="form.codi_postal" id="codi_postal" type="text" class="mt-1 block w-full" required />
-            </div>
 
             <div class="mb-4">
                 <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora d'Obertura</label>
-                <input step="any" v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
+                <input v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
             </div>
 
             <div class="mb-4">
                 <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
-                <input step="any" v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
+                <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
             </div>
 
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
@@ -81,7 +76,7 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    municipis: {
+    municipios: {
         type: Array,
         default: () => [],
     },
@@ -92,29 +87,26 @@ const form = reactive({
     descripcio: '',
     telefon: '',
     tipus_cuina: '',
-    provincia: '',
-    municipi: '',
     carrer: '',
     codi_postal: '',
     hora_obertura: '',
     hora_tancament: '',
+    municipio_id: null,
 });
 
 const selectedProvinciaId = ref(null);
 
-const filteredMunicipis = computed(() => {
-    return props.municipis.filter(municipi => municipi.provincia_id === selectedProvinciaId.value);
+const filteredMunicipios = computed(() => {
+    return props.municipios.filter(municipio => municipio.provincia_id === selectedProvinciaId.value);
 });
 
 watch(selectedProvinciaId, (newVal) => {
     if (newVal) {
-        form.provincia = props.provincias.find(provincia => provincia.id === newVal).nom;
-        form.municipi = '';
+        form.municipio_id = null;
     }
 });
 
 const submitCreateForm = () => {
     Inertia.post(route('restaurants.store'), form);
 };
-
 </script>

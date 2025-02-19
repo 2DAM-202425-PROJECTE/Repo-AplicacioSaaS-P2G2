@@ -14,7 +14,11 @@
                     {{ showCreateForm ? 'Cancel' : 'Crear Restaurant' }}
                 </button>
                 <div v-if="showCreateForm" class="mt-4">
-                    <Create :tipusCuinaOptions="tipusCuinaOptions" :ubicacioOptions="ubicacioOptions" />
+                    <Create
+                        :tipusCuinaOptions="tipusCuinaOptions"
+                        :provincias="provincias"
+                        :municipios="municipios"
+                    />
                 </div>
             </div>
         </div>
@@ -30,7 +34,8 @@ export default {
         return {
             showCreateForm: false,
             tipusCuinaOptions: [],
-            ubicacioOptions: [], // Add ubicacioOptions here
+            provincias: [],
+            municipios: [],
         };
     },
     components: {
@@ -43,11 +48,14 @@ export default {
             required: true,
         },
         restaurants: Array,
-        ubicacioOptions: { // Add the prop here
+        provincias: {
+            type: Array,
+            required: true,
+        },
+        municipios: {
             type: Array,
             required: true,
         },
     },
-
-}
+};
 </script>

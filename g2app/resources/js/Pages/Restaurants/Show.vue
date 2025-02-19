@@ -5,10 +5,13 @@
                 {{ showAdmin ? 'Veure Restaurant' : 'Modificar' }}
             </button>
 
+
             <AdminEdit
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
+                :provincias="provincias"
+                :municipios="municipios"
                 mode="edit"
                 @adminDataUpdated="updateRestaurantData"
             />
@@ -93,7 +96,11 @@ import axios from 'axios';
 const props = defineProps({
     restaurant: Object,
     tipusCuinaOptions: Array,
+    provincias: Array,
+    municipios: Array,
 });
+
+
 
 const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 
@@ -115,7 +122,12 @@ const loading = ref(false);
 const showAdmin = ref(false);
 
 // Deep copy for editing:
-const editableAdminData = reactive(JSON.parse(JSON.stringify(props.restaurant)));
+const editableAdminData = reactive(JSON.parse(JSON.stringify({
+    ...props.restaurant,
+    provincia_id: props.restaurant.municipio?.provincia_id,
+    municipio_id: props.restaurant.municipio?.id,
+
+})));
 
 
 onMounted(async () => {
@@ -152,7 +164,6 @@ const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
             console.log('Reserva creada amb èxit');
-            // Reset the reservation form or provide feedback to the user
             Object.assign(reservation, {
                 telefon: '',
                 data: '',
