@@ -5,10 +5,13 @@
                 {{ showAdmin ? 'Veure Restaurant' : 'Modificar' }}
             </button>
 
+
             <AdminEdit
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
+                :provincias="provincias"
+                :municipios="municipios"
                 mode="edit"
                 @adminDataUpdated="updateRestaurantData"
             />
@@ -33,6 +36,15 @@
                     <div class="mb-4">
                         <p><strong>Horari:</strong></p>
                         <p>Dilluns - Dissabte ({{ horaObertura }} - {{ horaTancament }})</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p><strong>Ubicació:</strong></p>
+                        <p>
+                            {{ restaurant.carrer }},
+                            {{ restaurant.municipio?.name || 'Municipi no disponible' }},
+                            {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
+                        </p>
                     </div>
                 </div>
                 <div class="w-1/3 pl-4">
@@ -84,7 +96,11 @@ import axios from 'axios';
 const props = defineProps({
     restaurant: Object,
     tipusCuinaOptions: Array,
+    provincias: Array,
+    municipios: Array,
 });
+
+
 
 const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 
@@ -106,7 +122,12 @@ const loading = ref(false);
 const showAdmin = ref(false);
 
 // Deep copy for editing:
-const editableAdminData = reactive(JSON.parse(JSON.stringify(props.restaurant)));
+const editableAdminData = reactive(JSON.parse(JSON.stringify({
+    ...props.restaurant,
+    provincia_id: props.restaurant.municipio?.provincia_id,
+    municipio_id: props.restaurant.municipio?.id,
+
+})));
 
 
 onMounted(async () => {
@@ -126,11 +147,11 @@ const toggleAdmin = () => {
 const updateRestaurantData = (updatedRestaurant) => {
     Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-            // Update the original restaurant prop:
+
             Object.assign(props.restaurant, response.props.restaurant);
-            // Update the editable copy:
+
             Object.assign(editableAdminData, response.props.restaurant);
-            showAdmin.value = false; // Close the admin view
+            showAdmin.value = false;
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);
@@ -143,7 +164,6 @@ const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
             console.log('Reserva creada amb èxit');
-            // Reset the reservation form or provide feedback to the user
             Object.assign(reservation, {
                 telefon: '',
                 data: '',
