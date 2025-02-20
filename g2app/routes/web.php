@@ -6,18 +6,6 @@ use App\Http\Controllers\TaulaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-/*
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-*/
-//Route::resource('restaurants', RestaurantController::class);
-//Route::get('/restaurants', [RestaurantController::class, 'index'])->middleware(['auth', 'verified'])->name('restaurants.index');
 
 
 Route::get('/', [RestaurantController::class, 'index'])->name('home');
@@ -28,7 +16,7 @@ Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.st
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
 Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
-
+Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
 
 Route::middleware([
     'auth:sanctum',

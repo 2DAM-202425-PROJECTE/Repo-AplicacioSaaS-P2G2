@@ -1,3 +1,6 @@
+Fragmento de código
+
+// AdminEdit.vue
 <template>
     <div>
         <form @submit.prevent="submitAdminForm">
@@ -21,16 +24,16 @@
             </div>
             <div class="mb-4">
                 <label for="provincia" class="block text-sm font-medium text-gray-700">Provincia</label>
-                <select v-model="selectedProvinciaId" id="provincia" class="mt-1 block w-full" required>
+                <select v-model="selectedProvinciaId" @change="fetchMunicipios" id="provincia" class="mt-1 block w-full" required>
                     <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{ provincia.name }}</option>
                 </select>
             </div>
 
-            <div class="mb-4" v-if="selectedProvinciaId">
+            <div class="mb-4" v-if="municipios.length > 0">
                 <label for="municipi" class="block text-sm font-medium text-gray-700">Municipi</label>
                 <select v-model="form.municipio_id" id="municipi" class="mt-1 block w-full" required>
                     <option value="" disabled>Select a Municipality</option>
-                    <option v-for="municipio in filteredMunicipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
+                    <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
                 </select>
             </div>
 
@@ -54,43 +57,45 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { route } from 'ziggy-js';
+import axios from 'axios';
 
 const props = defineProps({
     adminData: Object,
     tipusCuinaOptions: Array,
     provincias: Array,
-    municipios: Array,
-    filteredMunicipios: Array,
 });
 
 const form = reactive({ ...props.adminData });
 
 const selectedProvinciaId = ref(props.adminData.provincia_id);
+const municipios = ref([]);
 
-const filteredMunicipios = computed(() => {
-    return props.municipios.filter(municipio => municipio.provincia_id === selectedProvinciaId.value);
+onMounted(() => {
+    fetchMunicipios();
 });
 
-watch(selectedProvinciaId, (newVal) => {
-    form.municipio_id = null; // Reset municipio selection
-});
+const fetchMunicipios = async () => {
+    try {
+        const response = await axios.get(route('get.municipios', { provincia_id: selectedProvinciaId.value }));
+        municipios.value = response.data;
+    } catch (error) {
+        console.error("Error fetching municipios:", error);
+    }
+};
 
 const submitAdminForm = () => {
     Inertia.put(route('restaurants.update', { restaurant: form.id }), form, {
         onSuccess: (response) => {
-            // Handle success, maybe emit an event to parent
-            defineEmits(['adminDataUpdated'])(response.props.restaurant); // Emit the updated data
+            defineEmits(['adminDataUpdated'])(response.props.restaurant);
         },
         onError: (errors) => {
-            // Handle errors
             console.error("Error updating restaurant:", errors);
         },
     });
 };
 
 defineEmits(['adminDataUpdated']);
-
 </script>

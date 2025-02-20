@@ -10,8 +10,8 @@
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
                 :provincias="provincias"
-                :filteredMunicipios="filteredMunicipios"
-                @adminDataUpdated="updateRestaurantData"
+                :municipios="municipios"
+                 @adminDataUpdated="updateRestaurantData"
             />
 
             <div v-else class="flex">
@@ -106,6 +106,7 @@ const props = defineProps({
     municipios: Array,
 });
 
+
 const {nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament} = props.restaurant;
 
 const horaObertura = hora_obertura;
@@ -132,7 +133,6 @@ const editableAdminData = reactive(JSON.parse(JSON.stringify({
     ...props.restaurant,
     provincia_id: props.restaurant.municipio?.provincia_id,
     municipio_id: props.restaurant.municipio?.id,
-
 })));
 
 
@@ -149,29 +149,23 @@ const toggleAdmin = () => {
     showAdmin.value = !showAdmin.value;
 };
 
-const selectedProvinciaId = ref(props.restaurant.municipio?.provincia_id); // Make this a ref
-
-const filteredMunicipios = computed(() => {
-    return props.municipios.filter(municipio => municipio.provincia_id === selectedProvinciaId.value);
-});
-
-watch(() => props.restaurant.municipio?.provincia_id, (newVal) => {
-    selectedProvinciaId.value = newVal;
-});
+watch( // Watch the ENTIRE municipio object (important!)
+    () => props.restaurant.municipio,
+    (newMunicipio) => {
+        if (newMunicipio) {
+            selectedProvinciaId.value = newMunicipio.provincia_id;
+        } else {
+            selectedProvinciaId.value = null;
+        }
+    }
+);
 
 
 const updateRestaurantData = (updatedRestaurant) => {
-    Inertia.put(route('restaurants.update', {restaurant: props.restaurant.id}), updatedRestaurant, {
+    Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-            // Update the props.restaurant with the new data
-            Object.assign(props.restaurant, response.props.restaurant);
-
-            // Update editableAdminData
-            Object.assign(editableAdminData, response.props.restaurant);
-
-            // Update the allMunicipios ref if needed (if the update might change municipios)
-            allMunicipios.value = response.props.municipios; // Assuming your controller sends back all municipios
-
+            Object.assign(props.restaurant, response.props.restaurant); // Update props.restaurant
+            Object.assign(editableAdminData, response.props.restaurant); // Update editableAdminData
             showAdmin.value = false;
         },
         onError: (errors) => {
@@ -179,6 +173,7 @@ const updateRestaurantData = (updatedRestaurant) => {
         },
     });
 };
+
 
 const submitReservation = () => {
     loading.value = true;

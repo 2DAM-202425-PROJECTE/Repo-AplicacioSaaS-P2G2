@@ -4,6 +4,7 @@ use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Restaurant;
 use App\Models\Ubicacio;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -106,6 +107,12 @@ class RestaurantController extends Controller
 
         $restaurant->update($validatedData);
 
+    }
+    public function getMunicipios(Request $request): JsonResponse
+    {
+        $provinciaId = $request->input('provincia_id');
+        $municipios = Municipio::where('provincia_id', $provinciaId)->get();
+        return response()->json($municipios);
     }
 
 
