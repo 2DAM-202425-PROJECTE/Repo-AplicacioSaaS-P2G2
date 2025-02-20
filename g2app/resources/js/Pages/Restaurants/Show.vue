@@ -9,9 +9,8 @@
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
-                :provincias="provincias"
-                :municipios="municipios"
-                 @adminDataUpdated="updateRestaurantData"
+                mode="edit"
+                @adminDataUpdated="updateRestaurantData"
             />
 
             <div v-else class="flex">
@@ -35,15 +34,6 @@
                         <p><strong>Horari:</strong></p>
                         <p>Dilluns - Dissabte ({{ horaObertura }} - {{ horaTancament }})</p>
                     </div>
-
-                    <div class="mb-4">
-                        <p><strong>Ubicació:</strong></p>
-                        <p>
-                            {{ restaurant.carrer }},
-                            {{ restaurant.municipio?.name || 'Municipi no disponible' }},
-                            {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
-                        </p>
-                    </div>
                 </div>
                 <div class="w-1/3 pl-4">
                     <div class="mt-8">
@@ -51,32 +41,24 @@
                         <form @submit.prevent="submitReservation">
                             <div class="mb-4">
                                 <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
-                                <input type="text" v-model="reservation.telefon" id="telefon" class="mt-1 block w-full"
-                                       required>
+                                <input type="text" v-model="reservation.telefon" id="telefon" class="mt-1 block w-full" required>
                             </div>
                             <div class="mb-4">
                                 <label for="data" class="block text-sm font-medium text-gray-700">Data</label>
-                                <input type="date" v-model="reservation.data" id="data" class="mt-1 block w-full"
-                                       required>
+                                <input type="date" v-model="reservation.data" id="data" class="mt-1 block w-full" required>
                             </div>
                             <div class="mb-4">
                                 <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
-                                <input type="time" v-model="reservation.hora" id="hora" class="mt-1 block w-full"
-                                       required>
+                                <input type="time" v-model="reservation.hora" id="hora" class="mt-1 block w-full" required>
                             </div>
                             <div class="mb-4">
-                                <label for="num_persones" class="block text-sm font-medium text-gray-700">Número de
-                                    Persones</label>
-                                <input type="number" v-model="reservation.num_persones" id="num_persones"
-                                       class="mt-1 block w-full" required min="1" max="20">
+                                <label for="num_persones" class="block text-sm font-medium text-gray-700">Número de Persones</label>
+                                <input type="number" v-model="reservation.num_persones" id="num_persones" class="mt-1 block w-full" required min="1" max="20">
                             </div>
                             <div class="mb-4">
                                 <label for="id_taula" class="block text-sm font-medium text-gray-700">Taula</label>
                                 <select v-model="reservation.id_taula" id="id_taula" class="mt-1 block w-full" required>
-                                    <option v-for="taula in taules" :key="taula.id" :value="taula.id">{{
-                                            taula.id
-                                        }}
-                                    </option>
+                                    <option v-for="taula in taules" :key="taula.id" :value="taula.id">{{ taula.id }}</option>
                                 </select>
                             </div>
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" :disabled="loading">
@@ -92,22 +74,19 @@
 </template>
 
 <script setup>
-import {defineProps, reactive, ref, onMounted, watch, computed} from 'vue';
+import { defineProps, reactive, ref, onMounted } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import AdminEdit from './AdminEdit.vue';
-import {Inertia} from '@inertiajs/inertia';
-import {route} from "ziggy-js";
+import { Inertia } from '@inertiajs/inertia';
+import { route } from "ziggy-js";
 import axios from 'axios';
 
 const props = defineProps({
     restaurant: Object,
     tipusCuinaOptions: Array,
-    provincias: Array,
-    municipios: Array,
 });
 
-
-const {nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament} = props.restaurant;
+const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
@@ -122,24 +101,18 @@ const reservation = reactive({
     estat: 'pendent',
 });
 
-const taules = ref([]);
+const taules = reactive([]);
 const loading = ref(false);
 const showAdmin = ref(false);
 
-const allMunicipios = ref(props.municipios);  // All municipios as a ref
-
-
-const editableAdminData = reactive(JSON.parse(JSON.stringify({
-    ...props.restaurant,
-    provincia_id: props.restaurant.municipio?.provincia_id,
-    municipio_id: props.restaurant.municipio?.id,
-})));
+// Deep copy for editing:
+const editableAdminData = reactive(JSON.parse(JSON.stringify(props.restaurant)));
 
 
 onMounted(async () => {
     try {
-        const response = await axios.get(route('taules.index', {restaurant_id: props.restaurant.id}));
-        taules.value = response.data; // Use .value to update the ref
+        const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
+        taules.push(...response.data);
     } catch (error) {
         console.error('Error fetching taules:', error);
     }
@@ -149,24 +122,15 @@ const toggleAdmin = () => {
     showAdmin.value = !showAdmin.value;
 };
 
-watch( // Watch the ENTIRE municipio object (important!)
-    () => props.restaurant.municipio,
-    (newMunicipio) => {
-        if (newMunicipio) {
-            selectedProvinciaId.value = newMunicipio.provincia_id;
-        } else {
-            selectedProvinciaId.value = null;
-        }
-    }
-);
-
 
 const updateRestaurantData = (updatedRestaurant) => {
     Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-            Object.assign(props.restaurant, response.props.restaurant); // Update props.restaurant
-            Object.assign(editableAdminData, response.props.restaurant); // Update editableAdminData
-            showAdmin.value = false;
+            // Update the original restaurant prop:
+            Object.assign(props.restaurant, response.props.restaurant);
+            // Update the editable copy:
+            Object.assign(editableAdminData, response.props.restaurant);
+            showAdmin.value = false; // Close the admin view
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);
@@ -174,12 +138,12 @@ const updateRestaurantData = (updatedRestaurant) => {
     });
 };
 
-
 const submitReservation = () => {
     loading.value = true;
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
             console.log('Reserva creada amb èxit');
+            // Reset the reservation form or provide feedback to the user
             Object.assign(reservation, {
                 telefon: '',
                 data: '',
@@ -200,3 +164,5 @@ const submitReservation = () => {
 };
 
 </script>
+
+
