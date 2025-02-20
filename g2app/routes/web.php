@@ -6,6 +6,7 @@ use App\Http\Controllers\TaulaController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 //Fer que la pàgina principal sigui el login
 Route::get('/', function () {
     return Inertia::render('Login');
@@ -15,6 +16,7 @@ Route::get('/', function () {
 Route::get('/register', function () {
     return Inertia::render('Register');
 })->name('register');
+
 
 //Protegir totes les rutes perquè només siguin accessibles després del login
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -29,5 +31,6 @@ Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.st
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
 Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
-  
+
+
 });
