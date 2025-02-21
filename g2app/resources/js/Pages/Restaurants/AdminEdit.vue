@@ -22,6 +22,7 @@ Fragmento de código
                     <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
                 </select>
             </div>
+
             <div class="mb-4">
                 <label for="provincia" class="block text-sm font-medium text-gray-700">Provincia</label>
                 <select v-model="selectedProvinciaId" @change="fetchMunicipios" id="provincia" class="mt-1 block w-full" required>
@@ -48,6 +49,10 @@ Fragmento de código
             <div class="mb-4">
                 <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
                 <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
+
+
+
+
             </div>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                 Guardar canvis
@@ -57,6 +62,7 @@ Fragmento de código
 </template>
 
 <script setup>
+
 import { ref, reactive, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { route } from 'ziggy-js';
@@ -65,6 +71,7 @@ import axios from 'axios';
 const props = defineProps({
     adminData: Object,
     tipusCuinaOptions: Array,
+
     provincias: Array,
 });
 
@@ -90,6 +97,7 @@ const submitAdminForm = () => {
     Inertia.put(route('restaurants.update', { restaurant: form.id }), form, {
         onSuccess: (response) => {
             defineEmits(['adminDataUpdated'])(response.props.restaurant);
+
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);

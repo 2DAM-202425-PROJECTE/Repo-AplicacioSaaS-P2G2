@@ -21,8 +21,10 @@ return new class extends Migration
             $table->date('data');
             $table->time('hora');
             $table->integer('num_persones');
+
             $table->string('estat')->default('pendent');
             $table->text('solicituds');
+
         });
     }
 
