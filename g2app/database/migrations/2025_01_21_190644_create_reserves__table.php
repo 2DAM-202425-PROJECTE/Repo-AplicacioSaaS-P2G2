@@ -22,7 +22,7 @@ return new class extends Migration
             $table->time('hora');
             $table->integer('num_persones');
             $table->string('estat')->default('pendent');
-            $table->text('solicituds');
+            $table->text('solicituds')->nullable();
         });
     }
 
