@@ -5,15 +5,13 @@
                 {{ showAdmin ? 'Veure Restaurant' : 'Modificar' }}
             </button>
 
-
             <AdminEdit
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
                 :provincias="provincias"
                 :municipios="municipios"
-                mode="edit"
-                @adminDataUpdated="updateRestaurantData"
+                 @adminDataUpdated="updateRestaurantData"
             />
 
             <div v-else class="flex">
@@ -53,24 +51,32 @@
                         <form @submit.prevent="submitReservation">
                             <div class="mb-4">
                                 <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
-                                <input type="text" v-model="reservation.telefon" id="telefon" class="mt-1 block w-full" required>
+                                <input type="text" v-model="reservation.telefon" id="telefon" class="mt-1 block w-full"
+                                       required>
                             </div>
                             <div class="mb-4">
                                 <label for="data" class="block text-sm font-medium text-gray-700">Data</label>
-                                <input type="date" v-model="reservation.data" id="data" class="mt-1 block w-full" required>
+                                <input type="date" v-model="reservation.data" id="data" class="mt-1 block w-full"
+                                       required>
                             </div>
                             <div class="mb-4">
                                 <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
-                                <input type="time" v-model="reservation.hora" id="hora" class="mt-1 block w-full" required>
+                                <input type="time" v-model="reservation.hora" id="hora" class="mt-1 block w-full"
+                                       required>
                             </div>
                             <div class="mb-4">
-                                <label for="num_persones" class="block text-sm font-medium text-gray-700">Número de Persones</label>
-                                <input type="number" v-model="reservation.num_persones" id="num_persones" class="mt-1 block w-full" required min="1" max="20">
+                                <label for="num_persones" class="block text-sm font-medium text-gray-700">Número de
+                                    Persones</label>
+                                <input type="number" v-model="reservation.num_persones" id="num_persones"
+                                       class="mt-1 block w-full" required min="1" max="20">
                             </div>
                             <div class="mb-4">
                                 <label for="id_taula" class="block text-sm font-medium text-gray-700">Taula</label>
                                 <select v-model="reservation.id_taula" id="id_taula" class="mt-1 block w-full" required>
-                                    <option v-for="taula in taules" :key="taula.id" :value="taula.id">{{ taula.id }}</option>
+                                    <option v-for="taula in taules" :key="taula.id" :value="taula.id">{{
+                                            taula.id
+                                        }}
+                                    </option>
                                 </select>
                             </div>
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" :disabled="loading">
@@ -86,11 +92,11 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, ref, onMounted } from 'vue';
+import {defineProps, reactive, ref, onMounted, watch, computed} from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import AdminEdit from './AdminEdit.vue';
-import { Inertia } from '@inertiajs/inertia';
-import { route } from "ziggy-js";
+import {Inertia} from '@inertiajs/inertia';
+import {route} from "ziggy-js";
 import axios from 'axios';
 
 const props = defineProps({
@@ -101,8 +107,7 @@ const props = defineProps({
 });
 
 
-
-const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
+const {nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament} = props.restaurant;
 
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
@@ -117,23 +122,24 @@ const reservation = reactive({
     estat: 'pendent',
 });
 
-const taules = reactive([]);
+const taules = ref([]);
 const loading = ref(false);
 const showAdmin = ref(false);
 
-// Deep copy for editing:
+const allMunicipios = ref(props.municipios);  // All municipios as a ref
+
+
 const editableAdminData = reactive(JSON.parse(JSON.stringify({
     ...props.restaurant,
     provincia_id: props.restaurant.municipio?.provincia_id,
     municipio_id: props.restaurant.municipio?.id,
-
 })));
 
 
 onMounted(async () => {
     try {
-        const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
-        taules.push(...response.data);
+        const response = await axios.get(route('taules.index', {restaurant_id: props.restaurant.id}));
+        taules.value = response.data; // Use .value to update the ref
     } catch (error) {
         console.error('Error fetching taules:', error);
     }
@@ -143,14 +149,23 @@ const toggleAdmin = () => {
     showAdmin.value = !showAdmin.value;
 };
 
+watch( // Watch the ENTIRE municipio object (important!)
+    () => props.restaurant.municipio,
+    (newMunicipio) => {
+        if (newMunicipio) {
+            selectedProvinciaId.value = newMunicipio.provincia_id;
+        } else {
+            selectedProvinciaId.value = null;
+        }
+    }
+);
+
 
 const updateRestaurantData = (updatedRestaurant) => {
     Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-
-            Object.assign(props.restaurant, response.props.restaurant);
-
-            Object.assign(editableAdminData, response.props.restaurant);
+            Object.assign(props.restaurant, response.props.restaurant); // Update props.restaurant
+            Object.assign(editableAdminData, response.props.restaurant); // Update editableAdminData
             showAdmin.value = false;
         },
         onError: (errors) => {
@@ -158,6 +173,7 @@ const updateRestaurantData = (updatedRestaurant) => {
         },
     });
 };
+
 
 const submitReservation = () => {
     loading.value = true;
@@ -184,5 +200,3 @@ const submitReservation = () => {
 };
 
 </script>
-
-
