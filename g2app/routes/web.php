@@ -17,6 +17,7 @@ Route::get('/register', function () {
 })->name('register');
 
 //Protegir totes les rutes perquè només siguin accessibles després del login
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return redirect()->route('restaurants.index');

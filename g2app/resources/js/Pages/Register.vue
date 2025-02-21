@@ -1,5 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
+import Layout from "@/Layouts/Layout.vue";
 
 const form = useForm({
     name: "",
@@ -20,6 +21,7 @@ const submit = () => {
 </script>
 
 <template>
+    <layout>
     <div class="flex min-h-screen items-center justify-center bg-gray-100">
         <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-4">Registra't</h2>
@@ -101,4 +103,5 @@ const submit = () => {
             </p>
         </div>
     </div>
+    </layout>
 </template>
