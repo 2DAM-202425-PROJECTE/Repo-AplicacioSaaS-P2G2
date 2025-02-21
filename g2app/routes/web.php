@@ -22,12 +22,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('restaurants.index');
     })->name('dashboard');
 
-Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
-Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
-Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
-Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
-Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
-Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
-Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
-  
+    Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+    Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
+    Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
+    Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
+    Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
+    Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
+    Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
+    Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
+
 });
+

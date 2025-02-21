@@ -13,16 +13,15 @@ class Reserva extends Model
     protected $table = 'reserves';
     public $timestamps = false;
     protected $fillable = [
-        'id_usuari',
+        //'id_usuari',
         'id_taula',
         'id_restaurant',
-        'descripcio',
         'telefon',
-        'tipus_cuina',
         'data',
         'hora',
         'num_persones',
         'estat',
+        'solicituds'
     ];
 
     public function usuari(): BelongsTo
