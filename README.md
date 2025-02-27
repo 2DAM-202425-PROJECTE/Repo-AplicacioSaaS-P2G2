@@ -28,10 +28,3 @@ Iniciar el servidor de desenvolupament:
 
 Alternativament, executar les dues comandes juntes:  
 `npm run start`  
-
-
-## Desplegament
-Per desplegar l'aplicació en un entorn de producció, assegura't de:
-- Configurar correctament el fitxer .env per a producció.
-- Executar les migracions i seeders en el servidor de producció.
-- Compilar els recursos front-end per a producció.
