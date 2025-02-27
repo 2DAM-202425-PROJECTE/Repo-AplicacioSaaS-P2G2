@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
@@ -29,5 +30,7 @@ Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.st
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
 Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
-  
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
 });
