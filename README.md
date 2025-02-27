@@ -22,12 +22,12 @@ Executa les migracions i els seeders:
 ## Iniciar l'Aplicació
 
 Compilar els recursos front-end:  
-`npm run dev`
+`npm run dev`  
 Iniciar el servidor de desenvolupament:  
-`php artisan serve`
+`php artisan serve`  
 
-Alternativament, executar les dues comandes juntes:
-`npm run start`
+Alternativament, executar les dues comandes juntes:  
+`npm run start`  
 
 
 ## Desplegament
