@@ -1,5 +1,4 @@
 # Guia d'Inici per a l'Aplicació
-Aquesta guia t'ajudarà a configurar i iniciar l'aplicació pas a pas.  
 
 ## Instal·lació
 1. Clonar el repositori:  
