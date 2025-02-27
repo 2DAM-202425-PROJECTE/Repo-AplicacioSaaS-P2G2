@@ -3,7 +3,7 @@
 ## Instal·lació
 1. Clonar el repositori:  
    `git clone git@github.com:2DAM-202425-PROJECTE/Repo-AplicacioSaaS-P2G2.git`  
-   `cd Repo-AplicacioSaaS-P2G2`
+   `cd Repo-AplicacioSaaS-P2G2/g2app`
    
 2. Instal·lar les dependències de Composer i JavaScript:  
    `composer install`
