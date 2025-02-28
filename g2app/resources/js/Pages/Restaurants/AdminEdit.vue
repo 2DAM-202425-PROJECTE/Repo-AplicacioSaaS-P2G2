@@ -1,6 +1,4 @@
-Fragmento de código
 
-// AdminEdit.vue
 <template>
     <div>
         <form @submit.prevent="submitAdminForm">
