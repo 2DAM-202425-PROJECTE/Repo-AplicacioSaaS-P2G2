@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Restaurant;
-use App\Models\Ubicacio;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

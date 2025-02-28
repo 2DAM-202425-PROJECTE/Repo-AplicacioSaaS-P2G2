@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Municipio;
 use App\Models\Restaurant;
-use App\Models\Ubicacio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Factory as FakerFactory;
 
