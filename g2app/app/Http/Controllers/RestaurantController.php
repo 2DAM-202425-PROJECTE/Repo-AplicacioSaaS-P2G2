@@ -79,6 +79,7 @@ class RestaurantController extends Controller
         $provincias = Provincia::all();
         $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
 
+
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurant,
             'tipusCuinaOptions' => $tipusCuinaOptions,

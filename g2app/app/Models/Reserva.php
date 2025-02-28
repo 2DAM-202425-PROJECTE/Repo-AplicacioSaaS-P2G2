@@ -27,7 +27,9 @@ class Reserva extends Model
         'hora',
         'num_persones',
         'estat',
+        'terrassa',
         'solicituds'
+
     ];
 
     public function usuari(): BelongsTo
