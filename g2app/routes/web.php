@@ -18,10 +18,10 @@ Route::get('/register', function () {
 
 //Protegir totes les rutes perquè només siguin accessibles després del login
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return redirect()->route('restaurants.index');
-    })->name('dashboard');
+//Route::middleware(['auth', 'verified'])->group(function () {
+//    Route::get('/dashboard', function () {
+//        return redirect()->route('restaurants.index');
+//    })->name('dashboard');
 
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
     Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
@@ -32,5 +32,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
     Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
-});
+//});
 

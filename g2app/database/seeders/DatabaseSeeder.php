@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             MunicipiProvinciaSeeder::class,
             RestaurantSeeder::class,
             TaulaSeeder::class,
+            ReservaSeeder::class,
         ]);
 
     }

@@ -16,11 +16,11 @@ class ReservaController extends Controller
     public function index($id): Response
     {
         $restaurant = Restaurant::findOrFail($id);
-        $reservations = Reserva::where('id_restaurant', $id)->get();
+        $reserves = Reserva::where('id_restaurant', $id)->get();
 
         return Inertia::render('Reserves/Index', [
             'restaurant' => $restaurant,
-            'reservations' => $reservations,
+            'reserves' => $reserves
         ]);
     }
     public function store(Request $request): void
