@@ -21,7 +21,9 @@ return new class extends Migration
             $table->date('data');
             $table->time('hora');
             $table->integer('num_persones');
-            $table->string('estat')->default('pendent');
+            $table->unsignedTinyInteger('estat')->default(0); // Using unsignedTinyInteger and default 0
+            $table->index('estat'); // Add index for query performance
+            $table->boolean('terrassa')->default(false)->nullable();
             $table->text('solicituds')->nullable();
         });
     }

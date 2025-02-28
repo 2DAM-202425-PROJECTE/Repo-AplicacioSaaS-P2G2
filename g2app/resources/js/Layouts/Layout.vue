@@ -3,8 +3,9 @@
         <header class="bg-gray-100 p-4 text-center border-b border-gray-300">
             <!-- Header content -->
             <nav class="space-x-4">
-               <a href="/" class="text-blue-500 hover:underline">Home</a>
-               <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>
+               <Link href="/" class="text-blue-500 hover:underline">Home</Link>
+               <Link href="/restaurants" class="text-blue-500 hover:underline">Restaurants</Link>
+
             </nav>
         </header>
         <main class="flex-grow">
@@ -16,10 +17,11 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Layout',
-}
+<script setup>
+
+import { Head, Link, router } from '@inertiajs/vue3';
+
+
 </script>
 
 <style scoped>
