@@ -12,7 +12,7 @@ class RestaurantController extends Controller
 {
     public function index(): Response
     {
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::with('municipio')->get();
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = Municipio::all();
@@ -65,12 +65,7 @@ class RestaurantController extends Controller
 
         return redirect()->route('restaurants.index');
     }
-/*
-    public function edit(Restaurant $restaurant)
-    {
-        return Inertia::render('Restaurants/Edit', ['restaurant' => $restaurant]);
-    }
-*/
+
     public function show($id): Response
     {
         $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id); // Eager load provincia
