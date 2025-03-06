@@ -1,5 +1,3 @@
-<!-- g2app/resources/js/Pages/Restaurants/Index.vue -->
-
 <template>
     <layout>
         <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -12,16 +10,9 @@
                 </Link>
             </div>
             <div class="mt-4">
-                <button @click="showCreateForm = !showCreateForm" class="bg-blue-500 text-white px-4 py-2 rounded">
-                    {{ showCreateForm ? 'Cancel' : 'Crear Restaurant' }}
-                </button>
-                <div v-if="showCreateForm" class="mt-4">
-                    <Create
-                        :tipusCuinaOptions="tipusCuinaOptions"
-                        :provincias="provincias"
-                        :municipios="municipios"
-                    />
-                </div>
+                <Link :href="route('restaurants.create')" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Crear Restaurant
+                </Link>
             </div>
         </div>
     </layout>
@@ -29,35 +20,13 @@
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
-import Create from './Create.vue';
 
 export default {
-    data() {
-        return {
-            showCreateForm: false,
-            tipusCuinaOptions: [],
-            provincias: [],
-            municipios: [],
-        };
-    },
     components: {
         Layout,
-        Create,
     },
     props: {
-        tipusCuinaOptions: {
-            type: Array,
-            required: true,
-        },
         restaurants: Array,
-        provincias: {
-            type: Array,
-            required: true,
-        },
-        municipios: {
-            type: Array,
-            required: true,
-        },
     },
 };
 </script>
