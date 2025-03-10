@@ -1,35 +1,62 @@
 <template>
-    <div class="max-w-4xl mx-auto bg-[#1B1B1B] p-8 rounded-lg shadow-lg border border-[#3D3D3D] text-white">
-        <h2 class="text-3xl font-extrabold text-gold-500 mb-6 border-b border-[#3D3D3D] pb-4">Crear Restaurant</h2>
-        <form @submit.prevent="submitCreateForm" class="space-y-6">
-            <div>
-                <label for="nom" class="block text-lg font-medium text-gold-400">Nom</label>
-                <input v-model="form.nom" id="nom" type="text" class="input-field" required />
+    <div>
+        <h2 class="text-xl font-bold mb-4">Create Restaurant</h2>
+
+        <form @submit.prevent="submitCreateForm">
+            <div class="mb-4">
+                <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
             </div>
-            <div>
-                <label for="descripcio" class="block text-lg font-medium text-gold-400">Descripció</label>
-                <textarea v-model="form.descripcio" id="descripcio" class="input-field" required></textarea>
+
+            <div class="mb-4">
+                <label for="descripcio" class="block text-sm font-medium text-gray-700">Descripció</label>
+                <textarea v-model="form.descripcio" id="descripcio" class="mt-1 block w-full" required></textarea>
             </div>
-            <div>
-                <label for="telefon" class="block text-lg font-medium text-gold-400">Telèfon</label>
-                <input v-model="form.telefon" id="telefon" type="text" class="input-field" required />
+
+            <div class="mb-4">
+                <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
+                <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
             </div>
-            <div>
-                <label for="tipus_cuina" class="block text-lg font-medium text-gold-400">Tipus de Cuina</label>
-                <select v-model="form.tipus_cuina" id="tipus_cuina" class="input-field" required>
+
+            <div class="mb-4">
+                <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
+                <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
                     <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
                 </select>
             </div>
-            <div>
-                <label for="hora_obertura" class="block text-lg font-medium text-gold-400">Hora d'Obertura</label>
-                <input step="any" v-model="form.hora_obertura" id="hora_obertura" type="time" class="input-field" required />
+
+            <div class="mb-4">
+                <label for="provincia" class="block text-sm font-medium text-gray-700">Província</label>
+                <select v-model="selectedProvinciaId" id="provincia" class="mt-1 block w-full" required>
+                    <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{ provincia.name }}</option>
+                </select>
             </div>
-            <div>
-                <label for="hora_tancament" class="block text-lg font-medium text-gold-400">Hora de Tancament</label>
-                <input step="any" v-model="form.hora_tancament" id="hora_tancament" type="time" class="input-field" required />
+
+            <div class="mb-4" v-if="selectedProvinciaId">
+                <label for="municipi" class="block text-sm font-medium text-gray-700">Municipi</label>
+                <select v-model="form.municipio_id" id="municipi" class="mt-1 block w-full" required>
+                    <option v-for="municipio in filteredMunicipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
+                </select>
             </div>
-            <button type="submit" class="bg-gold-500 hover:bg-gold-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300 w-full">
-                Crear Restaurant
+
+            <div class="mb-4">
+                <label for="carrer" class="block text-sm font-medium text-gray-700">Carrer</label>
+                <input v-model="form.carrer" id="carrer" type="text" class="mt-1 block w-full" required />
+            </div>
+
+
+            <div class="mb-4">
+                <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora d'Obertura</label>
+                <input v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
+            </div>
+
+            <div class="mb-4">
+                <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
+                <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                Create Restaurant
             </button>
         </form>
     </div>
@@ -83,31 +110,3 @@ const submitCreateForm = () => {
     Inertia.post(route('restaurants.store'), form);
 };
 </script>
-
-<style scoped>
-.input-field {
-    margin-top: 0.5rem;
-    display: block;
-    width: 100%;
-    background-color: #2A2A2A;
-    border: 1px solid #3D3D3D;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    padding: 0.75rem;
-    font-size: 1.125rem;
-    color: #FFFFFF;
-    transition: box-shadow 0.2s;
-}
-.input-field:focus {
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
-}
-.text-gold-500 {
-    color: #FFD700;
-}
-.text-gold-400 {
-    color: #FFC300;
-}
-.bg-gold-500 {
-    background-color: #FFD700;
-}
-</style>
