@@ -1,27 +1,18 @@
 <template>
     <layout>
-        <div class="max-w-5xl mx-auto bg-[#1B1B1B] p-10 rounded-xl shadow-lg border border-[#3D3D3D] text-white">
-            <h1 class="text-4xl font-extrabold text-gold-500 mb-6 border-b border-[#3D3D3D] pb-4">Restaurants</h1>
-            <ul class="list-none space-y-4">
-                <li v-for="restaurant in restaurants" :key="restaurant.id" class="p-4 bg-[#2A2A2A] rounded-lg shadow-md transition duration-300 hover:bg-[#3A3A3A]">
-                    <a :href="`/restaurants/${restaurant.id}`" class="text-xl font-semibold text-gold-400 hover:text-gold-300 transition duration-300">
-                        {{ restaurant.nom }}
-                    </a>
-                </li>
-            </ul>
-            <div class="mt-6">
-                <button @click="showCreateForm = !showCreateForm"
-                        class="bg-gold-500 hover:bg-gold-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300">
-                    {{ showCreateForm ? 'Cancel·lar' : 'Crear Restaurant' }}
-                </button>
-
-                <div v-if="showCreateForm" class="mt-6 p-6 bg-[#2A2A2A] rounded-lg border border-[#3D3D3D] shadow-md">
-                    <Create
-                        :tipusCuinaOptions="tipusCuinaOptions"
-                        :provincias="provincias"
-                        :municipios="municipios"
-                    />
-                </div>
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-4">Restaurants:</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Link v-for="restaurant in restaurants" :key="restaurant.id" :href="`/restaurants/${restaurant.id}`" class="bg-gray-100 p-4 shadow block text-blue-500 hover:underline hover:text-blue-700">
+                    <h2 class="text-xl font-bold">{{ restaurant.nom }}</h2>
+                    <p class="text-gray-700">{{ restaurant.municipio.name }}</p>
+                    <p class="text-gray-700">{{ restaurant.tipus_cuina }}</p>
+                </Link>
+            </div>
+            <div class="mt-4">
+                <Link :href="route('restaurants.create')" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Crear Restaurant
+                </Link>
             </div>
         </div>
     </layout>
@@ -29,55 +20,13 @@
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
-import Create from './Create.vue';
 
 export default {
-    data() {
-        return {
-            showCreateForm: false,
-            tipusCuinaOptions: [],
-            provincias: [],
-            municipios: [],
-        };
-    },
     components: {
         Layout,
-        Create,
     },
     props: {
-        tipusCuinaOptions: {
-            type: Array,
-            required: true,
-        },
         restaurants: Array,
-        provincias: {
-            type: Array,
-            required: true,
-        },
-        municipios: {
-            type: Array,
-            required: true,
-        },
     },
-
 };
-
 </script>
-
-<style scoped>
-.text-gold-500 {
-    color: #FFD700;
-}
-.text-gold-400 {
-    color: #FFC300;
-}
-.text-gold-300 {
-    color: #FFB000;
-}
-.bg-gold-500 {
-    background-color: #FFD700;
-}
-.bg-gold-600 {
-    background-color: #E6C200;
-}
-</style>

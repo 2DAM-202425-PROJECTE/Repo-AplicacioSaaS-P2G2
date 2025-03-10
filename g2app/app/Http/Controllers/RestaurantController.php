@@ -12,26 +12,19 @@ class RestaurantController extends Controller
 {
     public function index(): Response
     {
-        $restaurants = Restaurant::all();
-        $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
-        $provincias = Provincia::all();
-        $municipios = Municipio::all();
+        $restaurants = Restaurant::with('municipio')->get();
 
         return Inertia::render('Restaurants/Index', [
             'restaurants' => $restaurants,
-            'tipusCuinaOptions' => $tipusCuinaOptions,
-            'provincias' => $provincias,
-            'municipios' => $municipios,
         ]);
     }
 
-    public function create(Request $request) // Add the Request object
+    public function create(Request $request)
     {
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
-        $municipios = [];  // Initialize an empty array for municipios
+        $municipios = [];
 
-        // Check if a province_id is provided in the request (e.g., from a previous selection)
         if ($request->has('provincia_id')) {
             $provinciaId = $request->input('provincia_id');
             $municipios = Municipio::where('provincia_id', $provinciaId)->get();
@@ -40,11 +33,9 @@ class RestaurantController extends Controller
         return Inertia::render('Restaurants/Create', [
             'tipusCuinaOptions' => $tipusCuinaOptions,
             'provincias' => $provincias,
-            'municipios' => $municipios, // Pass the municipios to the view
+            'municipios' => $municipios,
         ]);
     }
-
-
 
     public function store(Request $request)
     {
@@ -57,36 +48,36 @@ class RestaurantController extends Controller
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-
         ]);
-
 
         Restaurant::create($validatedData);
 
         return redirect()->route('restaurants.index');
     }
-/*
-    public function edit(Restaurant $restaurant)
-    {
-        return Inertia::render('Restaurants/Edit', ['restaurant' => $restaurant]);
-    }
-*/
+
     public function show($id): Response
     {
-        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id); // Eager load provincia
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
+
+        return Inertia::render('Restaurants/Show', [
+            'restaurant' => $restaurant,
+        ]);
+    }
+
+    public function edit($id): Response
+    {
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
 
-
-        return Inertia::render('Restaurants/Show', [
+        return Inertia::render('Restaurants/AdminEdit', [
             'restaurant' => $restaurant,
             'tipusCuinaOptions' => $tipusCuinaOptions,
             'provincias' => $provincias,
             'municipios' => $municipios,
         ]);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -100,14 +91,14 @@ class RestaurantController extends Controller
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
-            'provincia_id' => 'required|integer|exists:provincias,id',
             'carrer' => 'required|string',
         ]);
 
-
         $restaurant->update($validatedData);
 
+        return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
     }
+
     public function getMunicipios(Request $request): JsonResponse
     {
         $provinciaId = $request->input('provincia_id');
@@ -115,13 +106,9 @@ class RestaurantController extends Controller
         return response()->json($municipios);
     }
 
-
     public function destroy(Restaurant $restaurant)
     {
         $restaurant->delete();
-
         return redirect()->route('restaurants.index');
     }
-
-
 }
