@@ -2,14 +2,20 @@
     <layout>
         <div class="max-w-5xl mx-auto bg-[#1a1a1a] p-12 rounded-xl shadow-2xl border border-gray-700 text-white">
             <button @click="toggleAdmin" class="bg-[#c9a14a] hover:bg-[#b8923a] text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 mb-8 shadow-lg">
+
                 {{ showAdmin ? 'Veure Restaurant' : 'Modificar' }}
             </button>
+
+            <Link :href="route('restaurant.reserves', { id: restaurant.id })" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-4">
+                Reserves
+            </Link>
 
             <AdminEdit
                 v-if="showAdmin"
                 :adminData="editableAdminData"
                 :tipusCuinaOptions="tipusCuinaOptions"
-                mode="edit"
+                :provincias="provincias"
+                :municipios="municipios"
                 @adminDataUpdated="updateRestaurantData"
             />
 
@@ -34,37 +40,58 @@
                         <p class="text-lg font-semibold text-gray-400">Horari:</p>
                         <p class="text-gray-300 text-lg">Dilluns - Dissabte ({{ horaObertura }} - {{ horaTancament }})</p>
                     </div>
+
+                    <div class="mb-4">
+                        <p><strong>Ubicació:</strong></p>
+                        <p>
+                            {{ restaurant.carrer }},
+                            {{ restaurant.municipio?.name || 'Municipi no disponible' }},
+                            {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
+                        </p>
+                    </div>
                 </div>
-                <div class="md:w-1/3 pl-6 bg-[#2a2a2a] p-10 rounded-xl shadow-xl border border-gray-600">
-                    <h2 class="text-2xl font-bold text-[#c9a14a] mb-6">Reserva una Taula</h2>
-                    <form @submit.prevent="submitReservation" class="space-y-6">
-                        <div>
-                            <label for="telefon" class="block text-lg font-medium text-gray-400">Telèfon</label>
-                            <input type="text" v-model="reservation.telefon" id="telefon" class="input-field" required>
+                <div class="w-1/3 pl-4">
+                    <div class="mt-8">
+                    <h2 class="text-xl font-bold mb-4">Crea una Reserva</h2>
+                    <form @submit.prevent="submitReservation">
+                        <input type="hidden" v-model="reservation.id_restaurant">
+                        <div class="mb-4">
+                            <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
+                            <input type="text" v-model="reservation.telefon" id="telefon" class="mt-1 block w-full" required>
                         </div>
-                        <div>
-                            <label for="data" class="block text-lg font-medium text-gray-400">Data</label>
-                            <input type="date" v-model="reservation.data" id="data" class="input-field" required>
+                        <div class="mb-4">
+                            <label for="data" class="block text-sm font-medium text-gray-700">Data</label>
+                            <input type="date" v-model="reservation.data" id="data" class="mt-1 block w-full" required>
                         </div>
-                        <div>
-                            <label for="hora" class="block text-lg font-medium text-gray-400">Hora</label>
-                            <input type="time" v-model="reservation.hora" id="hora" class="input-field" required>
+                        <div class="mb-4">
+                            <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
+                            <input type="time" v-model="reservation.hora" id="hora" class="mt-1 block w-full" required>
                         </div>
-                        <div>
-                            <label for="num_persones" class="block text-lg font-medium text-gray-400">Número de Persones</label>
-                            <input type="number" v-model="reservation.num_persones" id="num_persones" class="input-field" required min="1" max="20">
+                        <div class="mb-4">
+                            <label for="num_persones" class="block text-sm font-medium text-gray-700">Número de Persones</label>
+                            <input type="number" v-model="reservation.num_persones" id="num_persones" class="mt-1 block w-full" required min="1">
                         </div>
-                        <div>
-                            <label for="id_taula" class="block text-lg font-medium text-gray-400">Taula</label>
-                            <select v-model="reservation.id_taula" id="id_taula" class="input-field" required>
-                                <option v-for="taula in taules" :key="taula.id" :value="taula.id">Taula {{ taula.id }}</option>
-                            </select>
+
+                        <div class="mt-1">
+                            <label class="inline-flex items-center">
+                                <input type="radio" v-model="reservation.terrassa" :value="true" class="form-radio">
+                                <span class="ml-2">Terrassa</span>
+                            </label>
+                            <label class="inline-flex items-center ml-6">
+                                <input type="radio" v-model="reservation.terrassa" :value="false" class="form-radio">
+                                <span class="ml-2">Interior</span>
+                            </label>
                         </div>
-                        <button type="submit" class="bg-[#c9a14a] hover:bg-[#b8923a] text-white font-semibold px-6 py-3 rounded-full shadow-lg transition-all duration-300 w-full" :disabled="loading">
+                        <div class="mb-4">
+                            <label for="solicituds" class="block text-sm font-medium text-gray-700">Solicituds</label>
+                            <textarea v-model="reservation.solicituds" id="solicituds" class="mt-1 block w-full"></textarea>
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded" :disabled="loading">
                             Reservar
                         </button>
-                        <div v-if="loading" class="mt-4 text-[#c9a14a] font-medium">Creant reserva...</div>
+                        <div v-if="loading" class="mt-4 text-blue-500">Creant reserva...</div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
@@ -83,15 +110,18 @@
 
 <script setup>
 import { defineProps, reactive, ref, onMounted } from 'vue';
+import {Link} from '@inertiajs/vue3';
 import Layout from '@/Layouts/Layout.vue';
 import AdminEdit from './AdminEdit.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { route } from "ziggy-js";
+import { route } from 'ziggy-js';
 import axios from 'axios';
 
 const props = defineProps({
     restaurant: Object,
     tipusCuinaOptions: Array,
+    provincias: Array,
+    municipios: Array,
 });
 
 const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
@@ -105,22 +135,25 @@ const reservation = reactive({
     data: '',
     hora: '',
     num_persones: 1,
-    id_taula: null,
-    estat: 'pendent',
+    estat: 0, // Default to PENDENT
+    terrassa: false, // Default to terrassa
+    solicituds: '',
 });
 
-const taules = reactive([]);
+const taules = ref([]);
 const loading = ref(false);
 const showAdmin = ref(false);
 
-// Deep copy for editing:
-const editableAdminData = reactive(JSON.parse(JSON.stringify(props.restaurant)));
-
+const editableAdminData = reactive(JSON.parse(JSON.stringify({
+    ...props.restaurant,
+    provincia_id: props.restaurant.municipio?.provincia_id,
+    municipio_id: props.restaurant.municipio?.id,
+})));
 
 onMounted(async () => {
     try {
         const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
-        taules.push(...response.data);
+        taules.value = response.data;
     } catch (error) {
         console.error('Error fetching taules:', error);
     }
@@ -130,18 +163,15 @@ const toggleAdmin = () => {
     showAdmin.value = !showAdmin.value;
 };
 
-
 const updateRestaurantData = (updatedRestaurant) => {
     Inertia.put(route('restaurants.update', { restaurant: props.restaurant.id }), updatedRestaurant, {
         onSuccess: (response) => {
-            // Update the original restaurant prop:
             Object.assign(props.restaurant, response.props.restaurant);
-            // Update the editable copy:
             Object.assign(editableAdminData, response.props.restaurant);
-            showAdmin.value = false; // Close the admin view
+            showAdmin.value = false;
         },
         onError: (errors) => {
-            console.error("Error updating restaurant:", errors);
+            console.error('Error updating restaurant:', errors);
         },
     });
 };
@@ -151,13 +181,13 @@ const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
             console.log('Reserva creada amb èxit');
-            // Reset the reservation form or provide feedback to the user
             Object.assign(reservation, {
                 telefon: '',
                 data: '',
                 hora: '',
                 num_persones: 1,
                 id_taula: null,
+                estat: 0, // Reset to PENDENT
             });
         },
         onError: (errors) => {
@@ -167,8 +197,7 @@ const submitReservation = () => {
             setTimeout(() => {
                 loading.value = false;
             }, 1000);
-        }
+        },
     });
 };
-
 </script>

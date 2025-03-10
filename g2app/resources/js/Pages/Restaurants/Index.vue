@@ -14,8 +14,13 @@
                         class="bg-gold-500 hover:bg-gold-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300">
                     {{ showCreateForm ? 'Cancel·lar' : 'Crear Restaurant' }}
                 </button>
+
                 <div v-if="showCreateForm" class="mt-6 p-6 bg-[#2A2A2A] rounded-lg border border-[#3D3D3D] shadow-md">
-                    <Create :tipusCuinaOptions="tipusCuinaOptions" />
+                    <Create
+                        :tipusCuinaOptions="tipusCuinaOptions"
+                        :provincias="provincias"
+                        :municipios="municipios"
+                    />
                 </div>
             </div>
         </div>
@@ -31,6 +36,8 @@ export default {
         return {
             showCreateForm: false,
             tipusCuinaOptions: [],
+            provincias: [],
+            municipios: [],
         };
     },
     components: {
@@ -43,8 +50,18 @@ export default {
             required: true,
         },
         restaurants: Array,
+        provincias: {
+            type: Array,
+            required: true,
+        },
+        municipios: {
+            type: Array,
+            required: true,
+        },
     },
-}
+
+};
+
 </script>
 
 <style scoped>

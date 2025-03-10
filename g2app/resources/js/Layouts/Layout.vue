@@ -7,6 +7,7 @@
             </nav>
         </header>
         <main class="flex-grow p-6 bg-[#1B1B1B] text-white">
+
             <slot></slot>
         </main>
         <footer class="bg-[#1B1B1B] p-4 text-center border-t border-[#3D3D3D] text-gold-500 text-sm">
@@ -15,10 +16,11 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Layout',
-}
+<script setup>
+
+import { Head, Link, router } from '@inertiajs/vue3';
+
+
 </script>
 
 <style scoped>

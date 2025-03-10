@@ -1,3 +1,4 @@
+
 <template>
     <div class="max-w-4xl mx-auto bg-[#1B1B1B] p-8 rounded-lg shadow-lg border border-[#3D3D3D] text-white">
         <h2 class="text-3xl font-extrabold text-gold-500 mb-6 border-b border-[#3D3D3D] pb-4">Personalitzar Restaurant</h2>
@@ -36,37 +37,51 @@
 </template>
 
 <script setup>
+import { ref, reactive, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { route } from 'ziggy-js';
+import axios from 'axios';
 
 const props = defineProps({
     adminData: Object,
     tipusCuinaOptions: Array,
+    provincias: Array,
 });
+
 
 const submitAdminForm = () => {
     console.log('adminData.tipus_cuina:', props.adminData.tipus_cuina);
 
-    const updateUrl = route('restaurants.update', { restaurant: props.adminData.id });
+const form = reactive({ ...props.adminData });
 
-    Inertia.put(updateUrl, {
-        nom: props.adminData.nom,
-        descripcio: props.adminData.descripcio,
-        telefon: props.adminData.telefon,
-        tipus_cuina: props.adminData.tipus_cuina,
-        hora_obertura: props.adminData.hora_obertura,
-        hora_tancament: props.adminData.hora_tancament,
-    }, {
-        preserveState: true,
-        onSuccess: () => {
-            props.adminData = response.props.adminData;
-            console.log('Restaurant updated successfully');
+const selectedProvinciaId = ref(props.adminData.provincia_id);
+const municipios = ref([]);
+
+onMounted(() => {
+    fetchMunicipios();
+});
+
+const fetchMunicipios = async () => {
+    try {
+        const response = await axios.get(route('get.municipios', { provincia_id: selectedProvinciaId.value }));
+        municipios.value = response.data;
+    } catch (error) {
+        console.error("Error fetching municipios:", error);
+    }
+};
+
+const submitAdminForm = () => {
+    Inertia.put(route('restaurants.update', { restaurant: form.id }), form, {
+        onSuccess: (response) => {
+            defineEmits(['adminDataUpdated'])(response.props.restaurant);
         },
         onError: (errors) => {
-            console.error('Error updating restaurant data:', errors);
-        }
+            console.error("Error updating restaurant:", errors);
+        },
     });
 };
+
+defineEmits(['adminDataUpdated']);
 </script>
 
 <style scoped>

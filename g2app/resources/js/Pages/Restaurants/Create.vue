@@ -36,12 +36,23 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref, computed, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { route } from 'ziggy-js';
 
 const props = defineProps({
-    tipusCuinaOptions: Array,
+    tipusCuinaOptions: {
+        type: Array,
+        default: () => [],
+    },
+    provincias: {
+        type: Array,
+        default: () => [],
+    },
+    municipios: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = reactive({
@@ -49,21 +60,27 @@ const form = reactive({
     descripcio: '',
     telefon: '',
     tipus_cuina: '',
+    carrer: '',
+    codi_postal: '',
     hora_obertura: '',
     hora_tancament: '',
+    municipio_id: null,
+});
+
+const selectedProvinciaId = ref(null);
+
+const filteredMunicipios = computed(() => {
+    return props.municipios.filter(municipio => municipio.provincia_id === selectedProvinciaId.value);
+});
+
+watch(selectedProvinciaId, (newVal) => {
+    if (newVal) {
+        form.municipio_id = null;
+    }
 });
 
 const submitCreateForm = () => {
-    const newRestaurant = {...form};
-
-    Inertia.post(route('restaurants.store'), newRestaurant, {
-        onSuccess: () => {
-            console.log('Restaurant created successfully');
-        },
-        onError: (errors) => {
-            console.error('Error creating the restaurant:', errors);
-        },
-    });
+    Inertia.post(route('restaurants.store'), form);
 };
 </script>
 
