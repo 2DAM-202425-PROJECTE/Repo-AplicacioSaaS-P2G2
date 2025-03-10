@@ -83,7 +83,7 @@
                             </button>
                         </form>
                     </div>
-                    <div v-if="page.props.flash && page.props.flash.message" class="mt-4 px-4 py-2 bg-gray-200" :class="page.props.flash.type === 'success' ? 'text-green-500' : 'text-red-500'">
+                    <div v-if="page.props.flash && page.props.flash.message" class="mt-4 px-4 py-2  text-green-900 bg-green-200" :class="page.props.flash.type === 'success' ? 'text-green-500' : 'text-red-500'">
                         {{ page.props.flash.message }}
                     </div>
                 </div>
