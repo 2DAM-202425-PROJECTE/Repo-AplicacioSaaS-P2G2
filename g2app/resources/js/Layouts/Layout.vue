@@ -2,8 +2,9 @@
     <div class="flex flex-col min-h-screen">
         <header class="bg-[#1B1B1B] p-6 text-center border-b border-[#3D3D3D] shadow-lg">
             <nav class="flex justify-center space-x-6">
-                <a href="/" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Home</a>
-                <!--<a href="/restaurants" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Restaurants</a>-->
+                <a href="/home" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Home</a>
+                <a href="/restaurants" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Restaurants</a>
+                <a href="/reserves" class="text-gold-500 text-lg font-semibold hover:text-gold-400 transition duration-300">Reserves</a>
             </nav>
         </header>
         <main class="flex-grow p-6 bg-[#1B1B1B] text-white">

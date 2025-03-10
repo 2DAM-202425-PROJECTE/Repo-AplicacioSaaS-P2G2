@@ -7,13 +7,29 @@ use Inertia\Response;
 
 class RestaurantController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $restaurants = Restaurant::all();
+        $search = $request->query('search');
+        $tipusCuina = $request->query('tipus_cuina');
+        $query = Restaurant::query();
+
+        if ($search) {
+            $query->where('nom', 'like', '%' . $search . '%')
+                ->orWhere('descripcio', 'like', '%' . $search . '%');
+        }
+
+        if ($tipusCuina) {
+            $query->where('tipus_cuina', $tipusCuina);
+        }
+
+        $restaurants = $query->get();
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
+
         return Inertia::render('Restaurants/Index', [
             'restaurants' => $restaurants,
             'tipusCuinaOptions' => $tipusCuinaOptions,
+            'search' => $search,
+            'tipusCuina' => $tipusCuina,
         ]);
     }
 

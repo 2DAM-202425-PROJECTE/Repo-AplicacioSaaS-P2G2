@@ -34,4 +34,15 @@ class ReservaController extends Controller
             'reserva' => $reserva,
         ]);
     }
+
+    public function index(Request $request): Response
+    {
+        $restaurantId = $request->query('restaurant_id');
+        $reserves = Reserva::where('id_restaurant', $restaurantId)->get();
+
+        return Inertia::render('Reserves/Index', [
+            'reserves' => $reserves,
+            'restaurantId' => $restaurantId,
+        ]);
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
@@ -21,10 +23,11 @@ Route::get('/', function () {
 
 
 Route::get('/', [RestaurantController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'home'])->name('Home');
 Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
 Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
 Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
-Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
+Route::get('/reserves', [ReservaController::class, 'index'])->name('reserves.index');
 Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
 Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
