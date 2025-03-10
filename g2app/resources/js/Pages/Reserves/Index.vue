@@ -8,7 +8,7 @@
             <h1 class="text-3xl font-bold mb-4">Reserves de {{ restaurant.nom }}</h1>
             <table class="min-w-full bg-white">
                 <thead>
-                <tr class="bg-gray-200">
+                <tr class="bg-gray-200 text-gray-900">
                     <th class="py-2 px-4 text-left">Data</th>
                     <th class="py-2 px-4 text-left">Hora</th>
                     <th class="py-2 px-4 text-left">Telèfon</th>
@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                 <template v-for="reserves in reserves" :key="reserves.id">
-                    <tr @click="toggleExpanded(reserves.id)" class="border-b cursor-pointer hover:bg-gray-50">
+                    <tr @click="toggleExpanded(reserves.id)" class="border-b cursor-pointer hover:bg-gray-50 text-blue-950">
                         <td class="py-2 px-4">{{ reserves.data }}</td>
                         <td class="py-2 px-4">{{ reserves.hora }}</td>
                         <td class="py-2 px-4">{{ reserves.telefon }}</td>

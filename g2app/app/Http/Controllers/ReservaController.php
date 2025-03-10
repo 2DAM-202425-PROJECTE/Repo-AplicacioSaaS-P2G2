@@ -23,7 +23,8 @@ class ReservaController extends Controller
             'reserves' => $reserves
         ]);
     }
-    public function store(Request $request): void
+
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'id_restaurant' => 'required|exists:restaurants,id',
@@ -44,7 +45,6 @@ class ReservaController extends Controller
         // Fetch available taules for the restaurant
         $taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
 
-
         // Randomly select a taula
         $randomTaula = $taules->random();
 
@@ -53,6 +53,11 @@ class ReservaController extends Controller
 
         $reserva = new Reserva($validatedData);
         $reserva->save();
-    }
 
+
+        return redirect()->route('restaurants.show', ['id' => $request->id_restaurant])
+            ->with(['flash' => ['message' => 'Reserva creada amb èxit!', 'type' => 'success']])
+            ->withInput();
+
+    }
 }
