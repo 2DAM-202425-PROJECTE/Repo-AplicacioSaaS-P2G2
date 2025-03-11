@@ -1,67 +1,91 @@
 <template>
     <layout>
-        <div class="max-w-5xl mx-auto bg-[#1B1B1B] p-10 rounded-xl shadow-lg border border-[#3D3D3D] text-white">
-            <h1 class="text-4xl font-extrabold text-gold-500 mb-6 border-b border-[#3D3D3D] pb-4">Reserves</h1>
-            <ul class="list-none space-y-4">
-                <li v-for="reserva in reserves" :key="reserva.id" class="reservation-card">
-                    <h2 class="text-2xl font-bold text-gold-500">Reserva per a {{ reserva.num_persones }} persones</h2>
-                    <p class="text-gray-400">📞 {{ reserva.telefon }}</p>
-                    <p class="text-gray-400">📅 {{ reserva.data }}</p>
-                    <p class="text-gray-400">🕒 {{ reserva.hora }}</p>
-                    <p class="text-gray-400">🪑 Taula: {{ reserva.id_taula }}</p>
-                </li>
-            </ul>
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md space-y-6">
+            <Link :href="route('restaurants.show', { id: restaurant.id })"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6">
+                <-Tornar
+            </Link>
+            <h1 class="text-3xl font-bold mb-4">Reserves de {{ restaurant.nom }}</h1>
+            <table class="min-w-full bg-white">
+                <thead>
+                <tr class="bg-gray-200 text-gray-900">
+                    <th class="py-2 px-4 text-left">Data</th>
+                    <th class="py-2 px-4 text-left">Hora</th>
+                    <th class="py-2 px-4 text-left">Telèfon</th>
+                    <th class="py-2 px-4 text-left">Persones</th>
+                    <th class="py-2 px-4 text-left">Estat</th>
+                    <th class="py-2 px-4 text-left">Terrassa</th>
+                    <th class="py-2 px-4 text-left">Taula</th>
+                    <th class="py-2 px-4 text-left">Solicituds</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template v-for="reserves in reserves" :key="reserves.id">
+                    <tr @click="toggleExpanded(reserves.id)" class="border-b cursor-pointer hover:bg-gray-50 text-blue-950">
+                        <td class="py-2 px-4">{{ reserves.data }}</td>
+                        <td class="py-2 px-4">{{ reserves.hora }}</td>
+                        <td class="py-2 px-4">{{ reserves.telefon }}</td>
+                        <td class="py-2 px-4">{{ reserves.num_persones }}</td>
+                        <td class="py-2 px-4">{{ getStatusText(reserves.estat) }}</td>
+                        <td class="py-2 px-4">{{ reserves.terrassa ? 'Sí' : 'No' }}</td>
+                        <td class="py-2 px-4">{{ reserves.id_taula }}</td>
+                        <td class="py-2 px-4">
+                            <span v-if="reserves.solicituds && reserves.solicituds.length > 10"
+                                  :title="reserves.solicituds">
+                                {{ reserves.solicituds.substring(0, 10) }}...
+                            </span>
+                            <span v-else>{{ reserves.solicituds }}</span>
+                        </td>
+                    </tr>
+                    <tr :class="{ 'hidden': expandedRowId !== reserves.id }">
+                        <td colspan="8" class="p-4 bg-gray-100">
+                            <div class="space-y-2">
+                                <p><strong>Sol·licituds:</strong> {{ reserves.solicituds }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
         </div>
     </layout>
 </template>
 
-<script>
+<script setup>
+import { defineProps, ref } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
-import axios from 'axios';
+import { Link } from "@inertiajs/vue3";
 
-export default {
-    data() {
-        return {
-            reserves: [],
-        };
-    },
-    components: {
-        Layout,
-    },
-    props: {
-        restaurantId: {
-            type: Number,
-            required: true,
-        },
-    },
-    mounted() {
-        this.fetchReserves();
-    },
-    methods: {
-        async fetchReserves() {
-            try {
-                const response = await axios.get(route('reserves.index', { restaurant_id: this.restaurantId }));
-                this.reserves = response.data;
-            } catch (error) {
-                console.error('Error fetching reserves:', error);
-            }
-        },
-    },
-}
+const props = defineProps({
+    restaurant: Object,
+    reserves: Array,
+});
+
+const expandedRowId = ref(null);
+
+const toggleExpanded = (id) => {
+    expandedRowId.value = expandedRowId.value === id ? null : id;
+};
+
+const getStatusText = (status) => {
+    switch (status) {
+        case 0:
+            return 'Pendent';
+        case 1:
+            return 'Confirmada';
+        case 2:
+            return 'Cancel·lada';
+        case 3:
+            return 'Completada';
+        default:
+            return 'Desconegut';
+    }
+};
 </script>
 
 <style scoped>
-.reservation-card {
-    display: block;
-    background: #2A2A2A;
-    border-radius: 10px;
-    padding: 15px;
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.reservation-card:hover {
-    background: #3A3A3A;
-    transform: scale(1.02);
+.hidden {
+    display: none;
 }
 </style>

@@ -3,46 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reserva;
+use App\Models\Restaurant;
+use App\Models\Taula;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ReservaController extends Controller
 {
-    public function create($restaurantId): Response
+
+    public function index($id): Response
     {
-        return Inertia::render('Reserves/Create', [
-            'restaurantId' => $restaurantId,
+        $restaurant = Restaurant::findOrFail($id);
+        $reserves = Reserva::where('id_restaurant', $id)->get();
+
+        return Inertia::render('Reserves/Index', [
+            'restaurant' => $restaurant,
+            'reserves' => $reserves
         ]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'id_restaurant' => 'required|exists:restaurants,id',
-            'telefon' => 'required|string|max:20',
+            'telefon' => 'required|string',
             'data' => 'required|date',
             'hora' => 'required|date_format:H:i',
-            'num_persones' => 'required|integer|min:1|max:20',
-            'id_taula' => 'required|exists:taules,id',
-            'estat' => 'required|string|max:255',
+            'num_persones' => 'required|integer|min:1',
+            'estat' => ['required', Rule::in([
+                Reserva::PENDENT,
+                Reserva::CONFIRMAT,
+                Reserva::CANCELAT,
+                Reserva::COMPLETAT,
+            ])],
+            'solicituds' => 'nullable|string',
+            'terrassa' => 'nullable|boolean',
         ]);
 
-        $reserva = Reserva::create($validated);
+        // Fetch available taules for the restaurant
+        $taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
 
-        return Inertia::render('Reserves/Show', [
-            'reserva' => $reserva,
-        ]);
+        // Randomly select a taula
+        $randomTaula = $taules->random();
+
+        // Add the randomly selected id_taula to the validated data
+        $validatedData['id_taula'] = $randomTaula->id;
+
+        $reserva = new Reserva($validatedData);
+        $reserva->save();
+
+
+        return redirect()->route('restaurants.show', ['id' => $request->id_restaurant])
+            ->with(['flash' => ['message' => 'Reserva creada amb èxit!', 'type' => 'success']])
+            ->withInput();
+
     }
 
-    public function index(Request $request): Response
-    {
-        $restaurantId = $request->query('restaurant_id');
-        $reserves = Reserva::where('id_restaurant', $restaurantId)->get();
-
-        return Inertia::render('Reserves/Index', [
-            'reserves' => $reserves,
-            'restaurantId' => $restaurantId,
-        ]);
-    }
 }

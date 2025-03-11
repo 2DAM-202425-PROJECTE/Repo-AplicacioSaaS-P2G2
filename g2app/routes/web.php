@@ -1,26 +1,23 @@
 <?php
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-/*
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-*/
-//Route::resource('restaurants', RestaurantController::class);
-//Route::get('/restaurants', [RestaurantController::class, 'index'])->middleware(['auth', 'verified'])->name('restaurants.index');
 
+//Fer que la pàgina principal sigui el login
+Route::get('/', function () {
+    return Inertia::render('Login');
+})->name('login');
+
+//Permetre l'accés al registre sense estar autenticat
+Route::get('/register', function () {
+    return Inertia::render('Register');
+})->name('register');
+
+//Protegir totes les rutes perquè només siguin accessibles després del login
 
 Route::get('/', [RestaurantController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'home'])->name('Home');
@@ -32,13 +29,5 @@ Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
 Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
 Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
 
+//});
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
