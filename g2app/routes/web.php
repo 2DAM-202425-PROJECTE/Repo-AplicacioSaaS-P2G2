@@ -33,6 +33,7 @@ Route::get('/register', function () {
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
     Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
+    Route::put('/reserves/{id}', [ReservaController::class, 'update'])->name('reserves.update');
 //});
 
 //});

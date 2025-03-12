@@ -42,7 +42,6 @@ class ReservaController extends Controller
             'terrassa' => 'nullable|boolean',
         ]);
 
-        // Fetch available taules for the restaurant
         $taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
 
         // Randomly select a taula
@@ -59,5 +58,23 @@ class ReservaController extends Controller
             ->with(['flash' => ['message' => 'Reserva creada amb èxit!', 'type' => 'success']])
             ->withInput();
 
+    }
+
+    public function update(Request $request, $id)
+    {
+        $reserva = Reserva::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'estat' => ['required', Rule::in([
+                Reserva::PENDENT,
+                Reserva::CONFIRMAT,
+                Reserva::CANCELAT,
+                Reserva::COMPLETAT,
+            ])],
+        ]);
+
+        $reserva->update($validatedData);
+
+        return redirect()->back()->with('success', 'Status updated successfully');
     }
 }

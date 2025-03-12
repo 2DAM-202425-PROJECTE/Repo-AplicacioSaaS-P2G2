@@ -105,4 +105,5 @@ const submitAdminForm = () => {
         },
     });
 };
+
 </script>
