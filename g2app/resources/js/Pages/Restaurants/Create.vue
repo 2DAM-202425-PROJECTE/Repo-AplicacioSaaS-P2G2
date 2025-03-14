@@ -48,6 +48,95 @@
                     <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
                     <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
                 </div>
+
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold mb-4">Afegir Plats</h2>
+                    <div class="mb-4">
+                        <label for="plat_nom" class="block text-sm font-medium text-gray-700">Nom del Plat</label>
+                        <input v-model="newPlat.nom" id="plat_nom" type="text" class="mt-1 block w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="plat_descripcio" class="block text-sm font-medium text-gray-700">Descripció del Plat</label>
+                        <textarea v-model="newPlat.descripcio" id="plat_descripcio" class="mt-1 block w-full"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="plat_preu" class="block text-sm font-medium text-gray-700">Preu del Plat</label>
+                        <input v-model="newPlat.preu" id="plat_preu" type="number" step="0.01" class="mt-1 block w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Al·lèrgens i Opcions Dietètiques</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.gluten" class="form-checkbox">
+                                <span class="ml-2">Gluten</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.lactics" class="form-checkbox">
+                                <span class="ml-2">Lactics</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.crustaci" class="form-checkbox">
+                                <span class="ml-2">Crustacis</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.ous" class="form-checkbox">
+                                <span class="ml-2">Ous</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.lupines" class="form-checkbox">
+                                <span class="ml-2">Lupines</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.mostassa" class="form-checkbox">
+                                <span class="ml-2">Mostassa</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.cacahuats" class="form-checkbox">
+                                <span class="ml-2">Cacahuets</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.soja" class="form-checkbox">
+                                <span class="ml-2">Soja</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.no_vegetaria" class="form-checkbox">
+                                <span class="ml-2">Vegetarià</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.no_vega" class="form-checkbox">
+                                <span class="ml-2">Vegà</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.carn_vermella" class="form-checkbox">
+                                <span class="ml-2">Carn Vermella</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.no_kosher" class="form-checkbox">
+                                <span class="ml-2">Kosher</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.no_halal" class="form-checkbox">
+                                <span class="ml-2">Halal</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" v-model="newPlat.no_keto" class="form-checkbox">
+                                <span class="ml-2">Keto</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" @click="addPlat" class="bg-green-500 text-white px-4 py-2 rounded">Afegir Plat</button>
+                </div>
+
+                <div v-if="form.plats.length > 0" class="mt-8">
+                    <h3 class="text-lg font-bold mb-2">Plats Afegits:</h3>
+                    <ul>
+                        <li v-for="(plat, index) in form.plats" :key="index" class="mb-2">
+                            {{ plat.nom }} - {{ plat.preu }} €
+                        </li>
+                    </ul>
+                </div>
+
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                     Crear Restaurant
                 </button>
@@ -111,11 +200,60 @@ export default {
             });
         };
 
+
+        const newPlat = reactive({
+            nom: '',
+            descripcio: '',
+            preu: null,
+            gluten: false,
+            lactics: false,
+            crustaci: false,
+            ous: false,
+            lupines: false,
+            mostassa: false,
+            cacahuats: false,
+            soja: false,
+            vegetaria: true,
+            vega: true,
+            carn_vermella: true,
+            kosher: true,
+            halal: true,
+            keto: true,
+        });
+
+        form.plats = reactive([]);
+
+        const addPlat = () => {
+                form.plats.push({ ...newPlat });
+                // Reset newPlat
+                Object.assign(newPlat, {
+                    nom: '',
+                    descripcio: '',
+                    preu: null,
+                    gluten: false,
+                    lactics: false,
+                    crustaci: false,
+                    ous: false,
+                    lupines: false,
+                    mostassa: false,
+                    cacahuats: false,
+                    soja: false,
+                    vegetaria: true,
+                    vega: true,
+                    carn_vermella: true,
+                    kosher: true,
+                    halal: true,
+                    keto: true,
+                });
+            };
+
         return {
             form,
             selectedProvinciaId,
             municipios,
+            newPlat, // Return newPlat
             fetchMunicipios,
+            addPlat,
             submitForm,
         };
     },

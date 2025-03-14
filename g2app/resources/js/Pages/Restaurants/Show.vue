@@ -41,6 +41,36 @@
                             {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
                         </p>
                     </div>
+
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold mb-4">Carta</h2>
+                        <ul>
+
+                            <li v-for="plat in restaurant.plats" :key="plat.id" class="border-b-2 p-2 mb-4">
+                                <div class="flex flex-wrap gap-3">
+
+                                    <h3 class="text-lg font-semibold">{{ plat.nom }}</h3>
+                                    <p>{{ plat.preu }} €</p>
+                                </div>
+                                <p class="mb-1">{{ plat.descripcio }}</p>
+
+                                <div v-if="allergenList(plat).length > 0">
+                                    <h4 class="font-semibold mb-1">Al·lèrgens:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a class= "px-2 py-0.5 bg-gray-100" v-for="allergen in allergenList(plat)" :key="allergen">{{ allergen }}</a>
+                                    </div>
+                                </div>
+
+                                <div v-if="dietaryList(plat).length > 0" class="mt-2">
+                                    <h4 class="font-semibold mb-1">Opcions Dietètiques:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a class = "px-2 py-0.5 bg-gray-100" v-for="dietary in dietaryList(plat)" :key="dietary">{{ dietary }}</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
                 <div class="w-1/3 pl-4">
                     <div class="mt-8">
@@ -81,6 +111,7 @@
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                                 Reservar
                             </button>
+
                         </form>
                     </div>
                     <div v-if="page.props.flash && page.props.flash.message" class="mt-4 px-4 py-2  text-green-900 bg-green-200" :class="page.props.flash.type === 'success' ? 'text-green-500' : 'text-red-500'">
@@ -123,6 +154,33 @@ const reservation = reactive({
 
 const taules = ref([]);
 const page = usePage();
+
+const allergenList = (plat) => {
+    const allergens = [];
+    if (plat.gluten) allergens.push('Gluten');
+    if (plat.lactics) allergens.push('Lactics');
+    if (plat.crustaci) allergens.push('Crustacis');
+    if (plat.ous) allergens.push('Ous');
+    if (plat.lupines) allergens.push('Lupines');
+    if (plat.mostassa) allergens.push('Mostassa');
+    if (plat.cacahuats) allergens.push('Cacahuets');
+    if (plat.soja) allergens.push('Soja');
+    if (plat.carn_vermella) allergens.push('Carn vermella');
+    return allergens;
+};
+
+
+
+const dietaryList = (plat) => {
+    const dietary = [];
+    if (plat.vegetaria) dietary.push('Vegetarià');
+    if (plat.vega) dietary.push('Vegà');
+    if (plat.kosher) dietary.push('Kosher');
+    if (plat.halal) dietary.push('Halal');
+    if (plat.keto) dietary.push('Keto');
+    return dietary;
+};
+
 
 
 onMounted(async () => {
