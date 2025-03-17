@@ -41,6 +41,39 @@
                             {{ restaurant.municipio?.provincia?.name || 'Provincia no disponible' }}
                         </p>
                     </div>
+
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold mb-4">Carta</h2>
+                        <ul>
+
+                            <li v-for="plat in restaurant.plats.slice(o, visiblePlatsCount)" :key="plat.id" class="border-b-2 p-2 mb-4">
+                                <div class="flex flex-wrap gap-3">
+
+                                    <p class="text-lg font-semibold">{{ plat.nom }}</p>
+                                    <p class=""> {{ plat.preu }} €</p>
+                                </div>
+                                <p class="mb-1">{{ plat.descripcio }}</p>
+
+                                <div v-if="allergenList(plat).length > 0">
+                                    <h4 class="font-semibold mb-1">Al·lèrgens:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a class= "px-2 py-0.5 bg-gray-100" v-for="allergen in allergenList(plat)" :key="allergen">{{ allergen }}</a>
+                                    </div>
+                                </div>
+
+                                <div v-if="dietaryList(plat).length > 0" class="mt-2">
+                                    <h4 class="font-semibold mb-1">Opcions Dietètiques:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a class = "px-2 py-0.5 bg-gray-100" v-for="dietary in dietaryList(plat)" :key="dietary">{{ dietary }}</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <button v-if="visiblePlatsCount < restaurant.plats.length" @click="visiblePlatsCount += initialLimit" class="text-blue-600 px-4 py-2 mt-2">
+                            + Mostrar més
+                        </button>
+                    </div>
+
                 </div>
                 <div class="w-1/3 pl-4">
                     <div class="mt-8">
@@ -81,6 +114,7 @@
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                                 Reservar
                             </button>
+
                         </form>
                     </div>
                     <div v-if="page.props.flash && page.props.flash.message" class="mt-4 px-4 py-2  text-green-900 bg-green-200" :class="page.props.flash.type === 'success' ? 'text-green-500' : 'text-red-500'">
@@ -94,37 +128,68 @@
 </template>
 
 <script setup>
-import {defineProps, reactive, ref, onMounted, watch} from 'vue';
-import {Link, usePage} from '@inertiajs/vue3';
-import Layout from '@/Layouts/Layout.vue';
-import {Inertia} from '@inertiajs/inertia';
-import {route} from 'ziggy-js';
+import { defineProps, reactive, ref, onMounted } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
+import { route } from 'ziggy-js';
 import axios from 'axios';
+import Layout from "@/Layouts/Layout.vue";
 
+//Definició de les propietats
 const props = defineProps({
     restaurant: Object,
 });
 
-const {nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament} = props.restaurant;
-
+//Extracció de dades del restaurant
+const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
 
+//Inicialització de l'objecte de reserva
 const reservation = reactive({
     id_restaurant: props.restaurant.id,
     telefon: '',
     data: '',
     hora: '',
     num_persones: 1,
-    estat: 0, // Default to PENDENT
-    terrassa: false, // Default to terrassa
+    estat: 0,
+    terrassa: false,
     solicituds: '',
 });
 
+//Inicialització de dades i variables reactives
 const taules = ref([]);
 const page = usePage();
+const initialLimit = 3;
+const visiblePlatsCount = ref(initialLimit);
 
+//Obtenir la llista d'al·lèrgens
+const allergenList = (plat) => {
+    const allergens = [];
+    if (plat.gluten) allergens.push('Gluten');
+    if (plat.lactics) allergens.push('Lactics');
+    if (plat.crustaci) allergens.push('Crustacis');
+    if (plat.ous) allergens.push('Ous');
+    if (plat.lupines) allergens.push('Lupines');
+    if (plat.mostassa) allergens.push('Mostassa');
+    if (plat.cacahuats) allergens.push('Cacahuets');
+    if (plat.soja) allergens.push('Soja');
+    if (plat.carn_vermella) allergens.push('Carn vermella');
+    return allergens;
+};
 
+// Obtenir la llista d'opcions dietètiques
+const dietaryList = (plat) => {
+    const dietary = [];
+    if (plat.vegetaria) dietary.push('Vegetarià');
+    if (plat.vega) dietary.push('Vegà');
+    if (plat.kosher) dietary.push('Kosher');
+    if (plat.halal) dietary.push('Halal');
+    if (plat.keto) dietary.push('Keto');
+    return dietary;
+};
+
+//Càrrega de dades al muntar el component
 onMounted(async () => {
     try {
         const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
@@ -134,10 +199,10 @@ onMounted(async () => {
     }
 });
 
+//Enviar la reserva
 const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
-
             // Reinicia el formulari
             Object.assign(reservation, {
                 telefon: '',
@@ -150,7 +215,7 @@ const submitReservation = () => {
             Inertia.clearErrors();
         },
         onError: (errors) => {
-            // Gestiona els errors aquí
+            console.error('Error submitting reservation:', errors);
         },
     });
 };

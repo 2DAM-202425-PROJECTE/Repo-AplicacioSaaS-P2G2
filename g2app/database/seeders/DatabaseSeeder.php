@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Plat;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,8 +16,9 @@ class DatabaseSeeder extends Seeder
             MunicipiProvinciaSeeder::class,
             RestaurantSeeder::class,
             TaulaSeeder::class,
+
             ReservaSeeder::class,
         ]);
-
+        Plat::factory()->count(60)->create();
     }
 }

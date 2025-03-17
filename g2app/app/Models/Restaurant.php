@@ -18,6 +18,10 @@ class Restaurant extends Model
     {
         return $this->belongsTo(Municipio::class);
     }
+    public function plats()
+    {
+        return $this->hasMany(Plat::class, 'id_restaurant', 'id');
+    }
     protected $fillable = [
         'nom',
         'municipio_id',
@@ -29,6 +33,7 @@ class Restaurant extends Model
         'hora_tancament',
         'carrer',
     ];
+
 
     public $timestamps = false;
 

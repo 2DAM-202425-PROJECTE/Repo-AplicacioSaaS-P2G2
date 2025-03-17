@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Municipio;
+use App\Models\Plat;
 use App\Models\Provincia;
 use App\Models\Restaurant;
 use Illuminate\Http\JsonResponse;
@@ -48,16 +49,59 @@ class RestaurantController extends Controller
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
+            'plats' => 'nullable|array', // Add validation for plats
+            'plats.*.nom' => 'required|string',
+            'plats.*.descripcio' => 'nullable|string',
+            'plats.*.preu' => 'required|numeric',
+            'plats.*.gluten' => 'nullable|boolean',
+            'plats.*.lactics' => 'nullable|boolean',
+            'plats.*.crustaci' => 'nullable|boolean',
+            'plats.*.ous' => 'nullable|boolean',
+            'plats.*.lupines' => 'nullable|boolean',
+            'plats.*.mostassa' => 'nullable|boolean',
+            'plats.*.cacahuats' => 'nullable|boolean',
+            'plats.*.soja' => 'nullable|boolean',
+            'plats.*.vegetaria' => 'nullable|boolean',
+            'plats.*.vega' => 'nullable|boolean',
+            'plats.*.carn_vermella' => 'nullable|boolean',
+            'plats.*.kosher' => 'nullable|boolean',
+            'plats.*.halal' => 'nullable|boolean',
+            'plats.*.keto' => 'nullable|boolean',
         ]);
 
-        Restaurant::create($validatedData);
+        $restaurant = Restaurant::create($validatedData);
+
+        if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
+            foreach ($validatedData['plats'] as $platData) {
+                Plat::create([
+                    'nom' => $platData['nom'],
+                    'descripcio' => $platData['descripcio'] ?? null,
+                    'id_restaurant' => $restaurant->id,
+                    'preu' => $platData['preu'],
+                    'gluten' => $platData['gluten'] ?? true,
+                    'lactics' => $platData['lactics'] ?? true,
+                    'crustaci' => $platData['crustaci'] ?? true,
+                    'ous' => $platData['ous'] ?? true,
+                    'lupines' => $platData['lupines'] ?? true,
+                    'mostassa' => $platData['mostassa'] ?? true,
+                    'cacahuats' => $platData['cacahuats'] ?? true,
+                    'soja' => $platData['soja'] ?? true,
+                    'vegetaria' => $platData['vegetaria'] ?? true,
+                    'vega' => $platData['vega'] ?? true,
+                    'carn_vermella' => $platData['carn_vermella'] ?? true,
+                    'kosher' => $platData['kosher'] ?? true,
+                    'halal' => $platData['halal'] ?? true,
+                    'keto' => $platData['keto'] ?? true,
+                ]);
+            }
+        }
 
         return redirect()->route('restaurants.index');
     }
 
     public function show($id): Response
     {
-        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
+        $restaurant = Restaurant::with(['municipio.provincia', 'plats'])->findOrFail($id);
 
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurant,
