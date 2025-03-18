@@ -31,6 +31,7 @@ class Restaurant extends Model
         'tipus_cuina',
         'hora_obertura',
         'hora_tancament',
+        'user_id',
         'carrer',
     ];
 
