@@ -21,7 +21,7 @@
                     </button>
                     <!-- Menú desplegable -->
                     <div v-show="isOpen" class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
-                        <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Configuració</a>
+                        <a href="/configuracio" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Configuració</a>
                         <button @click="confirmLogout" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Logout
                         </button>
@@ -74,14 +74,13 @@ export default {
         // Funció per realitzar el logout
         const handleLogout = async () => {
             try {
-                // Envia la petició POST per fer logout
+                //POST per fer logout
                 await axios.post('/logout');
 
-                // Redirigeix a la pàgina d'inici després de fer logout
+                // Redirect al login
                 window.location.href = '/';
             } catch (error) {
                 console.error('Logout failed', error);
-                // Opcional: Mostrar un missatge d'error si el logout falla
             }
         };
 
