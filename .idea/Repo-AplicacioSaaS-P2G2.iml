@@ -2,10 +2,6 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/G2App/app" isTestSource="false" packagePrefix="App\" />
-      <sourceFolder url="file://$MODULE_DIR$/G2App/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />
-      <sourceFolder url="file://$MODULE_DIR$/G2App/database/seeders" isTestSource="false" packagePrefix="Database\Seeders\" />
-      <sourceFolder url="file://$MODULE_DIR$/G2App/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/G2App/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/g2app/app" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/g2app/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />

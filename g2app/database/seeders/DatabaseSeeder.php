@@ -1,10 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
-use App\Models\Restaurant;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Plat;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,19 +11,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-/*
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-*/
-//Restaurant::factory()->count(10)->create();
 
         $this->call([
+            MunicipiProvinciaSeeder::class,
             RestaurantSeeder::class,
             TaulaSeeder::class,
-        ]);
 
+            ReservaSeeder::class,
+        ]);
+        Plat::factory()->count(60)->create();
     }
 }

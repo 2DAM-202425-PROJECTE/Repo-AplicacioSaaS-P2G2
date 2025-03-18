@@ -30,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
     Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
+    Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
+    Route::get('/restaurants/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurants.edit');
+    Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
 
     // Rutes per a la gestió del perfil d'usuari
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('user.profile');
@@ -42,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Rutes per a reserves i taules
     Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
     Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
+    Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
+    Route::put('/reserves/{id}', [ReservaController::class, 'update'])->name('reserves.update');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
