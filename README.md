@@ -28,3 +28,12 @@ Iniciar el servidor de desenvolupament:
 
 Alternativament, executar les dues comandes juntes:  
 `npm run start`  
+
+
+## Accés amb usuaris
+
+1. Accedir a la taula de Users i copiar correu.
+   
+2. Al login introduir correu.
+   
+3. CONTRASSENYA SEMPRE ÉS `PASSWORD`.
