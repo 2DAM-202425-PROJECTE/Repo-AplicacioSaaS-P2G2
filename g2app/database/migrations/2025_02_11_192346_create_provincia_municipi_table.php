@@ -19,7 +19,7 @@ return new class extends Migration
         Schema::create('municipios', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('provincia_id')->constrained('provincias');
+            $table->foreignId('provincia_id')->constrained('provincias')->onDelete('cascade');
 
         });
     }
@@ -30,7 +30,16 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Desactivar les restriccions de clau forana a SQLite
+        DB::statement('PRAGMA foreign_keys = OFF;');
+
+        // Eliminar els registres de la taula municipios primer
+        DB::table('municipios')->delete();
+
         Schema::dropIfExists('municipios');
         Schema::dropIfExists('provincias');
+
+        // Reactivar les restriccions de clau forana a SQLite
+        DB::statement('PRAGMA foreign_keys = ON;');
     }
 };
