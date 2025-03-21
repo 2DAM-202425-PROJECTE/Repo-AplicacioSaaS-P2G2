@@ -1,0 +1,392 @@
+[
+    {
+        "id": 1,
+        "name": "Madrid",
+        "population": 3416771,
+        "province_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Barcelona",
+        "population": 1702547,
+        "province_id": 2
+    },
+    {
+        "id": 3,
+        "name": "Valencia",
+        "population": 825948,
+        "province_id": 3
+    },
+    {
+        "id": 4,
+        "name": "Sevilla",
+        "population": 687488,
+        "province_id": 4
+    },
+    {
+        "id": 5,
+        "name": "Zaragoza",
+        "population": 686986,
+        "province_id": 5
+    },
+    {
+        "id": 6,
+        "name": "Málaga",
+        "population": 591637,
+        "province_id": 6
+    },
+    {
+        "id": 7,
+        "name": "Murcia",
+        "population": 474617,
+        "province_id": 7
+    },
+    {
+        "id": 8,
+        "name": "Palma de Mallorca",
+        "population": 431521,
+        "province_id": 8
+    },
+    {
+        "id": 9,
+        "name": "Las Palmas de Gran Canaria",
+        "population": 380436,
+        "province_id": 9
+    },
+    {
+        "id": 10,
+        "name": "Alicante",
+        "population": 358720,
+        "province_id": 10
+    },
+    {
+        "id": 11,
+        "name": "Bilbao",
+        "population": 348089,
+        "province_id": 11
+    },
+    {
+        "id": 12,
+        "name": "Córdoba",
+        "population": 322811,
+        "province_id": 12
+    },
+    {
+        "id": 13,
+        "name": "Valladolid",
+        "population": 300618,
+        "province_id": 13
+    },
+    {
+        "id": 14,
+        "name": "Vigo",
+        "population": 293997,
+        "province_id": 14
+    },
+    {
+        "id": 15,
+        "name": "Hospitalet de Llobregat",
+        "population": 279993,
+        "province_id": 2
+    },
+    {
+        "id": 16,
+        "name": "Gijón",
+        "population": 268561,
+        "province_id": 15
+    },
+    {
+        "id": 17,
+        "name": "Vitoria",
+        "population": 257968,
+        "province_id": 16
+    },
+    {
+        "id": 18,
+        "name": "La Coruña",
+        "population": 249261,
+        "province_id": 17
+    },
+    {
+        "id": 19,
+        "name": "Elche",
+        "population": 243128,
+        "province_id": 10
+    },
+    {
+        "id": 20,
+        "name": "Granada",
+        "population": 232717,
+        "province_id": 18
+    },
+    {
+        "id": 21,
+        "name": "Tarrasa",
+        "population": 228708,
+        "province_id": 2
+    },
+    {
+        "id": 22,
+        "name": "Badalona",
+        "population": 227083,
+        "province_id": 2
+    },
+    {
+        "id": 23,
+        "name": "Sabadell",
+        "population": 222177,
+        "province_id": 2
+    },
+    {
+        "id": 24,
+        "name": "Oviedo",
+        "population": 220543,
+        "province_id": 15
+    },
+    {
+        "id": 25,
+        "name": "Cartagena",
+        "population": 219777,
+        "province_id": 7
+    },
+    {
+        "id": 26,
+        "name": "Móstoles",
+        "population": 214006,
+        "province_id": 1
+    },
+    {
+        "id": 27,
+        "name": "Jerez de la Frontera",
+        "population": 213668,
+        "province_id": 19
+    },
+    {
+        "id": 28,
+        "name": "Santa Cruz de Tenerife",
+        "population": 211359,
+        "province_id": 20
+    },
+    {
+        "id": 29,
+        "name": "Pamplona",
+        "population": 207777,
+        "province_id": 21
+    },
+    {
+        "id": 30,
+        "name": "Almería",
+        "population": 202675,
+        "province_id": 22
+    },
+    {
+        "id": 31,
+        "name": "Alcalá de Henares",
+        "population": 200702,
+        "province_id": 1
+    },
+    {
+        "id": 32,
+        "name": "Leganés",
+        "population": 194084,
+        "province_id": 1
+    },
+    {
+        "id": 33,
+        "name": "Fuenlabrada",
+        "population": 190790,
+        "province_id": 1
+    },
+    {
+        "id": 34,
+        "name": "Getafe",
+        "population": 189906,
+        "province_id": 1
+    },
+    {
+        "id": 35,
+        "name": "San Sebastián",
+        "population": 189083,
+        "province_id": 23
+    },
+    {
+        "id": 36,
+        "name": "Castellón de la Plana",
+        "population": 180379,
+        "province_id": 24
+    },
+    {
+        "id": 37,
+        "name": "Burgos",
+        "population": 175895,
+        "province_id": 25
+    },
+    {
+        "id": 38,
+        "name": "Albacete",
+        "population": 174137,
+        "province_id": 26
+    },
+    {
+        "id": 39,
+        "name": "Santander",
+        "population": 174101,
+        "province_id": 27
+    },
+    {
+        "id": 40,
+        "name": "Alcorcón",
+        "population": 173625,
+        "province_id": 1
+    },
+    {
+        "id": 41,
+        "name": "San Cristóbal de La Laguna",
+        "population": 160258,
+        "province_id": 20
+    },
+    {
+        "id": 42,
+        "name": "Marbella",
+        "population": 159000,
+        "province_id": 6
+    },
+    {
+        "id": 43,
+        "name": "Logroño",
+        "population": 151164,
+        "province_id": 28
+    },
+    {
+        "id": 44,
+        "name": "Badajoz",
+        "population": 150570,
+        "province_id": 29
+    },
+    {
+        "id": 45,
+        "name": "Salamanca",
+        "population": 144866,
+        "province_id": 30
+    },
+    {
+        "id": 46,
+        "name": "Lérida",
+        "population": 144739,
+        "province_id": 31
+    },
+    {
+        "id": 47,
+        "name": "Huelva",
+        "population": 143290,
+        "province_id": 32
+    },
+    {
+        "id": 48,
+        "name": "Tarragona",
+        "population": 141151,
+        "province_id": 33
+    },
+    {
+        "id": 49,
+        "name": "Torrejón de Ardoz",
+        "population": 140626,
+        "province_id": 1
+    },
+    {
+        "id": 50,
+        "name": "Dos Hermanas",
+        "population": 140430,
+        "province_id": 4
+    },
+    {
+        "id": 51,
+        "name": "Parla",
+        "population": 134833,
+        "province_id": 1
+    },
+    {
+        "id": 52,
+        "name": "Mataró",
+        "population": 131798,
+        "province_id": 2
+    },
+    {
+        "id": 53,
+        "name": "Algeciras",
+        "population": 124978,
+        "province_id": 19
+    },
+    {
+        "id": 54,
+        "name": "León",
+        "population": 122243,
+        "province_id": 34
+    },
+    {
+        "id": 55,
+        "name": "Alcobendas",
+        "population": 121373,
+        "province_id": 1
+    },
+    {
+        "id": 56,
+        "name": "Santa Coloma de Gramanet",
+        "population": 121203,
+        "province_id": 2
+    },
+    {
+        "id": 57,
+        "name": "Jaén",
+        "population": 112074,
+        "province_id": 35
+    },
+    {
+        "id": 58,
+        "name": "Cádiz",
+        "population": 110914,
+        "province_id": 19
+    },
+    {
+        "id": 59,
+        "name": "Reus",
+        "population": 109930,
+        "province_id": 33
+    },
+    {
+        "id": 60,
+        "name": "Roquetas de Mar",
+        "population": 109204,
+        "province_id": 22
+    },
+    {
+        "id": 61,
+        "name": "Gerona",
+        "population": 107032,
+        "province_id": 36
+    },
+    {
+        "id": 62,
+        "name": "Orense",
+        "population": 104891,
+        "province_id": 37
+    },
+    {
+        "id": 63,
+        "name": "Telde",
+        "population": 102867,
+        "province_id": 9
+    },
+    {
+        "id": 64,
+        "name": "Baracaldo",
+        "population": 101984,
+        "province_id": 11
+    },
+    {
+        "id": 65,
+        "name": "Rivas-Vaciamadrid",
+        "population": 101949,
+        "province_id": 1
+    }
+]

@@ -22,13 +22,15 @@
                     </thead>
                     <tbody>
                     <template v-for="reserves in reserves" :key="reserves.id">
-                        <tr @click="toggleExpanded(reserves.id)" class="border-b border-gray-300 cursor-pointer hover:bg-gray-100 text-blue-950">
+                        <tr @click="toggleExpanded(reserves.id)"
+                            class="border-b border-gray-300 cursor-pointer hover:bg-gray-100 text-blue-950">
                             <td class="py-3 px-4">{{ formatDate(reserves.data) }}</td>
                             <td class="py-3 px-4">{{ formatHour(reserves.hora) }}</td>
                             <td class="py-3 px-4">{{ reserves.telefon }}</td>
                             <td class="py-3 px-4">{{ reserves.num_persones }}</td>
                             <td class="py-1 px-2">
-                                <select @click.stop v-model="reserves.estat" @change="updateStatus(reserves.id, reserves.estat)" class="p-2 text-sm pr-6">
+                                <select @click.stop v-model="reserves.estat"
+                                        @change="updateStatus(reserves.id, reserves.estat)" class="p-2 text-sm pr-6">
                                     <option :value="0">Pendent</option>
                                     <option :value="1">Confirmada</option>
                                     <option :value="2">Cancel·lada</option>
