@@ -12,7 +12,7 @@ class MunicipiProvinciaSeeder extends Seeder
     public function run(): void
     {
         $provinces = json_decode(File::get(public_path('data/provinces.json')), true);
-        $provinces = array_slice($provinces, 0, 8); // Limit to first 6 provinces
+        $provinces = array_slice($provinces, 0, 14); // Limit to first x provinces
         $provinces = array_map(function ($province) {
             return [
                 'id' => $province['id'],
@@ -37,7 +37,7 @@ class MunicipiProvinciaSeeder extends Seeder
             });
 
 
-            $limitedProvinceMunicipalities = array_slice($provinceMunicipalities, 0, 6);
+            $limitedProvinceMunicipalities = array_slice($provinceMunicipalities, 0, 8);
 
             foreach ($limitedProvinceMunicipalities as $municipality) {
                 $municipalitiesToInsert[] = [
