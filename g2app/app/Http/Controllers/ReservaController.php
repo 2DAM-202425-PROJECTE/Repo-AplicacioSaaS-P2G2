@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Reserva;
 use App\Models\Restaurant;
 use App\Models\Taula;
+use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -13,11 +15,13 @@ use Inertia\Response;
 class ReservaController extends Controller
 {
 
-    public function index($id): Response
+    public function index($id)
     {
         $restaurant = Restaurant::findOrFail($id);
         $reserves = Reserva::where('id_restaurant', $id)->get();
-
+        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
+            return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
+        }
         return Inertia::render('Reserves/Index', [
             'restaurant' => $restaurant,
             'reserves' => $reserves
