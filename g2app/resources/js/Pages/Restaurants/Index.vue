@@ -91,34 +91,6 @@
 
 
 
-/* Fons difuminat */
-.background {
-    background: url('/bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-    position: fixed; /* Canviat d'absolute a fixed */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: -1; /* Assegura que no cobreixi el contingut */
-}
-
-
-/* Aplica un efecte de difuminat */
-.background::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Fosc per millorar la llegibilitat */
-    backdrop-filter: blur(8px); /* Difuminat */
-    z-index: -1;
-}
 </style>
 
 <script>
@@ -156,7 +128,7 @@ export default {
                     (!this.filters.tipus_cuina || restaurant.tipus_cuina.trim() === String(this.filters.tipus_cuina).trim())
                 );
             });
-            this.currentPage = 1; // Reset to first page after filtering
+            this.currentPage = 1;
         },
         nextPage() {
             if (this.currentPage < this.totalPages) {
