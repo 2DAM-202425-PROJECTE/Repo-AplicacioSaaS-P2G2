@@ -4,8 +4,8 @@ import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
 
 const form = useForm({
-    email: "",
-    password: "",
+    email: "empresa@email.com",
+    password: "password",
 });
 
 const submit = () => {

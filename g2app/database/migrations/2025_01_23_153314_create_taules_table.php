@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('taules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_restaurant')->constrained('restaurants')->index();
+            $table->foreignId('id_restaurant')->constrained('restaurants')->index()->onDelete('cascade');
             $table->boolean('terrassa')->default(false);
             $table->integer('capacitat')->default(1);
             $table->boolean('disponible')->default(true);
@@ -26,6 +26,15 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Desactivar les restriccions de clau forana a SQLite
+        DB::statement('PRAGMA foreign_keys = OFF;');
+
+        // Eliminar els registres de la taula municipios primer
+        DB::table('taules')->delete();
+
         Schema::dropIfExists('taules');
+
+        // Reactivar les restriccions de clau forana a SQLite
+        DB::statement('PRAGMA foreign_keys = ON;');
     }
 };

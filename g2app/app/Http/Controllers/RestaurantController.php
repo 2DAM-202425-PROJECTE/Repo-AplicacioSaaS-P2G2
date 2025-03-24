@@ -4,6 +4,7 @@ use App\Models\Municipio;
 use App\Models\Plat;
 use App\Models\Provincia;
 use App\Models\Restaurant;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,6 +23,10 @@ class RestaurantController extends Controller
 
     public function create(Request $request)
     {
+
+        if (!Auth::user()->isEmpresa()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
+        }
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = [];
@@ -40,6 +45,9 @@ class RestaurantController extends Controller
 
     public function store(Request $request)
     {
+        if (!Auth::user()->isEmpresa()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
+        }
         $validatedData = $request->validate([
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
@@ -68,6 +76,7 @@ class RestaurantController extends Controller
             'plats.*.keto' => 'nullable|boolean',
         ]);
 
+        $validatedData['user_id'] = Auth::id();
         $restaurant = Restaurant::create($validatedData);
 
         if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
@@ -107,9 +116,15 @@ class RestaurantController extends Controller
         ]);
     }
 
-    public function edit($id): Response
+    public function edit($id)
     {
         $restaurant = Restaurant::with('municipio.provincia', 'plats')->findOrFail($id);
+        // Comprovem que l'usuari té permís per editar aquest restaurant
+        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
+            return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
+        }
+
+
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
@@ -125,6 +140,11 @@ class RestaurantController extends Controller
     public function update(Request $request, $id)
     {
         $restaurant = Restaurant::findOrFail($id);
+
+        // Comprovem que l'usuari té permís per editar aquest restaurant
+        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
+            return redirect()->route('restaurants.index')->with('error', 'No tens permís per actualitzar aquest restaurant.');
+        }
 
         $validatedData = $request->validate([
             'nom' => 'required|string|max:255',
@@ -191,7 +211,40 @@ class RestaurantController extends Controller
 
     public function destroy(Restaurant $restaurant)
     {
+        // Comprovem que l'usuari té permís per eliminar aquest restaurant
+        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
+            return redirect()->route('restaurants.index')->with('error', 'No tens permís per eliminar aquest restaurant.');
+        }
+
+
         $restaurant->delete();
         return redirect()->route('restaurants.index');
+    }
+
+    // Funció per mostrar la gestió
+    public function manageRestaurant()
+    {
+        // Comprovem si l'usuari té un restaurant associat
+        $restaurant = Restaurant::where('user_id', Auth::id())->first();
+
+        if ($restaurant) {
+            // Si l'usuari té un restaurant pàgina de gestió del restaurant
+            return redirect()->route('restaurant-management', ['id' => $restaurant->id]);
+        }
+
+        // Si no té cap restaurant associat pàgina per fer un nou
+        return Inertia::render('Restaurants/Create');
+    }
+
+    // Funció per crear restaurant només si l'usuari no en té cap
+    public function createRestaurantForUser()
+    {
+        // Si l'usuari ja té un restaurant el redirigim a la pag de gestió
+        $restaurant = Restaurant::where('user_id', Auth::id())->first();
+        if ($restaurant) {
+            return redirect()->route('restaurant-management', ['id' => $restaurant->id]);
+        }
+
+        return Inertia::render('Restaurants/Create');
     }
 }

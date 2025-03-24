@@ -18,6 +18,11 @@ class Restaurant extends Model
     {
         return $this->belongsTo(Municipio::class);
     }
+
+    public function usuari(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
     public function plats()
     {
         return $this->hasMany(Plat::class, 'id_restaurant', 'id');
@@ -31,6 +36,7 @@ class Restaurant extends Model
         'tipus_cuina',
         'hora_obertura',
         'hora_tancament',
+        'user_id',
         'carrer',
     ];
 
