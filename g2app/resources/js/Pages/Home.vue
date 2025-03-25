@@ -4,15 +4,19 @@ import Typewriter from "typewriter-effect/dist/core";
 import Layout from "@/Layouts/Layout.vue";
 
 onMounted(() => {
-    new Typewriter("#animated-title", {
-        strings: ["La Solució Integral per a Restaurants"],
+    const typewriter = new Typewriter("#animated-title", {
         autoStart: true,
-        loop: true,
+        loop: false, // No tornarà a esborrar-se
         cursor: "_",
         delay: 75,
     });
+
+    typewriter
+        .typeString("La Solució Integral per a Restaurants")
+        .start(); // Escriu i es queda fixat
 });
 </script>
+
 
 
 <template>
