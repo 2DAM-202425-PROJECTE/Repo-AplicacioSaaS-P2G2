@@ -27,10 +27,19 @@
                         <!-- Si no té restaurant associat, mostrar la creació de negoci -->
                         <div v-else>
                             <p class="text-gray-600 text-lg">No tens cap negoci associat.</p>
+                            <!--
                             <SecondaryButton @click="showCreatePopup" class="w-full sm:w-auto mt-4">
                                 Crear negoci
                             </SecondaryButton>
+                            -->
+                            <div class="mt-4">
+                                <Link :href="route('restaurants.create')" class="bg-blue-500 text-white px-4 py-2 rounded">
+                                    Crear Negoci
+                                </Link>
+                            </div>
                         </div>
+
+
                     </div>
 
                     <!-- Si l'usuari no és empresa, no mostra cap botó -->
@@ -61,10 +70,11 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PopupModal from '@/Components/PopupModal.vue';
 import Layout from "@/Layouts/Layout.vue";
+import {route} from "ziggy-js";
 
 const { props } = usePage();
 const user = ref(props.user);
-const restaurant = ref(props.restaurant || null);  // Aquesta variable guarda el restaurant associat
+const restaurant = ref(props.restaurant || null);
 const showPopup = ref(false);
 
 // Funció per verificar si l'usuari és empresa
@@ -86,7 +96,8 @@ function showCreatePopup() {
 
 // Funció per crear el restaurant
 function createRestaurant() {
-    Inertia.visit('/create-restaurant');
+    console.log("Redirigint a /restaurants/create");
+    Inertia.visit('/restaurants/create');
     showPopup.value = false;
 }
 

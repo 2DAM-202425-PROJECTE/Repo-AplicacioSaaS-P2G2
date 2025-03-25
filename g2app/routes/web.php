@@ -24,6 +24,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('restaurants.index');
     })->name('dashboard');
 
+    //Update de la info del perfil
+    Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    Route::post('/user/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
+
     // Rutes per als restaurants
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
     Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
