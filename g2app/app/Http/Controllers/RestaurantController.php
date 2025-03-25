@@ -42,6 +42,9 @@ class RestaurantController extends Controller
 
     public function store(Request $request)
     {
+        if (!Auth::user()->isEmpresa()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
+        }
         $validatedData = $request->validate([
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
@@ -51,7 +54,6 @@ class RestaurantController extends Controller
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-            'plats' => 'nullable|array', // Add validation for plats
             'plats.*.nom' => 'required|string',
             'plats.*.descripcio' => 'nullable|string',
             'plats.*.preu' => 'required|numeric',
@@ -71,10 +73,8 @@ class RestaurantController extends Controller
             'plats.*.keto' => 'nullable|boolean',
         ]);
 
-
-        // Crear el restaurant associat a l'usuari autenticat
-        $validatedData['user_id'] = Auth::id();  // Afegir l'ID de l'usuari autenticat
-        Restaurant::create($validatedData);
+        $validatedData['user_id'] = Auth::id();
+        $restaurant = Restaurant::create($validatedData);
 
         if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
             foreach ($validatedData['plats'] as $platData) {
@@ -113,14 +113,15 @@ class RestaurantController extends Controller
         ]);
     }
 
-    public function edit($id): Response
+    public function edit($id)
     {
+        $restaurant = Restaurant::with('municipio.provincia', 'plats')->findOrFail($id);
         // Comprovem que l'usuari té permís per editar aquest restaurant
-        if ($restaurant->user_id !== Auth::id()) {
+        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
         }
-      
-        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
+
+
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
