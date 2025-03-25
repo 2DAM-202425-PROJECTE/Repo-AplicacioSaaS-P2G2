@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
@@ -23,6 +24,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return redirect()->route('restaurants.index');
     })->name('dashboard');
+
+    // Rutes per al home
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Rutes per als restaurants
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
