@@ -20,9 +20,15 @@
                     <div v-if="isEmpresa()" class="mt-6">
                         <!-- Comprovació si l'usuari té un restaurant associat -->
                         <div v-if="restaurant">
-                            <PrimaryButton @click="goToRestaurantManagement" class="w-full sm:w-auto">
+<!--                            <PrimaryButton @click="'restaurant.management', { id: restaurant.value.id }" class="w-full sm:w-auto">
                                 Gestiona el teu negoci
-                            </PrimaryButton>
+                            </PrimaryButton>-->
+
+                            <div class="mt-4">
+                                <Link :href="route('restaurant.management', { id: restaurant.id })" class="bg-blue-500 text-white px-4 py-2 rounded">
+                                    Gestiona el teu negoci
+                                </Link>
+                            </div>
                         </div>
                         <!-- Si no té restaurant associat, mostrar la creació de negoci -->
                         <div v-else>
@@ -38,10 +44,7 @@
                                 </Link>
                             </div>
                         </div>
-
-
                     </div>
-
                     <!-- Si l'usuari no és empresa, no mostra cap botó -->
                     <div v-else>
                         <p class="text-gray-600 text-lg">No tens permisos per gestionar un negoci.</p>
@@ -61,13 +64,11 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from 'vue';
+import {defineProps, ref, onMounted} from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/vue3';
 import UserInfo from '@/Components/UserInfo.vue';
 import RestaurantInfo from '@/Components/RestaurantInfo.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PopupModal from '@/Components/PopupModal.vue';
 import Layout from "@/Layouts/Layout.vue";
 import {route} from "ziggy-js";
@@ -77,27 +78,30 @@ const user = ref(props.user);
 const restaurant = ref(props.restaurant || null);
 const showPopup = ref(false);
 
+
+onMounted(() => {
+    fetchUserRestaurant(props.user.id);
+});
+
+function fetchUserRestaurant(userId) {
+    fetch(route('user.restaurant', { userId }))
+        .then(response => response.json())
+        .then(data => {
+            restaurant.value = data.restaurant;
+        });
+}
+
+
+
+
 // Funció per verificar si l'usuari és empresa
-function isEmpresa(){
-    return props.user.empresa === 1;
-}
-
-// Funció per redirigir a la gestió del restaurant
-function goToRestaurantManagement() {
-    if (restaurant.value) {
-        Inertia.visit(`/restaurant-management/${restaurant.value.id}`);
-    }
-}
-
-// Funció per mostrar el popup de creació del restaurant
-function showCreatePopup() {
-    showPopup.value = true;
+function isEmpresa() {
+    return user.value?.empresa === 1;
 }
 
 // Funció per crear el restaurant
 function createRestaurant() {
-    console.log("Redirigint a /restaurants/create");
-    Inertia.visit('/restaurants/create');
+    Inertia.visit(route('restaurants.create'));
     showPopup.value = false;
 }
 

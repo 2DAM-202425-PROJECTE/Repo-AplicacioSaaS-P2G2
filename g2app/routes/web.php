@@ -34,17 +34,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
     Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
-    Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
     Route::get('/restaurants/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurants.edit');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
+    //Route::get('/create-restaurant', [RestaurantController::class, 'createRestaurantForUser'])->name('create-restaurant');
 
     // Rutes per a la gestió del perfil d'usuari
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('user.profile');
     Route::get('/configuracio', [UserController::class, 'showAccountConfig'])->name('restaurants.AccountConfig');
-    Route::get('/restaurant/crear', [RestaurantController::class, 'create'])->name('create-restaurant');
+    Route::get('/restaurant/crear', [RestaurantController::class, 'createRestaurantForUser'])->name('create-restaurant');
     Route::post('/restaurant', [RestaurantController::class, 'store']);
-    Route::get('/restaurant/gestio', [RestaurantController::class, 'manageRestaurant'])->name('restaurant-management');
+    Route::get('/restaurant/{id}/gestio', [RestaurantController::class, 'manageRestaurant'])->name('restaurant.management');
     Route::put('/restaurant/{id}', [RestaurantController::class, 'update']);
+    Route::get('/user/{userId}/restaurant', [UserController::class, 'getUserRestaurant'])->name('user.restaurant');
+
 
     // Rutes per a reserves i taules
     Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
