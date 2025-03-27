@@ -20,9 +20,6 @@
                     <div v-if="isEmpresa()" class="mt-6">
                         <!-- Comprovació si l'usuari té un restaurant associat -->
                         <div v-if="restaurant">
-                            <!--                            <PrimaryButton @click="'restaurant.management', { id: restaurant.value.id }" class="w-full sm:w-auto">
-                                                            Gestiona el teu negoci
-                                                        </PrimaryButton>-->
 
                             <div class="mt-4">
                                 <Link :href="route('restaurant.management', { id: restaurant.id })" class="bg-blue-500 text-white px-4 py-2 rounded">
