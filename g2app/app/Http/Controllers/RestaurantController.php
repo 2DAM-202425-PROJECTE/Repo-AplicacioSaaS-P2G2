@@ -23,10 +23,17 @@ class RestaurantController extends Controller
 
     public function create(Request $request)
     {
+        $user = Auth::user();
 
-        if (!Auth::user()->isEmpresa()) {
+        // Comprovar si l'usuari ja té un restaurant
+        if (Restaurant::where('user_id', $user->id)->exists()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només pots tenir un restaurant.');
+        }
+
+        if (!$user->isEmpresa()) {
             return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
         }
+
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = [];
@@ -42,6 +49,7 @@ class RestaurantController extends Controller
             'municipios' => $municipios,
         ]);
     }
+
 
     public function store(Request $request)
     {
