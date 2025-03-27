@@ -222,19 +222,15 @@ class RestaurantController extends Controller
     }
 
     // Funció per mostrar la gestió
-    public function manageRestaurant()
+    public function manageRestaurant($id)
     {
-        // Comprovem si l'usuari té un restaurant associat
-        $restaurant = Restaurant::where('user_id', Auth::id())->first();
+        $restaurant = Restaurant::findOrFail($id);  // Busquem el restaurant pel ID
 
-        if ($restaurant) {
-            // Si l'usuari té un restaurant pàgina de gestió del restaurant
-            return redirect()->route('restaurant-management', ['id' => $restaurant->id]);
-        }
-
-        // Si no té cap restaurant associat pàgina per fer un nou
-        return Inertia::render('Restaurants/Create');
+        return Inertia::render('Restaurants/Management', [
+            'restaurant' => $restaurant
+        ]);
     }
+
 
     // Funció per crear restaurant només si l'usuari no en té cap
     public function createRestaurantForUser()

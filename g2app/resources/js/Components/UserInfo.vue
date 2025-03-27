@@ -33,6 +33,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    business: {
+        type: Object,
+        required: false, // Pot ser `null` si l'usuari no té negoci
+    },
 });
 
 function isEmpresa(){
