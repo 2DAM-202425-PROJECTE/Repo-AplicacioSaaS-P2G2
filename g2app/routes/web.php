@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
@@ -24,9 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('restaurants.index');
     })->name('dashboard');
 
-    //Update de la info del perfil
-    Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
-    Route::post('/user/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
+    // Rutes per al home
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Rutes per als restaurants
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');

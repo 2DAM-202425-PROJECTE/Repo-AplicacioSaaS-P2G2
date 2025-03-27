@@ -70,7 +70,7 @@ const form = reactive({
     telefon: props.restaurant.telefon || '',
     tipus_cuina: props.restaurant.tipus_cuina || '',
     hora_obertura: props.restaurant.hora_obertura || '',
-    hora_tancament: props.restaurant.hora_tancament || '',
+    hora_tancament: props.restaurant.hora_tancament || ''
 });
 
 const errors = ref({});
