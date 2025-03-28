@@ -46,13 +46,13 @@ class ReservaController extends Controller
             'terrassa' => 'nullable|boolean',
         ]);
 
-        $taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
+        //$taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
 
         // Randomly select a taula
-        $randomTaula = $taules->random();
+        //$randomTaula = $taules->random();
 
         // Add the randomly selected id_taula to the validated data
-        $validatedData['id_taula'] = $randomTaula->id;
+        //$validatedData['id_taula'] = $randomTaula->id;
 
         $reserva = new Reserva($validatedData);
         $reserva->save();
@@ -62,6 +62,16 @@ class ReservaController extends Controller
             ->with(['flash' => ['message' => 'Reserva creada amb èxit!', 'type' => 'success']])
             ->withInput();
 
+    }
+    public function edit($id)
+    {
+        $reserva = Reserva::find($id);
+
+        if (!$reserva) {
+            return Inertia::render('Error', ['message' => 'Reserva no trobada.']);
+        }
+
+        return Inertia::render('Reserves/EditModal', ['reserva' => $reserva]);
     }
 
     public function update(Request $request, $id)
@@ -76,6 +86,7 @@ class ReservaController extends Controller
                 Reserva::COMPLETAT,
             ])],
         ]);
+
 
         $reserva->update($validatedData);
 

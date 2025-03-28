@@ -47,7 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
     Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
     Route::put('/reserves/{id}', [ReservaController::class, 'update'])->name('reserves.update');
-
+    Route::get('/reserves/{id}/edit', [ReservaController::class, 'edit'])->name('reserves.edit');
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

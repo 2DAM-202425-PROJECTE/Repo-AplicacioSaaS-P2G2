@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reserves', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_taula')->constrained('taules');
+            $table->foreignId('id_taula')->nullable()->constrained('taules');
 
             // $table->foreignId('id_usuari')->constrained('usuaris')->index();
             $table->foreignId('id_restaurant')->constrained('restaurants');
