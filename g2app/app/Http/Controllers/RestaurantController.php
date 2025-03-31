@@ -26,10 +26,17 @@ class RestaurantController extends Controller
 
     public function create(Request $request)
     {
+        $user = Auth::user();
 
-        if (!Auth::user()->isEmpresa()) {
+        // Comprovar si l'usuari ja té un restaurant
+        if (Restaurant::where('user_id', $user->id)->exists()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només pots tenir un restaurant.');
+        }
+
+        if (!$user->isEmpresa()) {
             return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
         }
+
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = [];
@@ -45,6 +52,7 @@ class RestaurantController extends Controller
             'municipios' => $municipios,
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -226,19 +234,15 @@ class RestaurantController extends Controller
     }
 
     // Funció per mostrar la gestió
-    public function manageRestaurant()
+    public function manageRestaurant($id)
     {
-        // Comprovem si l'usuari té un restaurant associat
-        $restaurant = Restaurant::where('user_id', Auth::id())->first();
+        $restaurant = Restaurant::findOrFail($id);  // Busquem el restaurant pel ID
 
-        if ($restaurant) {
-            // Si l'usuari té un restaurant pàgina de gestió del restaurant
-            return redirect()->route('restaurant-management', ['id' => $restaurant->id]);
-        }
-
-        // Si no té cap restaurant associat pàgina per fer un nou
-        return Inertia::render('Restaurants/Create');
+        return Inertia::render('Restaurants/Management', [
+            'restaurant' => $restaurant
+        ]);
     }
+
 
     // Funció per crear restaurant només si l'usuari no en té cap
     public function createRestaurantForUser()

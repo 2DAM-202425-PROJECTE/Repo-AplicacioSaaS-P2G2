@@ -103,6 +103,8 @@
 <script>
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
+import { usePage } from "@inertiajs/vue3";
+import Swal from "sweetalert2";
 
 export default {
     components: {
@@ -181,6 +183,17 @@ export default {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
             return this.filteredRestaurants.slice(start, end);
+        }
+    },
+    mounted() {
+        const page = usePage();
+        if (page.props.flash.error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: page.props.flash.error,
+                confirmButtonText: "Entès"
+            });
         }
     }
 };
