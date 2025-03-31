@@ -11,7 +11,6 @@
             <div v-if="restaurant">
                 <p><strong>Nom del Restaurant:</strong> {{ restaurant.name }}</p>
                 <p><strong>Telefon:</strong> {{ restaurant.telefon }}</p>
-                <!-- Addicionalment, pots afegir més dades aquí -->
             </div>
         </div>
     </div>
