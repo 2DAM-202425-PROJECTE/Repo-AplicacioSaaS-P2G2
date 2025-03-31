@@ -19,7 +19,7 @@ class ReservaController extends Controller
     {
         $restaurant = Restaurant::findOrFail($id);
         $reserves = Reserva::where('id_restaurant', $id)->get();
-        if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
+        if (!Auth::user()->isEmpresa()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
         }
         return Inertia::render('Reserves/Index', [
@@ -57,11 +57,9 @@ class ReservaController extends Controller
         $reserva = new Reserva($validatedData);
         $reserva->save();
 
-
         return redirect()->route('restaurants.show', ['id' => $request->id_restaurant])
             ->with(['flash' => ['message' => 'Reserva creada amb èxit!', 'type' => 'success']])
             ->withInput();
-
     }
 
     public function update(Request $request, $id)

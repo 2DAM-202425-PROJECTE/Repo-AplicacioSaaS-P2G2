@@ -135,17 +135,17 @@ import { route } from 'ziggy-js';
 import axios from 'axios';
 import Layout from "@/Layouts/Layout.vue";
 
-//Definició de les propietats
+// Define properties
 const props = defineProps({
     restaurant: Object,
 });
 
-//Extracció de dades del restaurant
+// Extract restaurant data
 const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
 
-//Inicialització de l'objecte de reserva
+// Initialize reservation object
 const reservation = reactive({
     id_restaurant: props.restaurant.id,
     telefon: '',
@@ -157,13 +157,17 @@ const reservation = reactive({
     solicituds: '',
 });
 
-//Inicialització de dades i variables reactives
+// Initialize reactive data and variables
 const taules = ref([]);
 const page = usePage();
 const initialLimit = 3;
 const visiblePlatsCount = ref(initialLimit);
 
-//Obtenir la llista d'al·lèrgens
+// Get the logged-in user's ID
+const userId = page.props.auth.user.id;
+reservation.user_id = userId;
+
+// Get allergen list
 const allergenList = (plat) => {
     const allergens = [];
     if (plat.gluten) allergens.push('Gluten');
@@ -178,7 +182,7 @@ const allergenList = (plat) => {
     return allergens;
 };
 
-// Obtenir la llista d'opcions dietètiques
+// Get dietary options list
 const dietaryList = (plat) => {
     const dietary = [];
     if (plat.vegetaria) dietary.push('Vegetarià');
@@ -189,7 +193,7 @@ const dietaryList = (plat) => {
     return dietary;
 };
 
-//Càrrega de dades al muntar el component
+// Load data when component is mounted
 onMounted(async () => {
     try {
         const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
@@ -199,11 +203,11 @@ onMounted(async () => {
     }
 });
 
-//Enviar la reserva
+// Submit reservation
 const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
-            // Reinicia el formulari
+            // Reset the form
             Object.assign(reservation, {
                 telefon: '',
                 data: '',

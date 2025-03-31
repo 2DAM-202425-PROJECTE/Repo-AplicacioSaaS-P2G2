@@ -20,6 +20,13 @@
                         <option v-for="tipus in uniqueTipusCuina" :key="tipus" :value="tipus">{{ tipus }}</option>
                     </select>
 
+                    <!-- Tipus de plat -->
+                    <label class="block text-gray-700 font-medium mb-1">🍽️ Tipus de Plat</label>
+                    <select v-model="filters.tipus_plat" class="border p-3 rounded-lg mb-4 w-full bg-white focus:ring-2 focus:ring-gold">
+                        <option value="">Tots els tipus de plats</option>
+                        <option v-for="tipus in uniqueTipusPlat" :key="tipus" :value="tipus">{{ tipus }}</option>
+                    </select>
+
                     <button @click="applyFilters" class="bg-gold text-white px-4 py-3 rounded-lg w-full flex items-center justify-center shadow-md hover:bg-yellow-600 transition">
                         <i class="fas fa-filter mr-2"></i> Aplicar filtres
                     </button>
@@ -105,6 +112,7 @@ export default {
         restaurants: Array,
         municipios: Array,
         tipusCuina: Array,
+        plats: Array,
     },
     data() {
         return {
@@ -112,6 +120,7 @@ export default {
                 nom: '',
                 municipio: '',
                 tipus_cuina: '',
+                tipus_plat: '',
             },
             currentPage: 1,
             itemsPerPage: 9,
@@ -121,13 +130,25 @@ export default {
     methods: {
         route,
         applyFilters() {
+            console.log("Plats disponibles:", this.plats); // Debugging
+
             this.filteredRestaurants = this.restaurants.filter(restaurant => {
+                let platsValids = true; // Per defecte és true
+
+                if (this.filters.tipus_plat) {
+                    platsValids = Array.isArray(this.plats) && this.plats.some(plat => {
+                        return plat.id_restaurant === restaurant.id && (plat[this.filters.tipus_plat] === 1 || plat[this.filters.tipus_plat] === true);
+                    });
+                }
+
                 return (
                     (!this.filters.nom || restaurant.nom.toLowerCase().includes(this.filters.nom.toLowerCase())) &&
                     (!this.filters.municipio || restaurant.municipio.name.trim() === String(this.filters.municipio).trim()) &&
-                    (!this.filters.tipus_cuina || restaurant.tipus_cuina.trim() === String(this.filters.tipus_cuina).trim())
+                    (!this.filters.tipus_cuina || restaurant.tipus_cuina.trim() === String(this.filters.tipus_cuina).trim()) &&
+                    platsValids
                 );
             });
+
             this.currentPage = 1;
         },
         nextPage() {
@@ -147,6 +168,11 @@ export default {
         },
         uniqueTipusCuina() {
             return [...new Set(this.restaurants.map(r => r.tipus_cuina))].sort();
+        },
+        uniqueTipusPlat() {
+            return [
+                'vegetaria', 'vega', 'kosher', 'halal', 'keto', 'carn_vermella', 'gluten', 'lactics', 'crustaci', 'ous', 'lupines', 'mostassa', 'cacahuats', 'soja'
+            ];
         },
         totalPages() {
             return Math.ceil(this.filteredRestaurants.length / this.itemsPerPage);

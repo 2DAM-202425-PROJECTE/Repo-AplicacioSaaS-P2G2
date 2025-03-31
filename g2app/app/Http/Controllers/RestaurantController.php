@@ -15,9 +15,12 @@ class RestaurantController extends Controller
     public function index(): Response
     {
         $restaurants = Restaurant::with('municipio')->get();
+        $plats = Plat::all(); // Obtenim tots els plats
 
-        return Inertia::render('Restaurants/Index', [
+
+        return inertia('Restaurants/Index', [
             'restaurants' => $restaurants,
+            'plats' => $plats, // Enviem els plats a Vue
         ]);
     }
 
@@ -78,6 +81,7 @@ class RestaurantController extends Controller
 
         $validatedData['user_id'] = Auth::id();
         $restaurant = Restaurant::create($validatedData);
+
 
         if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
             foreach ($validatedData['plats'] as $platData) {

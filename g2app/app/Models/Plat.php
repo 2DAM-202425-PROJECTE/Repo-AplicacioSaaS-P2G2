@@ -38,6 +38,7 @@ class Plat extends Model
 
     public function restaurant()
     {
-        return $this->belongsTo(Restaurant::class, 'id', 'id_restaurant');
+        return $this->belongsTo(Restaurant::class, 'id_restaurant', 'id');
     }
+
 }

@@ -8,6 +8,7 @@
                 <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
                 <span v-if="errors.nom" class="text-red-500 text-sm">{{ errors.nom }}</span>
             </div>
+            
 
             <!-- Descripcio -->
             <div class="mb-4">
