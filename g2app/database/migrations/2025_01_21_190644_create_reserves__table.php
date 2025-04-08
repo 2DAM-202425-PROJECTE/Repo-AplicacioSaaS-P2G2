@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_taula')->nullable()->constrained('taules');
 
-            // $table->foreignId('id_usuari')->constrained('usuaris')->index();
+            $table->foreignId('id_usuari')->constrained('usuaris');
             $table->foreignId('id_restaurant')->constrained('restaurants');
             $table->string('telefon');
             $table->date('data');

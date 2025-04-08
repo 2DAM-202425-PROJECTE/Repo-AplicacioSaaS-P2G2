@@ -158,7 +158,6 @@ const reservation = reactive({
 });
 
 //Inicialització de dades i variables reactives
-const taules = ref([]);
 const page = usePage();
 const initialLimit = 3;
 const visiblePlatsCount = ref(initialLimit);
@@ -188,16 +187,6 @@ const dietaryList = (plat) => {
     if (plat.keto) dietary.push('Keto');
     return dietary;
 };
-
-//Càrrega de dades al muntar el component
-onMounted(async () => {
-    try {
-        const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
-        taules.value = response.data;
-    } catch (error) {
-        console.error('Error fetching taules:', error);
-    }
-});
 
 //Enviar la reserva
 const submitReservation = () => {

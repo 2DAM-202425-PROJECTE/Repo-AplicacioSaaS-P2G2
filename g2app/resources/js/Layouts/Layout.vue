@@ -7,8 +7,9 @@
 
                 <!-- Navegació centrada -->
                 <nav class="absolute left-1/2 transform -translate-x-1/2 space-x-4">
-                    <a href="/" class="text-blue-500 hover:underline">Home</a>
-                    <a href="/restaurants" class="text-blue-500 hover:underline">Restaurants</a>
+                    <Link href="/" class="text-blue-500 hover:underline">Home</Link>
+                    <Link :href="route('restaurants.index')" class="text-blue-500 hover:underline">Restaurants</Link>
+                    <Link :href="route('user.reserves')" class="text-blue-500 hover:underline">Reserves</Link>
                 </nav>
 
                 <!-- Icona d'usuari amb menú desplegable -->

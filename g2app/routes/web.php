@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\ReservaUserController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TaulaController;
 use App\Http\Controllers\UserController;
@@ -42,12 +43,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/restaurant/gestio', [RestaurantController::class, 'manageRestaurant'])->name('restaurant-management');
     Route::put('/restaurant/{id}', [RestaurantController::class, 'update']);
 
-    // Rutes per a reserves i taules
+    // Rutes per a reserves d'empresa
     Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
-    Route::get('/taules', [TaulaController::class, 'index'])->name('taules.index');
     Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
+    Route::put('/reserves/{id}/estat', [ReservaController::class, 'updateEstat'])->name('reserves.updateEstat');
     Route::put('/reserves/{id}', [ReservaController::class, 'update'])->name('reserves.update');
     Route::get('/reserves/{id}/edit', [ReservaController::class, 'edit'])->name('reserves.edit');
+    Route::get('/reserves/{id}/delete', [ReservaController::class, 'delete'])->name('reserves.delete');
+    Route::delete('/reserves/{id}/destroy', [ReservaController::class, 'destroy'])->name('reserves.destroy');
+
+    //Rutes per reserves d'usuari
+   Route::get('/user/reserves', [ReservaUserController::class, 'index'])->name('user.reserves');
+
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
