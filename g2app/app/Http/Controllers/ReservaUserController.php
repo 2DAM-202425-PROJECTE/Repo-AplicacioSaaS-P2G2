@@ -12,7 +12,7 @@ class ReservaUserController
     public function index()
     {
 
-        $userReserves = Reserva::where('user_id', Auth::id())
+        $userReserves = Reserva::where('id_usuari', Auth::id())
             ->with('restaurant:id,nom') // Carrega el nom del restaurant per mostrar-lo
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')

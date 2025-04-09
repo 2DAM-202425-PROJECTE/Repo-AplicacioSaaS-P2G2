@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Reserva;
 use App\Models\Restaurant;
 use App\Models\Taula;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReservaFactory extends Factory
@@ -15,7 +16,7 @@ class ReservaFactory extends Factory
     {
         return [
             'id_restaurant' => Restaurant::inRandomOrder()->first()->id,
-            'id_taula' => Taula::inRandomOrder()->first()->id,
+            'id_usuari' => User::inRandomOrder()->first()->id,
             'data' => $this->faker->date(),
             'hora' => $this->faker->time(),
             'telefon' => $this->faker->phoneNumber,

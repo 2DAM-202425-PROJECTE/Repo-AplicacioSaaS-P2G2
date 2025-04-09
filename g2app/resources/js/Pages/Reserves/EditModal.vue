@@ -13,6 +13,8 @@
                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
             </div>
             <div class="mb-4">
+
+
                 <label for="hora" class="block text-sm font-medium text-gray-700">Hora:</label>
                 <input v-model="form.hora" id="hora" type="time" class="mt-1 block w-full" required />
             </div>

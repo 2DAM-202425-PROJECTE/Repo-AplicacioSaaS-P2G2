@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Reserva;
 use App\Models\Restaurant;
-use App\Models\Taula;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -48,17 +48,11 @@ class ReservaController extends Controller
             ])],
             'solicituds' => 'nullable|string',
             'terrassa' => 'nullable|boolean',
+
         ]);
 
-        //$taules = Taula::where('id_restaurant', $validatedData['id_restaurant'])->get();
-
-        // Randomly select a taula
-        //$randomTaula = $taules->random();
-
-        // Add the randomly selected id_taula to the validated data
-        //$validatedData['id_taula'] = $randomTaula->id;
-
         $reserva = new Reserva($validatedData);
+        $reserva->id_usuari = Auth::id();
         $reserva->save();
 
 
@@ -78,7 +72,7 @@ class ReservaController extends Controller
         if (!$reserva) {
             return Inertia::render('Error', ['message' => 'Reserva no trobada.']);
         }
-
+        $reserva->hora = Carbon::parse($reserva->hora)->format('H:i');
         return Inertia::render('Reserves/EditModal', ['reserva' => $reserva]);
     }
 
