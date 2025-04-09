@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Storage;
 
 class RestaurantController extends Controller
 {
@@ -63,6 +64,7 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
@@ -87,6 +89,10 @@ class RestaurantController extends Controller
             'plats.*.keto' => 'nullable|boolean',
         ]);
 
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $validatedData['profile_image'] = $path;
+        }
         $validatedData['user_id'] = Auth::id();
         $restaurant = Restaurant::create($validatedData);
 
@@ -162,6 +168,7 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
@@ -185,6 +192,15 @@ class RestaurantController extends Controller
             'plats.*.halal' => 'nullable|boolean',
             'plats.*.keto' => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('profile_image')) {
+            if ($restaurant->profile_image) {
+                Storage::disk('public')->delete($restaurant->profile_image);
+            }
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $validatedData['profile_image'] = $path;
+        }
+
 
         $restaurant->update($validatedData);
 

@@ -5,12 +5,17 @@
 
             <!-- Informació del restaurant -->
             <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h2 class="text-2xl font-semibold text-gray-700">{{ restaurant.nom }}</h2>
+
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-semibold text-gray-700">{{ restaurant.nom }}</h2>
+                    <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="w-12 h-12 rounded-full object-cover mb-2 profile-image">
+                </div>
                 <p class="text-gray-600 mt-2">{{ restaurant.descripcio }}</p>
                 <div class="mt-4 text-gray-700">
                     <p><strong>Telèfon:</strong> {{ restaurant.telefon }}</p>
                     <p><strong>Tipus de Cuina:</strong> {{ restaurant.tipus_cuina }}</p>
                 </div>
+
             </div>
 
             <!-- Accions -->
@@ -35,6 +40,15 @@
     </layout>
 
 </template>
+
+<style>
+.profile-image {
+    width: 75px; /* Increased from 50px to 75px */
+    height: 75px; /* Increased from 50px to 75px */
+    border-radius: 50%;
+    object-fit: cover;
+}
+</style>
 
 <script>
 import { route } from "ziggy-js";

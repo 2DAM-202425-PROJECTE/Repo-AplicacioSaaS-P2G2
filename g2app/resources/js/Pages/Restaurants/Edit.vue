@@ -8,7 +8,7 @@
                 <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
                 <span v-if="errors.nom" class="text-red-500 text-sm">{{ errors.nom }}</span>
             </div>
-            
+
 
             <!-- Descripcio -->
             <div class="mb-4">
@@ -22,6 +22,13 @@
                 <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
                 <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
                 <span v-if="errors.telefon" class="text-red-500 text-sm">{{ errors.telefon }}</span>
+            </div>
+
+            <!-- Imatge de perfil -->
+            <div class="mb-4">
+                <label for="profile_image" class="block text-sm font-medium text-gray-700">Imatge de Perfil</label>
+                <input id="profile_image" type="file" class="mt-1 block w-full" @change="handleFileUpload" />
+                <span v-if="errors.profile_image" class="text-red-500 text-sm">{{ errors.profile_image }}</span>
             </div>
 
             <!-- Tipus de Cuina (Dropdown) -->
@@ -69,6 +76,7 @@ const form = reactive({
     nom: props.restaurant.nom || '',
     descripcio: props.restaurant.descripcio || '',
     telefon: props.restaurant.telefon || '',
+    profile_image: null,
     tipus_cuina: props.restaurant.tipus_cuina || '',
     hora_obertura: props.restaurant.hora_obertura || '',
     hora_tancament: props.restaurant.hora_tancament || ''
@@ -76,10 +84,27 @@ const form = reactive({
 
 const errors = ref({});
 
-const submitEditForm = () => {
-    const updatedRestaurant = { ...form };
+const handleFileUpload = (event) => {
+    form.profile_image = event.target.files[0];
+};
 
-    Inertia.put(route('restaurants.update', props.restaurant.id), updatedRestaurant, {
+const submitEditForm = () => {
+    const formData = new FormData();
+
+    formData.append('nom', form.nom);
+    formData.append('descripcio', form.descripcio);
+    formData.append('telefon', form.telefon);
+    formData.append('tipus_cuina', form.tipus_cuina);
+    formData.append('hora_obertura', form.hora_obertura);
+    formData.append('hora_tancament', form.hora_tancament);
+
+    if (form.profile_image) {
+        formData.append('profile_image', form.profile_image);
+    }
+
+    Inertia.post(route('restaurants.update', props.restaurant.id), formData, {
+        method: 'post', // Important per evitar conflictes amb PUT i fitxers
+        forceFormData: true, // força Inertia a enviar-ho com multipart/form-data
         onSuccess: () => {
             console.log('Restaurant updated successfully');
         },
@@ -89,4 +114,5 @@ const submitEditForm = () => {
         },
     });
 };
+
 </script>

@@ -55,6 +55,17 @@
     </div>
 </template>
 
+<style scoped>
+.menu-container {
+    position: relative;
+    z-index: 50; /* Assegura que el menú es mostri per sobre dels altres elements */
+}
+
+.menu-container .absolute {
+    z-index: 100; /* Assegura que el menú desplegable es mostri per sobre del contenidor */
+}
+</style>
+
 <script>
 import { ref } from 'vue';
 import axios from 'axios';

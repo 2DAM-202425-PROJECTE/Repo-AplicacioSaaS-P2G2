@@ -51,7 +51,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <Link v-for="restaurant in paginatedRestaurants" :key="restaurant.id" :href="`/restaurants/${restaurant.id}`"
                               class="bg-white p-6 shadow-lg rounded-lg transition-transform transform hover:scale-105 hover:shadow-2xl border border-gray-200">
-                            <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
+                                <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="profile-image ml-4">
+                            </div>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt text-gold"></i> {{ restaurant.municipio.name }}</p>
                             <p class="text-gray-600"><i class="fas fa-utensils text-gold"></i> {{ restaurant.tipus_cuina }}</p>
                         </Link>
@@ -96,8 +99,12 @@
     color: var(--gold);
 }
 
-
-
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 </style>
 
 <script>
