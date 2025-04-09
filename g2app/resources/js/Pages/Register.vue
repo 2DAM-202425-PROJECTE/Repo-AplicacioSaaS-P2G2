@@ -1,6 +1,11 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Layouts/Layout.vue";
+import {ref} from "vue";
+
+
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const form = useForm({
     name: "",
@@ -53,27 +58,44 @@ const submit = () => {
 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Contrasenya</label>
-                    <input
-                        type="password"
-                        id="password"
-                        v-model="form.password"
-                        required
-                        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    />
+                    <div class="relative">
+                        <input
+                            :type="showPassword ? 'text' : 'password'"
+                            id="password"
+                            v-model="form.password"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        <button
+                            @click.prevent="showPassword = !showPassword"
+                            class="absolute right-2 top-2 text-xs text-blue-500"
+                        >
+                            {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+                        </button>
+                    </div>
                     <p v-if="form.errors.password" class="text-red-500 text-sm">{{ form.errors.password }}</p>
                 </div>
 
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirma la contrasenya</label>
-                    <input
-                        type="password"
-                        id="password_confirmation"
-                        v-model="form.password_confirmation"
-                        required
-                        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    />
+                    <div class="relative">
+                        <input
+                            :type="showConfirmPassword ? 'text' : 'password'"
+                            id="password_confirmation"
+                            v-model="form.password_confirmation"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        <button
+                            @click.prevent="showConfirmPassword = !showConfirmPassword"
+                            class="absolute right-2 top-2 text-xs text-blue-500"
+                        >
+                            {{ showConfirmPassword ? 'Ocultar' : 'Mostrar' }}
+                        </button>
+                    </div>
                     <p v-if="form.errors.password_confirmation" class="text-red-500 text-sm">{{ form.errors.password_confirmation }}</p>
                 </div>
+
 
                 <!-- Selector per a empresa o usuari -->
                 <div>

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use DB;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+
 
 class UserController extends Controller
 {
@@ -73,6 +76,34 @@ class UserController extends Controller
             'restaurant' => $restaurant
         ]);
     }
+
+
+    public function destroy(string $id)
+    {
+        // Comprovar si l'usuari autenticat és el mateix que l'usuari a eliminar
+        if (Auth::id() !== (int)$id) {
+            return redirect()->route('home')->with('error', 'No tens permís per eliminar aquest usuari.');
+        }
+
+        DB::transaction(function () use ($id) {
+            $user = User::findOrFail($id);
+
+            // Buscar el restaurant associat
+            $restaurant = Restaurant::where('user_id', $user->id)->first();
+
+            // Si existeix, cridar a RestaurantsController@destroy
+            if ($restaurant) {
+                $restaurantsController = app(RestaurantController::class);
+                $restaurantsController->destroy($restaurant->id);
+            }
+
+            // Finalment eliminar l’usuari
+            $user->delete();
+        });
+
+        return redirect()->route('login')->with('success', 'Usuari eliminat correctament.');
+    }
+
 
 
 
