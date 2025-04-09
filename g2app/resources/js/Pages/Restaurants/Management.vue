@@ -30,6 +30,14 @@
                         Editar Restaurant
                     </Link>
                 </div>
+
+                <div class="bg-red-100 p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-xl font-semibold text-red-700 mb-2">Eliminar Restaurant</h3>
+                    <p class="text-gray-600 mb-4">Elimina el restaurant juntament amb tots els registres associats. (Acció Irreversible)</p>
+                    <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded inline-block">
+                        Eliminar Restaurant
+                    </Link>
+                </div>
             </div>
         </div>
     </layout>

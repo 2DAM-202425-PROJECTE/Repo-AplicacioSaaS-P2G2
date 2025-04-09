@@ -47,10 +47,10 @@
                         <p class="text-gray-600 text-lg">No tens permisos per gestionar un negoci.</p>
                     </div>
 
-                    <!-- Informació del restaurant associat -->
-                    <div v-if="restaurant" class="mt-8">
-                        <RestaurantInfo :restaurant="restaurant" />
-                    </div>
+<!--                    &lt;!&ndash; Informació del restaurant associat &ndash;&gt;-->
+<!--                    <div v-if="restaurant" class="mt-8">-->
+<!--                        <RestaurantInfo :restaurant="restaurant" />-->
+<!--                    </div>-->
                 </div>
             </div>
 

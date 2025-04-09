@@ -1,5 +1,12 @@
 <template>
     <div class="text-left space-y-4">
+        <!-- Eliminar compte -->
+        <div class="mt-4">
+            <Link :href="route('users.destroy', { id: user.id })" class="bg-red-500 text-white px-4 py-2 rounded">
+                ELIMINAR L'USUARI
+            </Link>
+        </div>
+
         <!-- Editar Nom -->
         <div>
             <p v-if="!editingName"><strong>Nom:</strong> {{ user.name }}
@@ -38,7 +45,18 @@
             <div class="mt-4">
                 <div class="flex justify-between items-center">
                     <p><strong>Contrasenya:</strong></p>
-                    <p class="text-gray-800">**********</p>
+                    <p class="text-gray-800">
+                        <span v-if="showPassword" class="font-semibold text-red-500">No es pot mostrar per seguretat</span>
+                        <span v-else class="font-semibold text-gray-800">* * * * * * * * * * * * * * * *</span>
+                    </p>
+                    <button
+                        @click="showPassword = !showPassword"
+                        class="ml-2 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300"
+                        :class="showPassword ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'"
+                    >
+                        {{ showPassword ? 'Ocultar ' : ' Mostrar' }}
+                    </button>
+
                     <PrimaryButton @click="showPasswordModal = true" class="ml-2 text-xs">Modificar</PrimaryButton>
                 </div>
             </div>
@@ -51,15 +69,30 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-gray-700">Contrasenya Actual</label>
-                        <input v-model="currentPassword" type="password" class="border p-2 rounded w-full">
+                        <div class="relative">
+                            <input v-model="currentPassword" :type="showCurrentPassword ? 'text' : 'password'" class="border p-2 rounded w-full">
+                            <button @click="showCurrentPassword = !showCurrentPassword" class="absolute right-2 top-2 text-xs text-blue-500">
+                                {{ showCurrentPassword ? 'Ocultar' : 'Mostrar' }}
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-gray-700">Nova Contrasenya</label>
-                        <input v-model="newPassword" type="password" class="border p-2 rounded w-full">
+                        <div class="relative">
+                            <input v-model="newPassword" :type="showNewPassword ? 'text' : 'password'" class="border p-2 rounded w-full">
+                            <button @click="showNewPassword = !showNewPassword" class="absolute right-2 top-2 text-xs text-blue-500">
+                                {{ showNewPassword ? 'Ocultar' : 'Mostrar' }}
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-gray-700">Confirmar Contrasenya</label>
-                        <input v-model="confirmPassword" type="password" class="border p-2 rounded w-full">
+                        <div class="relative">
+                            <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" class="border p-2 rounded w-full">
+                            <button @click="showConfirmPassword = !showConfirmPassword" class="absolute right-2 top-2 text-xs text-blue-500">
+                                {{ showConfirmPassword ? 'Ocultar' : 'Mostrar' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -77,6 +110,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PopupModal from '@/Components/PopupModal.vue';
 import { ref, defineProps } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+import {route} from "ziggy-js";
 
 const props = defineProps({
     user: {
@@ -94,6 +128,10 @@ const isEmpresa = () => {
 // Control d'edició
 const editingName = ref(false);
 const editingEmail = ref(false);
+const showPassword = ref(false);
+const showCurrentPassword = ref(false);
+const showNewPassword = ref(false);
+const showConfirmPassword = ref(false);
 const showPasswordModal = ref(false);
 const newName = ref(props.user.name);
 const newEmail = ref(props.user.email);
@@ -129,6 +167,7 @@ const updatePassword = () => {
         },
     });
 };
+
 </script>
 
 

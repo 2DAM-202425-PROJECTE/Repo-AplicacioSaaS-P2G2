@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
     Route::get('/restaurants/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurants.edit');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
-    //Route::get('/create-restaurant', [RestaurantController::class, 'createRestaurantForUser'])->name('create-restaurant');
+    Route::get('/restaurants/{id}/delete', [RestaurantController::class, 'destroy'])->name('restaurants.delete');
 
     // Rutes per a la gestió del perfil d'usuari
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('user.profile');
@@ -56,4 +56,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 });
