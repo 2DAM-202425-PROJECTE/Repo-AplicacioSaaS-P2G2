@@ -7,7 +7,7 @@
 
                 <!-- Navegació centrada -->
                 <nav class="absolute left-1/2 transform -translate-x-1/2 space-x-4">
-                    <Link href="/" class="text-blue-500 hover:underline">Home</Link>
+                    <Link :href="route('home')" class="text-blue-500 hover:underline">Home</Link>
                     <Link :href="route('restaurants.index')" class="text-blue-500 hover:underline">Restaurants</Link>
                     <Link :href="route('user.reserves')" class="text-blue-500 hover:underline">Reserves</Link>
                 </nav>
