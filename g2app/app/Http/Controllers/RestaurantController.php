@@ -9,24 +9,35 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Storage;
 
 class RestaurantController extends Controller
 {
     public function index(): Response
     {
         $restaurants = Restaurant::with('municipio')->get();
+        $plats = Plat::all(); // Obtenim tots els plats
 
-        return Inertia::render('Restaurants/Index', [
+
+        return inertia('Restaurants/Index', [
             'restaurants' => $restaurants,
+            'plats' => $plats, // Enviem els plats a Vue
         ]);
     }
 
     public function create(Request $request)
     {
+        $user = Auth::user();
 
-        if (!Auth::user()->isEmpresa()) {
+        // Comprovar si l'usuari ja té un restaurant
+        if (Restaurant::where('user_id', $user->id)->exists()) {
+            return redirect()->route('restaurants.index')->with('error', 'Només pots tenir un restaurant.');
+        }
+
+        if (!$user->isEmpresa()) {
             return redirect()->route('restaurants.index')->with('error', 'Només les empreses poden crear restaurants.');
         }
+
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = [];
@@ -43,6 +54,7 @@ class RestaurantController extends Controller
         ]);
     }
 
+
     public function store(Request $request)
     {
         if (!Auth::user()->isEmpresa()) {
@@ -52,6 +64,7 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
@@ -76,8 +89,13 @@ class RestaurantController extends Controller
             'plats.*.keto' => 'nullable|boolean',
         ]);
 
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $validatedData['profile_image'] = $path;
+        }
         $validatedData['user_id'] = Auth::id();
         $restaurant = Restaurant::create($validatedData);
+
 
         if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
             foreach ($validatedData['plats'] as $platData) {
@@ -150,6 +168,7 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
@@ -173,6 +192,15 @@ class RestaurantController extends Controller
             'plats.*.halal' => 'nullable|boolean',
             'plats.*.keto' => 'nullable|boolean',
         ]);
+
+        if ($request->hasFile('profile_image')) {
+            if ($restaurant->profile_image) {
+                Storage::disk('public')->delete($restaurant->profile_image);
+            }
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $validatedData['profile_image'] = $path;
+        }
+
 
         $restaurant->update($validatedData);
 
@@ -222,19 +250,15 @@ class RestaurantController extends Controller
     }
 
     // Funció per mostrar la gestió
-    public function manageRestaurant()
+    public function manageRestaurant($id)
     {
-        // Comprovem si l'usuari té un restaurant associat
-        $restaurant = Restaurant::where('user_id', Auth::id())->first();
+        $restaurant = Restaurant::findOrFail($id);  // Busquem el restaurant pel ID
 
-        if ($restaurant) {
-            // Si l'usuari té un restaurant pàgina de gestió del restaurant
-            return redirect()->route('restaurant-management', ['id' => $restaurant->id]);
-        }
-
-        // Si no té cap restaurant associat pàgina per fer un nou
-        return Inertia::render('Restaurants/Create');
+        return Inertia::render('Restaurants/Management', [
+            'restaurant' => $restaurant
+        ]);
     }
+
 
     // Funció per crear restaurant només si l'usuari no en té cap
     public function createRestaurantForUser()

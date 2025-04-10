@@ -25,6 +25,10 @@
                         <p>{{ telefon }}</p>
                     </div>
                     <div class="mb-4">
+                        <p><strong>Imatge de perfil:</strong></p>
+                        <img :src="`/storage/${profile_image}`" alt="Profile Image" class="w-32 h-32 rounded-full">
+                    </div>
+                    <div class="mb-4">
                         <p><strong>Cuina:</strong></p>
                         <p>{{ tipus_cuina }}</p>
                     </div>
@@ -162,7 +166,11 @@ const page = usePage();
 const initialLimit = 3;
 const visiblePlatsCount = ref(initialLimit);
 
-//Obtenir la llista d'al·lèrgens
+// Get the logged-in user's ID
+const userId = page.props.auth.user.id;
+reservation.user_id = userId;
+
+// Get allergen list
 const allergenList = (plat) => {
     const allergens = [];
     if (plat.gluten) allergens.push('Gluten');

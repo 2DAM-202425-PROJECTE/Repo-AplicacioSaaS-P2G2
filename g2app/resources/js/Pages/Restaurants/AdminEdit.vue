@@ -22,6 +22,10 @@
                     <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
                 </div>
                 <div class="mb-4">
+                    <label for="profile_image" class="block text-sm font-medium text-gray-700">Imatge de Perfil</label>
+                    <input id="profile_image" type="file" class="mt-1 block w-full" @change="HandleFileUpload" />
+                </div>
+                <div class="mb-4">
                     <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
                     <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
                         <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
@@ -142,6 +146,10 @@ const props = defineProps({
     municipios: Array,
     plats: Array,
 });
+
+const HandleFileUpload = (event) => {
+    form.profile_image = event.target.files[0];
+};
 
 const form = reactive({
     ...props.restaurant,

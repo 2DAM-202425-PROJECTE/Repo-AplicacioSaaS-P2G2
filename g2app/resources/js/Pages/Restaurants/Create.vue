@@ -16,6 +16,10 @@
                     <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required/>
                 </div>
                 <div class="mb-4">
+                    <label for="profile_image" class="block text-sm font-medium text-gray-700">Profile Image</label>
+                    <input id="profile_image" type="file" class="mt-1 block w-full" @change="handleFileUpload"/>
+                </div>
+                <div class="mb-4">
                     <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
                     <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
                         <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
@@ -78,6 +82,11 @@ export default {
 
     components: {
         Layout,
+    },
+    methods: {
+        handleFileUpload(event) {
+            this.form.profile_image = event.target.files[0];
+        },
     },
     props: {
         tipusCuinaOptions: Array,

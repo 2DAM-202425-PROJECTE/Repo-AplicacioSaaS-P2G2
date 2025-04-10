@@ -38,6 +38,7 @@ class Restaurant extends Model
         'hora_tancament',
         'user_id',
         'carrer',
+        'profile_image',
     ];
 
 
