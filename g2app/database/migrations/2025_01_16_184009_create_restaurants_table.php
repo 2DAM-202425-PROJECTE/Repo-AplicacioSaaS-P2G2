@@ -32,6 +32,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('PRAGMA foreign_keys = OFF;'); // Desactiva les FK per evitar errors
         Schema::dropIfExists('restaurants');
+        DB::statement('PRAGMA foreign_keys = ON;'); // Torna a activar-les
     }
 };
