@@ -71,7 +71,7 @@
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
-import {onMounted, reactive, ref} from 'vue';
+import {reactive, ref, onMounted, computed} from 'vue';
 import {Inertia} from '@inertiajs/inertia';
 import {route} from 'ziggy-js';
 import axios from 'axios';

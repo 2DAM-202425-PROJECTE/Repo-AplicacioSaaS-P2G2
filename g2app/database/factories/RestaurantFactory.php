@@ -25,7 +25,6 @@ class RestaurantFactory extends Factory
             'hora_obertura' => $faker->time('H:i'),
             'hora_tancament' => $faker->time('H:i'),
             'carrer' => $faker->streetAddress,
-            'user_id' =>  User::where('empresa', 1)->inRandomOrder()->first()?->id,
         ];
     }
 }

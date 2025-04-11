@@ -20,7 +20,6 @@ class Reserva extends Model
 
     protected $fillable = [
         //'id_usuari',
-        'id_taula',
         'id_restaurant',
         'telefon',
         'data',
@@ -37,11 +36,6 @@ class Reserva extends Model
         return $this->belongsTo(User::class, 'id_usuari');
     }
 
-
-    public function taula(): BelongsTo
-    {
-        return $this->belongsTo(Taula::class, 'id_taula');
-    }
 
     public function restaurant(): BelongsTo
     {
