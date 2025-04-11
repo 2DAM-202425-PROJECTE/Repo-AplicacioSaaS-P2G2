@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('reserves', function (Blueprint $table) {
-            // Elimina la foreign key actual
-            $table->dropForeign(['id_taula']);
-
-            // Afegeix la nova foreign key amb onDelete('cascade')
-            $table->foreign('id_taula')
-                ->references('id')->on('taules')
-                ->onDelete('cascade');
-        });
+//        Schema::table('reserves', function (Blueprint $table) {
+//            // Elimina la foreign key actual
+//            $table->dropForeign(['id_taula']);
+//
+//            // Afegeix la nova foreign key amb onDelete('cascade')
+//            $table->foreign('id_taula')
+//                ->references('id')->on('taules')
+//                ->onDelete('cascade');
+//        });
     }
 
     /**
@@ -30,9 +30,9 @@ return new class extends Migration
         Schema::table('reserves', function (Blueprint $table) {
             $table->dropForeign(['id_restaurant']);
 
-            // Torna a crear la foreign key sense cascade
-            $table->foreign('id_taula')
-                ->references('id')->on('taules');
+//            // Torna a crear la foreign key sense cascade
+//            $table->foreign('id_taula')
+//                ->references('id')->on('taules');
         });
     }
 };

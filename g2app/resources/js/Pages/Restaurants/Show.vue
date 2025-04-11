@@ -139,17 +139,17 @@ import { route } from 'ziggy-js';
 import axios from 'axios';
 import Layout from "@/Layouts/Layout.vue";
 
-// Define properties
+//Definició de les propietats
 const props = defineProps({
     restaurant: Object,
 });
 
-// Extract restaurant data
-const { nom, descripcio, telefon, profile_image, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
+//Extracció de dades del restaurant
+const { nom, descripcio, telefon, tipus_cuina, hora_obertura, hora_tancament } = props.restaurant;
 const horaObertura = hora_obertura;
 const horaTancament = hora_tancament;
 
-// Initialize reservation object
+//Inicialització de l'objecte de reserva
 const reservation = reactive({
     id_restaurant: props.restaurant.id,
     telefon: '',
@@ -161,8 +161,7 @@ const reservation = reactive({
     solicituds: '',
 });
 
-// Initialize reactive data and variables
-const taules = ref([]);
+//Inicialització de dades i variables reactives
 const page = usePage();
 const initialLimit = 3;
 const visiblePlatsCount = ref(initialLimit);
@@ -186,7 +185,7 @@ const allergenList = (plat) => {
     return allergens;
 };
 
-// Get dietary options list
+// Obtenir la llista d'opcions dietètiques
 const dietaryList = (plat) => {
     const dietary = [];
     if (plat.vegetaria) dietary.push('Vegetarià');
@@ -197,21 +196,11 @@ const dietaryList = (plat) => {
     return dietary;
 };
 
-// Load data when component is mounted
-onMounted(async () => {
-    try {
-        const response = await axios.get(route('taules.index', { restaurant_id: props.restaurant.id }));
-        taules.value = response.data;
-    } catch (error) {
-        console.error('Error fetching taules:', error);
-    }
-});
-
-// Submit reservation
+//Enviar la reserva
 const submitReservation = () => {
     Inertia.post(route('reserves.store'), reservation, {
         onSuccess: () => {
-            // Reset the form
+            // Reinicia el formulari
             Object.assign(reservation, {
                 telefon: '',
                 data: '',

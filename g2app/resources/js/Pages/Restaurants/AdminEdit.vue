@@ -2,7 +2,7 @@
     <layout>
         <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
             <div class="mb-4">
-            <Link :href="route('restaurant.management', { id: restaurant.id })"
+            <Link :href="route('restaurants.show', { id: restaurant.id })"
                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 <-Tornar
             </Link>
