@@ -237,8 +237,9 @@ class RestaurantController extends Controller
         return response()->json($municipios);
     }
 
-    public function destroy(Restaurant $restaurant)
+    public function destroy($id)
     {
+        $restaurant = Restaurant::findOrFail($id);
         // Comprovem que l'usuari té permís per eliminar aquest restaurant
         if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per eliminar aquest restaurant.');

@@ -9,7 +9,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->count(4)->create();
+        User::factory()->count(25)->create();
 
         User::factory()->create([
             'name' => 'Usuari Empresa',

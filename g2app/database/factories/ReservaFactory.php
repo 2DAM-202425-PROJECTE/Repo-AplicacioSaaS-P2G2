@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Reserva;
 use App\Models\Restaurant;
-use App\Models\Taula;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
