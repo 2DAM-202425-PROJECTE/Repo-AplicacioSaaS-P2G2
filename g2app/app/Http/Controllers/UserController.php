@@ -101,7 +101,7 @@ class UserController extends Controller
             $user->delete();
         });
 
-        return redirect()->route('login')->with('success', 'Usuari eliminat correctament.');
+        return redirect()->route('login')->with('success', 'User eliminat correctament.');
     }
 
 

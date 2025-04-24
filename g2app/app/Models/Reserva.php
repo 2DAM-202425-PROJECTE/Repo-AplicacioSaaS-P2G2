@@ -11,7 +11,6 @@ class Reserva extends Model
     use HasFactory;
 
     protected $table = 'reserves';
-    public $timestamps = false;
 
     const PENDENT = 0;
     const CONFIRMAT = 1;

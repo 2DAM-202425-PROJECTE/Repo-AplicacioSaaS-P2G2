@@ -1,15 +1,15 @@
 <template>
     <layout>
         <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md space-x-2">
-            <div class="mb-4">
-                <Link :href="route('restaurants.edit', { id: restaurant.id })" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-4">
-                    Modificar
-                </Link>
+<!--            <div class="mb-4">-->
+<!--                <Link :href="route('restaurants.edit', { id: restaurant.id })" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-4">-->
+<!--                    Modificar-->
+<!--                </Link>-->
 
-                <Link :href="route('restaurant.reserves', { id: restaurant.id })" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Mostrar Reserves
-                </Link>
-            </div>
+<!--                <Link :href="route('restaurant.reserves', { id: restaurant.id })" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">-->
+<!--                    Mostrar Reserves-->
+<!--                </Link>-->
+<!--            </div>-->
 
             <div class="flex">
                 <div class="w-2/3 pr-4">

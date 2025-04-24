@@ -22,10 +22,11 @@ class ReservaController extends Controller
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
         }
         $reserves = Reserva::where('id_restaurant', $id)
+            ->orderBy('created_at', 'desc')
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')
             ->get();
-        return Inertia::render('Reserves/IndexRest', [
+        return Inertia::render('Reserves/Restaurant/Index', [
             'restaurant' => $restaurant,
             'reserves' => $reserves
         ]);
@@ -50,7 +51,7 @@ class ReservaController extends Controller
             'terrassa' => 'nullable|boolean',
 
         ]);
-
+        $validatedData['created_at'] = Carbon::now();
         $reserva = new Reserva($validatedData);
         $reserva->id_usuari = Auth::id();
         $reserva->save();
@@ -70,8 +71,9 @@ class ReservaController extends Controller
         if (!$reserva) {
             return Inertia::render('Error', ['message' => 'Reserva no trobada.']);
         }
+        $reserva->terrassa = (bool) $reserva->terrassa;
         $reserva->hora = Carbon::parse($reserva->hora)->format('H:i');
-        return Inertia::render('Reserves/EditModal', ['reserva' => $reserva]);
+        return Inertia::render('Reserves/Restaurant/EditModal', ['reserva' => $reserva]);
     }
 
     public function updateEstat(Request $request, $id): RedirectResponse
@@ -113,7 +115,6 @@ class ReservaController extends Controller
                 Reserva::CANCELAT,
                 Reserva::COMPLETAT,
             ])],
-            'solicituds' => 'nullable|string',
             'terrassa' => 'nullable|boolean',
         ]);
 
@@ -129,7 +130,7 @@ class ReservaController extends Controller
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per eliminar aquesta reserva.');
         }
 
-        return Inertia::render('Reserves/DeleteModal', [
+        return Inertia::render('Reserves/Restaurant/DeleteModal', [
             'reservaId' => $reserva->id,
         ]);
     }
