@@ -23,6 +23,7 @@ return new class extends Migration
             $table->index('estat'); // Add index for query performance
             $table->boolean('terrassa')->default(false)->nullable();
             $table->text('solicituds')->nullable();
+            $table->timestamps();
         });
     }
 

@@ -59,6 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Rutes per reserves d'usuari
     Route::get('/user/reserves', [ReservaUserController::class, 'index'])->name('user.reserves');
+    Route::get('/user/reserves/{id}/edit', [ReservaUserController::class, 'edit'])->name('user.reserves.edit');
+    Route::put('/user/reserves/{id}', [ReservaUserController::class, 'update'])->name('user.reserves.update');
+    Route::get('/user/reserves/{id}/cancel', [ReservaUserController::class, 'cancel'])->name('user.reserves.cancel');
+    Route::post('/user/reserves/{id}/cancelConfirm', [ReservaUserController::class, 'cancelConfirm'])->name('user.reserves.cancelConfirm');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
