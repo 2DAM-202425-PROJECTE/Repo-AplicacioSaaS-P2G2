@@ -70,23 +70,7 @@ class RestaurantController extends Controller
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-            'plats.*.nom' => 'required|string',
-            'plats.*.descripcio' => 'nullable|string',
-            'plats.*.preu' => 'required|numeric',
-            'plats.*.gluten' => 'nullable|boolean',
-            'plats.*.lactics' => 'nullable|boolean',
-            'plats.*.crustaci' => 'nullable|boolean',
-            'plats.*.ous' => 'nullable|boolean',
-            'plats.*.lupines' => 'nullable|boolean',
-            'plats.*.mostassa' => 'nullable|boolean',
-            'plats.*.cacahuats' => 'nullable|boolean',
-            'plats.*.soja' => 'nullable|boolean',
-            'plats.*.vegetaria' => 'nullable|boolean',
-            'plats.*.vega' => 'nullable|boolean',
-            'plats.*.carn_vermella' => 'nullable|boolean',
-            'plats.*.kosher' => 'nullable|boolean',
-            'plats.*.halal' => 'nullable|boolean',
-            'plats.*.keto' => 'nullable|boolean',
+
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -94,33 +78,9 @@ class RestaurantController extends Controller
             $validatedData['profile_image'] = $path;
         }
         $validatedData['user_id'] = Auth::id();
-        $restaurant = Restaurant::create($validatedData);
+        Restaurant::create($validatedData);
 
 
-        if (isset($validatedData['plats']) && is_array($validatedData['plats'])) {
-            foreach ($validatedData['plats'] as $platData) {
-                Plat::create([
-                    'nom' => $platData['nom'],
-                    'descripcio' => $platData['descripcio'] ?? null,
-                    'id_restaurant' => $restaurant->id,
-                    'preu' => $platData['preu'],
-                    'gluten' => $platData['gluten'] ?? true,
-                    'lactics' => $platData['lactics'] ?? true,
-                    'crustaci' => $platData['crustaci'] ?? true,
-                    'ous' => $platData['ous'] ?? true,
-                    'lupines' => $platData['lupines'] ?? true,
-                    'mostassa' => $platData['mostassa'] ?? true,
-                    'cacahuats' => $platData['cacahuats'] ?? true,
-                    'soja' => $platData['soja'] ?? true,
-                    'vegetaria' => $platData['vegetaria'] ?? true,
-                    'vega' => $platData['vega'] ?? true,
-                    'carn_vermella' => $platData['carn_vermella'] ?? true,
-                    'kosher' => $platData['kosher'] ?? true,
-                    'halal' => $platData['halal'] ?? true,
-                    'keto' => $platData['keto'] ?? true,
-                ]);
-            }
-        }
 
         return redirect()->route('restaurants.index');
     }
@@ -136,7 +96,7 @@ class RestaurantController extends Controller
 
     public function edit($id)
     {
-        $restaurant = Restaurant::with('municipio.provincia', 'plats')->findOrFail($id);
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
         // Comprovem que l'usuari té permís per editar aquest restaurant
         if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
@@ -174,23 +134,6 @@ class RestaurantController extends Controller
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-            'plats.*.nom' => 'required|string',
-            'plats.*.descripcio' => 'nullable|string',
-            'plats.*.preu' => 'required|numeric',
-            'plats.*.gluten' => 'nullable|boolean',
-            'plats.*.lactics' => 'nullable|boolean',
-            'plats.*.crustaci' => 'nullable|boolean',
-            'plats.*.ous' => 'nullable|boolean',
-            'plats.*.lupines' => 'nullable|boolean',
-            'plats.*.mostassa' => 'nullable|boolean',
-            'plats.*.cacahuats' => 'nullable|boolean',
-            'plats.*.soja' => 'nullable|boolean',
-            'plats.*.vegetaria' => 'nullable|boolean',
-            'plats.*.vega' => 'nullable|boolean',
-            'plats.*.carn_vermella' => 'nullable|boolean',
-            'plats.*.kosher' => 'nullable|boolean',
-            'plats.*.halal' => 'nullable|boolean',
-            'plats.*.keto' => 'nullable|boolean',
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -201,31 +144,7 @@ class RestaurantController extends Controller
             $validatedData['profile_image'] = $path;
         }
 
-
         $restaurant->update($validatedData);
-
-        if (isset($validatedData['plats'])) {
-            $updatedPlatIds = []; // Array per guardar els IDs dels plats actualitzats
-
-            foreach ($validatedData['plats'] as $platData) {
-                if (isset($platData['id'])) {
-                    // Actualitzar plat existent
-                    Plat::find($platData['id'])->update($platData);
-                    $updatedPlatIds[] = $platData['id']; // Afegir ID a l'array
-                } else {
-                    // Crear nou plat
-                    $newPlat = Plat::create(array_merge($platData, ['id_restaurant' => $restaurant->id]));
-                    $updatedPlatIds[] = $newPlat->id; // Afegir ID a l'array
-                }
-            }
-
-            // Eliminar plats que no estan presents a la llista actualitzada
-            $platsToDelete = $restaurant->plats->pluck('id')->diff($updatedPlatIds)->toArray();
-            Plat::whereIn('id', $platsToDelete)->delete();
-        } else {
-            // Si no hi ha plats a la petició, eliminar tots els plats del restaurant
-            Plat::where('id_restaurant', $restaurant->id)->delete();
-        }
 
         return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
     }

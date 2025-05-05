@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PlatController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ReservaUserController;
 use App\Http\Controllers\RestaurantController;
@@ -48,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/{userId}/restaurant', [UserController::class, 'getUserRestaurant'])->name('user.restaurant');
 
 
-    // Rutes per a reserves i taules
+    // Rutes per a reserves d'empresa
     Route::post('/reserves', [ReservaController::class, 'store'])->name('reserves.store');
     Route::get('/restaurants/{id}/reserves', [ReservaController::class, 'index'])->name('restaurant.reserves');
     Route::put('/reserves/{id}/estat', [ReservaController::class, 'updateEstat'])->name('reserves.updateEstat');
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/user/reserves/{id}', [ReservaUserController::class, 'update'])->name('user.reserves.update');
     Route::get('/user/reserves/{id}/cancel', [ReservaUserController::class, 'cancel'])->name('user.reserves.cancel');
     Route::post('/user/reserves/{id}/cancelConfirm', [ReservaUserController::class, 'cancelConfirm'])->name('user.reserves.cancelConfirm');
+
+    // Rutes per a la gestió de plats
+    Route::get('/restaurants/{restaurant}/plats', [PlatController::class, 'index'])->name('restaurants.plats');
+    Route::put('/restaurants/{restaurant}/plats', [PlatController::class, 'update'])->name('restaurants.plats.update');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
