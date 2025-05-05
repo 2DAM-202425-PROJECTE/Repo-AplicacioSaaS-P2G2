@@ -43,6 +43,16 @@
                         Eliminar Restaurant
                     </Link>
                 </div>
+
+                <div class="bg-sky-100 p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-2">Gestionar Carta</h3>
+                    <p class="text-gray-600 mb-4">Afegeix i modifica la informació de la carta del teu restaurant.</p>
+                    <Link :href="route('restaurants.plats', { id: restaurant.id })" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded inline-block">
+                        Editar Carta
+                    </Link>
+                </div>
+
+
             </div>
         </div>
     </layout>
