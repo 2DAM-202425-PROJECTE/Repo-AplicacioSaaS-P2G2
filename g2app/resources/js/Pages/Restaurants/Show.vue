@@ -26,7 +26,7 @@
                     </div>
                     <div class="mb-4">
                         <p><strong>Imatge de perfil:</strong></p>
-                        <img :src="`/storage/${profile_image}`" alt="Profile Image" class="w-32 h-32 rounded-full">
+                        <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="profile-image ml-4">
                     </div>
                     <div class="mb-4">
                         <p><strong>Cuina:</strong></p>
