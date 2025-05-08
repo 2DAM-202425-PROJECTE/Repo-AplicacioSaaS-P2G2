@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Notifications\EstatReservaCanviada;
 
 class ReservaController extends Controller
 {
@@ -92,6 +93,8 @@ class ReservaController extends Controller
         ]);
 
         $reserva->update($validatedData);
+        // Enviar notificació a l’usuari de la reserva
+        $reserva->usuari->notify(new EstatReservaCanviada($reserva));
         return redirect()->back()->with('success', 'Status updated successfully');
     }
 
