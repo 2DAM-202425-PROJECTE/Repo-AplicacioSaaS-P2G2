@@ -67,8 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rutes per a la gestió de plats
     Route::get('/restaurants/{restaurant}/plats', [PlatController::class, 'index'])->name('restaurants.plats');
-    Route::put('/restaurants/{restaurant}/plats', [PlatController::class, 'update'])->name('restaurants.plats.update');
-
+    Route::post('/restaurants/{restaurant}/plats', [PlatController::class, 'store'])->name('restaurants.plats.store');
+    Route::delete('/restaurants/{restaurant}/plats/{plat}', [PlatController::class, 'destroy'])->name('restaurants.plats.destroy');
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
