@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <main class="flex-grow p-4">
+        <main class="flex-grow">
             <slot></slot>
         </main>
 

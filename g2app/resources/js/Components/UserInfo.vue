@@ -34,7 +34,7 @@
         <div>
             <p><strong>Tipus de compte:</strong></p>
             <span :class="isEmpresa() ? 'text-green-500' : 'text-blue-500'" class="font-semibold">
-                {{ isEmpresa() ? 'Empresa' : 'Usuari' }}
+                {{ isEmpresa() ? 'Empresa' : 'User' }}
             </span>
         </div>
         -->

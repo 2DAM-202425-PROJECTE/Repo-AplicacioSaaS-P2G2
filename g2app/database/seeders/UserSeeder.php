@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
         User::factory()->count(25)->create();
 
         User::factory()->create([
-            'name' => 'Usuari Empresa',
+            'name' => 'User Empresa',
             'email' => 'empresa@email.com',
             'password' => bcrypt('password'),
             'empresa' => true,
@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Usuari Normal',
+            'name' => 'User Normal',
             'email' => 'usuari@email.com',
             'password' => bcrypt('password'),
             'empresa' => false,

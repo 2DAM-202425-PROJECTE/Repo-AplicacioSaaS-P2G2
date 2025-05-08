@@ -1,118 +1,130 @@
 <template>
-    <div>
-        <h2 class="text-xl font-bold mb-4">Edit Restaurant</h2>
-        <form @submit.prevent="submitEditForm">
-            <!-- Nom -->
+    <layout>
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
             <div class="mb-4">
-                <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
-                <span v-if="errors.nom" class="text-red-500 text-sm">{{ errors.nom }}</span>
+            <Link :href="route('restaurants.show', { id: restaurant.id })"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                <-Tornar
+            </Link>
             </div>
+            <h1 class="text-2xl font-bold mb-4">Editar Restaurant</h1>
+            <form @submit.prevent="submitAdminForm">
+                <div class="mb-4">
+                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                    <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
+                </div>
+                <div class="mb-4">
+                    <label for="descripcio" class="block text-sm font-medium text-gray-700">Descripció</label>
+                    <textarea v-model="form.descripcio" id="descripcio" class="mt-1 block w-full" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
+                    <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
+                </div>
+                <div class="mb-4">
+                    <label for="profile_image" class="block text-sm font-medium text-gray-700">Imatge de Perfil</label>
+                    <input id="profile_image" type="file" class="mt-1 block w-full" @change="HandleFileUpload" />
+                </div>
+                <div class="mb-4">
+                    <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
+                    <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
+                        <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="provincia" class="block text-sm font-medium text-gray-700">Provincia</label>
+                    <select v-model="selectedProvinciaId" @change="fetchMunicipios" id="provincia" class="mt-1 block w-full" required>
+                        <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{ provincia.name }}</option>
+                    </select>
+                </div>
+
+                <div class="mb-4" v-if="municipios.length > 0">
+                    <label for="municipi" class="block text-sm font-medium text-gray-700">Municipi</label>
+                    <select v-model="form.municipio_id" id="municipi" class="mt-1 block w-full" required>
+                        <option value="" disabled>Select a Municipality</option>
+                        <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="carrer" class="block text-sm font-medium text-gray-700">Carrer</label>
+                    <input v-model="form.carrer" id="carrer" type="text" class="mt-1 block w-full" required />
+                </div>
+                <div class="mb-4">
+                    <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora d'Obertura</label>
+                    <input v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
+                </div>
+                <div class="mb-4">
+                    <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
+                    <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
+                </div>
 
 
-            <!-- Descripcio -->
-            <div class="mb-4">
-                <label for="descripcio" class="block text-sm font-medium text-gray-700">Descripció</label>
-                <textarea v-model="form.descripcio" id="descripcio" class="mt-1 block w-full" required></textarea>
-                <span v-if="errors.descripcio" class="text-red-500 text-sm">{{ errors.descripcio }}</span>
-            </div>
-
-            <!-- Telefon -->
-            <div class="mb-4">
-                <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
-                <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
-                <span v-if="errors.telefon" class="text-red-500 text-sm">{{ errors.telefon }}</span>
-            </div>
-
-            <!-- Imatge de perfil -->
-            <div class="mb-4">
-                <label for="profile_image" class="block text-sm font-medium text-gray-700">Imatge de Perfil</label>
-                <input id="profile_image" type="file" class="mt-1 block w-full" @change="handleFileUpload" />
-                <span v-if="errors.profile_image" class="text-red-500 text-sm">{{ errors.profile_image }}</span>
-            </div>
-
-            <!-- Tipus de Cuina (Dropdown) -->
-            <div class="mb-4">
-                <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
-                <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
-                    <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
-                </select>
-                <span v-if="errors.tipus_cuina" class="text-red-500 text-sm">{{ errors.tipus_cuina }}</span>
-            </div>
-
-            <!-- Hora Obertura -->
-            <div class="mb-4">
-                <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora d'Obertura</label>
-                <input step="any" v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
-                <span v-if="errors.hora_obertura" class="text-red-500 text-sm">{{ errors.hora_obertura }}</span>
-            </div>
-
-            <!-- Hora Tancament -->
-            <div class="mb-4">
-                <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
-                <input step="any" v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
-                <span v-if="errors.hora_tancament" class="text-red-500 text-sm">{{ errors.hora_tancament }}</span>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                Update Restaurant
-            </button>
-        </form>
-    </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Guardar canvis
+                </button>
+            </form>
+        </div>
+    </layout>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
-import { route } from 'ziggy-js';
+import {ref, reactive, onMounted, computed} from 'vue';
+import {Inertia} from '@inertiajs/inertia';
+import {route} from 'ziggy-js';
+import axios from 'axios';
+import Layout from '@/Layouts/Layout.vue';
+import {Link} from "@inertiajs/vue3";
+import ToggleButton from '@/Components/CheckButton.vue';
 
 const props = defineProps({
     restaurant: Object,
     tipusCuinaOptions: Array,
+    provincias: Array,
+    municipios: Array,
+    plats: Array,
 });
 
-const form = reactive({
-    nom: props.restaurant.nom || '',
-    descripcio: props.restaurant.descripcio || '',
-    telefon: props.restaurant.telefon || '',
-    profile_image: null,
-    tipus_cuina: props.restaurant.tipus_cuina || '',
-    hora_obertura: props.restaurant.hora_obertura || '',
-    hora_tancament: props.restaurant.hora_tancament || ''
-});
-
-const errors = ref({});
-
-const handleFileUpload = (event) => {
+const HandleFileUpload = (event) => {
     form.profile_image = event.target.files[0];
 };
 
-const submitEditForm = () => {
-    const formData = new FormData();
+const form = reactive({
+    ...props.restaurant,
+    plats: props.restaurant.plats || [],
+});
 
-    formData.append('nom', form.nom);
-    formData.append('descripcio', form.descripcio);
-    formData.append('telefon', form.telefon);
-    formData.append('tipus_cuina', form.tipus_cuina);
-    formData.append('hora_obertura', form.hora_obertura);
-    formData.append('hora_tancament', form.hora_tancament);
+const selectedProvinciaId = ref(props.restaurant.municipio.provincia_id);
+const municipios = ref([]);
 
-    if (form.profile_image) {
-        formData.append('profile_image', form.profile_image);
+onMounted(() => {
+    fetchMunicipios();
+});
+
+const fetchMunicipios = async () => {
+    try {
+        const response = await axios.get(route('get.municipios', {provincia_id: selectedProvinciaId.value}));
+        municipios.value = response.data;
+    } catch (error) {
+        console.error("Error fetching municipios:", error);
     }
+};
 
-    Inertia.post(route('restaurants.update', props.restaurant.id), formData, {
-        method: 'post', // Important per evitar conflictes amb PUT i fitxers
-        forceFormData: true, // força Inertia a enviar-ho com multipart/form-data
+
+const submitAdminForm = () => {
+
+    Inertia.put(route('restaurants.update', { restaurant: form.id }), {
+...form, plats: form.plats,
+    }, {
         onSuccess: () => {
-            console.log('Restaurant updated successfully');
+            Inertia.visit(route('restaurants.show', { id: form.id }));
         },
-        onError: (errorData) => {
-            errors.value = errorData.errors;
-            console.error('Error updating the restaurant:', errorData.errors);
+        onError: (errors) => {
+            console.error("Error updating restaurant:", errors);
         },
     });
 };
+
+
 
 </script>

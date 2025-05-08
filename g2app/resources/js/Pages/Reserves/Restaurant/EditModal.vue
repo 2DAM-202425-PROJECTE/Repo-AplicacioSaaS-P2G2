@@ -2,16 +2,29 @@
     <Modal  v-slot="{ close }" max-width="xl" panel-classes="bg-white rounded-lg" >
         <h1 class="text-2xl font-bold mb-4">Modificar Reserva</h1>
         <form @submit.prevent="() => updateReserva(close)">
+
+            <div class="mb-4">
+                <label for="estat" class="block text-sm font-medium text-gray-700">Estat:</label>
+                <select v-model="form.estat" id="estat" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    <option :value="0">Pendent</option>
+                    <option :value="1">Confirmada</option>
+                    <option :value="2">Cancel·lada</option>
+                    <option :value="3">Completada</option>
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon:</label>
                 <input type="text" v-model="form.telefon" id="telefon"
                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
             </div>
+
             <div class="mb-4">
                 <label for="data" class="block text-sm font-medium text-gray-700">Data:</label>
                 <input type="date" v-model="form.data" id="data"
                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
             </div>
+
             <div class="mb-4">
 
 
@@ -25,15 +38,17 @@
                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
             </div>
 
-            <div class="mb-4">
-                <label for="estat" class="block text-sm font-medium text-gray-700">Estat:</label>
-                <select v-model="form.estat" id="estat" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                    <option :value="0">Pendent</option>
-                    <option :value="1">Confirmada</option>
-                    <option :value="2">Cancel·lada</option>
-                    <option :value="3">Completada</option>
-                </select>
+            <div>
+                <label class="inline-flex items-center">
+                    <input type="radio" v-model="form.terrassa" :value="true" class="form-radio">
+                    <span class="ml-2">Terrassa</span>
+                </label>
+                <label class="inline-flex items-center ml-6">
+                    <input type="radio" v-model="form.terrassa" :value="false" class="form-radio">
+                    <span class="ml-2">Interior</span>
+                </label>
             </div>
+
 
             <div class="flex justify-end">
                 <button type="button" @click="close"
@@ -71,14 +86,5 @@ const updateReserva = (close) => {
 </script>
 
 <style>
-/* Canviar color fons del modal d'edició */
-.im-backdrop {
-    background-color: rgba(0, 0, 0, 0.5)
-
-}
-.im-modal-wrapper {
-
-    transition-duration: 0.2s;
-}
 
 </style>
