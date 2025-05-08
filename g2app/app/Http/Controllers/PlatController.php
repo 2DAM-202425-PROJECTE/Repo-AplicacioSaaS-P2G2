@@ -24,54 +24,41 @@ class PlatController extends Controller
         ]);
     }
 
-    public function update(Request $request, $restaurantId)
+    public function store(Request $request, $restaurantId)
     {
         $restaurant = Restaurant::findOrFail($restaurantId);
 
         $validatedData = $request->validate([
-            'plats.*.id' => 'nullable|exists:plats,id',
-            'plats.*.nom' => 'required|string',
-            'plats.*.descripcio' => 'nullable|string',
-            'plats.*.preu' => 'required|numeric',
-            'plats.*.gluten' => 'nullable|boolean',
-            'plats.*.lactics' => 'nullable|boolean',
-            'plats.*.crustaci' => 'nullable|boolean',
-            'plats.*.ous' => 'nullable|boolean',
-            'plats.*.lupines' => 'nullable|boolean',
-            'plats.*.mostassa' => 'nullable|boolean',
-            'plats.*.cacahuats' => 'nullable|boolean',
-            'plats.*.soja' => 'nullable|boolean',
-            'plats.*.vegetaria' => 'nullable|boolean',
-            'plats.*.vega' => 'nullable|boolean',
-            'plats.*.carn_vermella' => 'nullable|boolean',
-            'plats.*.kosher' => 'nullable|boolean',
-            'plats.*.halal' => 'nullable|boolean',
-            'plats.*.keto' => 'nullable|boolean',
+            'nom' => 'required|string',
+            'descripcio' => 'nullable|string',
+            'preu' => 'required|numeric',
+            'gluten' => 'nullable|boolean',
+            'lactics' => 'nullable|boolean',
+            'crustaci' => 'nullable|boolean',
+            'ous' => 'nullable|boolean',
+            'lupines' => 'nullable|boolean',
+            'mostassa' => 'nullable|boolean',
+            'cacahuats' => 'nullable|boolean',
+            'soja' => 'nullable|boolean',
+            'vegetaria' => 'nullable|boolean',
+            'vega' => 'nullable|boolean',
+            'carn_vermella' => 'nullable|boolean',
+            'kosher' => 'nullable|boolean',
+            'halal' => 'nullable|boolean',
+            'keto' => 'nullable|boolean',
         ]);
 
-        if (isset($validatedData['plats'])) {
-            $updatedPlatIds = [];
+        $plat = new Plat(array_merge($validatedData, ['id_restaurant' => $restaurant->id]));
+        $plat->save();
 
-            foreach ($validatedData['plats'] as $platData) {
-                if (isset($platData['id'])) {
-                    // Actualitzar plat existent
-                    Plat::find($platData['id'])->update($platData);
-                    $updatedPlatIds[] = $platData['id'];
-                } else {
-                    // Crear nou plat
-                    $newPlat = Plat::create(array_merge($platData, ['id_restaurant' => $restaurant->id]));
-                    $updatedPlatIds[] = $newPlat->id;
-                }
-            }
+        return response()->json($plat);
+    }
 
-            // Eliminar plats que no estan presents a la llista actualitzada
-            $platsToDelete = $restaurant->plats->pluck('id')->diff($updatedPlatIds)->toArray();
-            Plat::whereIn('id', $platsToDelete)->delete();
-        } else {
-            // Si no hi ha plats a la petició, eliminar tots els plats del restaurant
-            Plat::where('id_restaurant', $restaurant->id)->delete();
-        }
+    public function destroy($restaurantId, $platId)
+    {
+        $plat = Plat::findOrFail($platId);
+        $plat->delete();
 
-        return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
+        return response()->json(['success' => true]);
     }
 }
