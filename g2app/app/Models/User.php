@@ -80,4 +80,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reserva::class, 'id_usuari');
     }
+    public function favoriteRestaurants()
+    {
+        return $this->belongsToMany(Restaurant::class, 'restaurant_favorites');
+    }
 }

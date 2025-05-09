@@ -104,7 +104,15 @@ class UserController extends Controller
         return redirect()->route('login')->with('success', 'User eliminat correctament.');
     }
 
+    public function favorites()
+    {
+        $user = Auth::user();
+        $restaurants = $user->favoriteRestaurants;
 
+        return response()->json([
+            'restaurants' => $restaurants,
+        ]);
+    }
 
 
 }

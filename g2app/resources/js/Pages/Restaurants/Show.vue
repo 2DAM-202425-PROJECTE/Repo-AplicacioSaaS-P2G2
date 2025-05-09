@@ -11,11 +11,19 @@
 <!--                </Link>-->
 <!--            </div>-->
 
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold">{{ nom }}</h1>
+                <button @click="toggleFavorite" class="focus:outline-none">
+                    <svg v-if="isFavorite" class="h-8 w-8 text-yellow-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z"/>
+                    </svg>
+                    <svg v-else class="h-8 w-8 text-gray-400 fill-current hover:text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                    </svg>
+                </button>
+            </div>
             <div class="flex">
                 <div class="w-2/3 pr-4">
-                    <div class="mb-4">
-                        <h1 class="text-3xl font-bold">{{ nom }}</h1>
-                    </div>
                     <div class="mb-4">
                         <p><strong>Descripció:</strong></p>
                         <p>{{ descripcio }}</p>
@@ -216,4 +224,29 @@ const submitReservation = () => {
         },
     });
 };
+
+const isFavorite = ref(false);
+onMounted(() => {
+    checkIfFavorite();
+});
+
+const checkIfFavorite = async () => {
+    try {
+        const response = await axios.get(route('restaurants.isFavorite', { restaurant: props.restaurant.id }));
+        isFavorite.value = response.data.isFavorite;
+    } catch (error) {
+        console.error('Error checking favorite status:', error);
+    }
+};
+
+
+const toggleFavorite = async () => {
+    try {
+        const response = await axios.post(route('restaurants.favorite', { restaurant: props.restaurant.id }));
+        isFavorite.value = response.data.isFavorite;
+    } catch (error) {
+        console.error('Error toggling favorite:', error);
+    }
+};
+
 </script>

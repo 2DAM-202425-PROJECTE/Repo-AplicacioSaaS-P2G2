@@ -6,6 +6,7 @@ use App\Http\Controllers\PlatController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ReservaUserController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\RestaurantFavoriteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +39,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/restaurants/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurants.edit');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
     Route::get('/restaurants/{id}/delete', [RestaurantController::class, 'destroy'])->name('restaurants.delete');
+
+    //Restaurants preferits
+    Route::post('/restaurants/{restaurant}/favorite', [RestaurantFavoriteController::class, 'toggle'])->name('restaurants.favorite');
+    Route::get('/favorites', [UserController::class, 'favorites'])->name('favorites.index');
+    Route::get('/restaurants/{restaurant}/isFavorite', [RestaurantFavoriteController::class, 'isFavorite'])->name('restaurants.isFavorite');
+
 
     // Rutes per a la gestió del perfil d'usuari
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('user.profile');
