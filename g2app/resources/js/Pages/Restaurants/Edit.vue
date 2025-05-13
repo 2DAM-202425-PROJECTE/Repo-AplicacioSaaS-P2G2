@@ -74,7 +74,7 @@ import {Inertia} from '@inertiajs/inertia';
 import {route} from 'ziggy-js';
 import axios from 'axios';
 import Layout from '@/Layouts/Layout.vue';
-import {Link} from "@inertiajs/vue3";
+import {Link, useForm} from "@inertiajs/vue3";
 import ToggleButton from '@/Components/CheckButton.vue';
 
 const props = defineProps({
@@ -83,16 +83,25 @@ const props = defineProps({
     provincias: Array,
     municipios: Array,
     plats: Array,
+
+});
+
+const form = useForm({
+    nom: props.restaurant.nom,
+    descripcio: props.restaurant.descripcio,
+    telefon: props.restaurant.telefon,
+    profile_image: props.restaurant.profile_image,
+    tipus_cuina: props.restaurant.tipus_cuina,
+    municipio_id: props.restaurant.municipio_id,
+    carrer: props.restaurant.carrer,
+    hora_obertura: props.restaurant.hora_obertura,
+    hora_tancament: props.restaurant.hora_tancament,
+    plats: props.restaurant.plats || [],
 });
 
 const HandleFileUpload = (event) => {
     form.profile_image = event.target.files[0];
 };
-
-const form = reactive({
-    ...props.restaurant,
-    plats: props.restaurant.plats || [],
-});
 
 const selectedProvinciaId = ref(props.restaurant.municipio.provincia_id);
 const municipios = ref([]);
@@ -112,19 +121,19 @@ const fetchMunicipios = async () => {
 
 
 const submitAdminForm = () => {
-
-    Inertia.put(route('restaurants.update', { restaurant: form.id }), {
-...form, plats: form.plats,
-    }, {
+    form.transform(data => {
+        let formData = new FormData();
+        for (let key in data) {
+            formData.append(key, data[key] === null ? '' : data[key]);
+        }
+        return formData;
+    }).post(route('restaurants.update', { restaurant: props.restaurant.id }), {
         onSuccess: () => {
-            Inertia.visit(route('restaurants.show', { id: form.id }));
+            Inertia.visit(route('restaurants.show', { id: props.restaurant.id }));
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);
         },
     });
 };
-
-
-
 </script>
