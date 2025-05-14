@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificacionsController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ReservaUserController;
@@ -72,5 +73,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    //Rutes de Notificacions
+    Route::get('/notificacions', [NotificacionsController::class, 'index'])->name('notificacions.index');
+
 
 });

@@ -10,6 +10,7 @@
                     <Link :href="route('home')" class="text-blue-500 hover:underline">Home</Link>
                     <Link :href="route('restaurants.index')" class="text-blue-500 hover:underline">Restaurants</Link>
                     <Link :href="route('user.reserves')" class="text-blue-500 hover:underline">Reserves</Link>
+                    <Link :href="route('notificacions.index')" class="text-blue-500 hover:underline">Notificacions</Link>
                 </nav>
 
                 <!-- Icona d'usuari amb menú desplegable -->

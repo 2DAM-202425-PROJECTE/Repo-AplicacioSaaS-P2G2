@@ -12,6 +12,7 @@ class EstatReservaCanviada extends Notification
     use Queueable;
 
     protected $reserva;
+    private $nouEstat;
 
     public function __construct($reserva)
     {
@@ -51,6 +52,8 @@ class EstatReservaCanviada extends Notification
         return [
             'missatge' => "L'estat de la teva reserva ha canviat a: " . $this->reserva->estat,
             'reserva_id' => $this->reserva->id,
+            'restaurant_id' => $this->reserva->restaurant_id,
+            'estat' => $this->nouEstat,
             'data' => now()->toDateTimeString(),
         ];
     }
