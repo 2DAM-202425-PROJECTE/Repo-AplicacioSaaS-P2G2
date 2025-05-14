@@ -56,25 +56,27 @@
                     </div>
 
                     <!-- Llistat de Restaurants -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div v-for="restaurant in paginatedRestaurants" :key="restaurant.id"
-                             class="bg-white p-6 shadow-lg rounded-lg transition-transform transform hover:scale-105 hover:shadow-2xl border border-gray-200">
-                            <Link :href="`/restaurants/${restaurant.id}`">
-                                <div class="flex items-center justify-between">
-                                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
-                                    <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="profile-image ml-4">
+                             class="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl border border-gray-200">
+                            <Link :href="`/restaurants/${restaurant.id}`" class="block">
+                                <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
+                                    <p class="text-gray-600 text-base mb-2"><i class="fas fa-map-marker-alt text-gold mr-1"></i> {{ restaurant.municipio.name }}</p>
+                                    <p class="text-gray-600 text-base"><i class="fas fa-utensils text-gold mr-1"></i> {{ restaurant.tipus_cuina }}</p>
                                 </div>
-                                <p class="text-gray-600"><i class="fas fa-map-marker-alt text-gold"></i> {{ restaurant.municipio.name }}</p>
-                                <p class="text-gray-600"><i class="fas fa-utensils text-gold"></i> {{ restaurant.tipus_cuina }}</p>
                             </Link>
-                            <button @click.prevent="toggleFavorite(restaurant)" class="focus:outline-none">
-                                <svg v-if="isFavorite(restaurant.id)" class="h-6 w-6 text-yellow-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z"/>
-                                </svg>
-                                <svg v-else class="h-6 w-6 text-gray-400 fill-current hover:text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z" fill="none" stroke="currentColor" stroke-width="1"/>
-                                </svg>
-                            </button>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-end">
+                                <button @click.prevent="toggleFavorite(restaurant)" class="focus:outline-none">
+                                    <svg v-if="isFavorite(restaurant.id)" class="h-6 w-6 text-yellow-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z"/>
+                                    </svg>
+                                    <svg v-else class="h-6 w-6 text-gray-400 fill-current hover:text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -112,12 +114,6 @@
     color: var(--gold);
 }
 
-.profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
 </style>
 
 <script>
