@@ -9,18 +9,18 @@ use Inertia\Inertia;
 
 class PlatController extends Controller
 {
-    public function index($restaurantId)
+    public function index($restaurant)
     {
-        $restaurant = Restaurant::findOrFail($restaurantId);
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($restaurant);
 
         if (!$restaurant) {
             return redirect()->route('restaurants.create')->with('error', 'Si us plau, crea un restaurant per gestionar la carta.');
         }
         $plats = $restaurant->plats;
 
-        return Inertia::render('Restaurants/Plats', [
+        return Inertia::render('Restaurants/Manage', [
             'restaurant' => $restaurant,
-            'plats' => $plats,
+            'activeTab' => 'plats',
         ]);
     }
 

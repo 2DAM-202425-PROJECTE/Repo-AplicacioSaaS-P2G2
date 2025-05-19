@@ -22,9 +22,12 @@
                     </button>
                     <!-- Menú desplegable -->
                     <div v-show="isOpen" class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
-                        <a href="/configuracio" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Configuració</a>
+                        <a href="/configuracio" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perfil</a>
+                        <Link v-if="hasRestaurant" :href="route('restaurant.management', { id: restaurantId })" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Gestionar Restaurant
+                        </Link>
                         <button @click="confirmLogout" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                            Logout
+                            Tancar sessió
                         </button>
                     </div>
                 </div>
@@ -68,13 +71,17 @@
 </style>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import axios from 'axios';
 
 export default {
     name: 'Layout',
     setup() {
         const isOpen = ref(false);
+        const hasRestaurant = ref(false);
+        const restaurantId = ref(null);
         const showLogoutConfirm = ref(false); // Controla la visibilitat del modal de confirmació
 
         // Mostra el modal de confirmació de logout
@@ -101,8 +108,21 @@ export default {
             showLogoutConfirm.value = false;
         };
 
+        onMounted(async () => {
+            try {
+                const response = await axios.get(route('user.restaurant', { userId: usePage().props.auth.user.id }));
+                if (response.data.restaurant) {
+                    hasRestaurant.value = true;
+                    restaurantId.value = response.data.restaurant.id;
+                }
+            } catch (error) {
+                console.error("Error fetching restaurant:", error);
+            }
+        });
         return {
             isOpen,
+            hasRestaurant,
+            restaurantId,
             showLogoutConfirm,
             confirmLogout,
             handleLogout,
