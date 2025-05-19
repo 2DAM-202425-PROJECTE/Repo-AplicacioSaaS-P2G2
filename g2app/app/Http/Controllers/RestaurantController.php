@@ -97,18 +97,18 @@ class RestaurantController extends Controller
     public function edit($id)
     {
         $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
-        // Comprovem que l'usuari té permís per editar aquest restaurant
+
         if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
         }
-
 
         $tipusCuinaOptions = Restaurant::$TIPUS_CUINA;
         $provincias = Provincia::all();
         $municipios = Municipio::where('provincia_id', $restaurant->municipio->provincia_id)->get();
 
-        return Inertia::render('Restaurants/Edit', [
+        return Inertia::render('Restaurants/Manage', [
             'restaurant' => $restaurant,
+            'activeTab' => 'edit',
             'tipusCuinaOptions' => $tipusCuinaOptions,
             'provincias' => $provincias,
             'municipios' => $municipios,
@@ -148,7 +148,7 @@ class RestaurantController extends Controller
 
         $restaurant->update($dataToUpdate);
 
-        return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
+        return redirect()->route('restaurants.edit', ['id' => $restaurant->id]);
     }
 
     public function getMunicipios(Request $request): JsonResponse
@@ -174,9 +174,9 @@ class RestaurantController extends Controller
     // Funció per mostrar la gestió
     public function manageRestaurant($id)
     {
-        $restaurant = Restaurant::findOrFail($id);  // Busquem el restaurant pel ID
+        $restaurant = Restaurant::with(['municipio.provincia'])->findOrFail($id);  // Eager load relationships
 
-        return Inertia::render('Restaurants/Management', [
+        return Inertia::render('Restaurants/Manage', [
             'restaurant' => $restaurant
         ]);
     }

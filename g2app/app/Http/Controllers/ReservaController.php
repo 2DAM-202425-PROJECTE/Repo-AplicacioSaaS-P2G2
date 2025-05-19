@@ -18,7 +18,7 @@ class ReservaController extends Controller
 
     public function index($id)
     {
-        $restaurant = Restaurant::findOrFail($id);
+        $restaurant = Restaurant::with('municipio.provincia')->findOrFail($id);
         if (!Auth::user()->isEmpresa() || $restaurant->user_id !== Auth::id()) {
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per editar aquest restaurant.');
         }
@@ -27,8 +27,9 @@ class ReservaController extends Controller
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')
             ->get();
-        return Inertia::render('Reserves/Restaurant/Index', [
+        return Inertia::render('Restaurants/Manage', [
             'restaurant' => $restaurant,
+            'activeTab' => 'reserves',
             'reserves' => $reserves
         ]);
     }

@@ -1,71 +1,74 @@
 <template>
-    <layout>
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <div>
+        <form @submit.prevent="submitAdminForm">
             <div class="mb-4">
-            <Link :href="route('restaurants.show', { id: restaurant.id })"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                <-Tornar
-            </Link>
             </div>
-            <h1 class="text-2xl font-bold mb-4">Editar Restaurant</h1>
-            <form @submit.prevent="submitAdminForm">
-                <div class="mb-4">
-                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input v-model="form.nom" id="nom" type="text" class="mt-1 block w-full" required />
-                </div>
-                <div class="mb-4">
-                    <label for="descripcio" class="block text-sm font-medium text-gray-700">Descripció</label>
-                    <textarea v-model="form.descripcio" id="descripcio" class="mt-1 block w-full" required></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
-                    <input v-model="form.telefon" id="telefon" type="text" class="mt-1 block w-full" required />
-                </div>
-                <div class="mb-4">
-                    <label for="profile_image" class="block text-sm font-medium text-gray-700">Imatge de Perfil</label>
-                    <input id="profile_image" type="file" class="mt-1 block w-full" @change="HandleFileUpload" />
-                </div>
-                <div class="mb-4">
-                    <label for="tipus_cuina" class="block text-sm font-medium text-gray-700">Tipus de Cuina</label>
-                    <select v-model="form.tipus_cuina" id="tipus_cuina" class="mt-1 block w-full" required>
-                        <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="provincia" class="block text-sm font-medium text-gray-700">Provincia</label>
-                    <select v-model="selectedProvinciaId" @change="fetchMunicipios" id="provincia" class="mt-1 block w-full" required>
-                        <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{ provincia.name }}</option>
-                    </select>
-                </div>
 
-                <div class="mb-4" v-if="municipios.length > 0">
-                    <label for="municipi" class="block text-sm font-medium text-gray-700">Municipi</label>
-                    <select v-model="form.municipio_id" id="municipi" class="mt-1 block w-full" required>
-                        <option value="" disabled>Select a Municipality</option>
-                        <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">{{ municipio.name }}</option>
-                    </select>
-                </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="nom">Nom</label>
+                <input id="nom" v-model="form.nom" class="mt-1 block w-full" required type="text"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="descripcio">Descripció</label>
+                <textarea id="descripcio" v-model="form.descripcio" class="mt-1 block w-full" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="telefon">Telèfon</label>
+                <input id="telefon" v-model="form.telefon" class="mt-1 block w-full" required type="text"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="profile_image">Imatge de Perfil</label>
+                <input id="profile_image" class="mt-1 block w-full" type="file" @change="HandleFileUpload"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="tipus_cuina">Tipus de Cuina</label>
+                <select id="tipus_cuina" v-model="form.tipus_cuina" class="mt-1 block w-full" required>
+                    <option v-for="option in tipusCuinaOptions" :key="option" :value="option">{{ option }}</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="provincia">Provincia</label>
+                <select id="provincia" v-model="selectedProvinciaId" class="mt-1 block w-full" required
+                        @change="fetchMunicipios">
+                    <option v-for="provincia in provincias" :key="provincia.id" :value="provincia.id">{{
+                            provincia.name
+                        }}
+                    </option>
+                </select>
+            </div>
 
-                <div class="mb-4">
-                    <label for="carrer" class="block text-sm font-medium text-gray-700">Carrer</label>
-                    <input v-model="form.carrer" id="carrer" type="text" class="mt-1 block w-full" required />
-                </div>
-                <div class="mb-4">
-                    <label for="hora_obertura" class="block text-sm font-medium text-gray-700">Hora d'Obertura</label>
-                    <input v-model="form.hora_obertura" id="hora_obertura" type="time" class="mt-1 block w-full" required />
-                </div>
-                <div class="mb-4">
-                    <label for="hora_tancament" class="block text-sm font-medium text-gray-700">Hora de Tancament</label>
-                    <input v-model="form.hora_tancament" id="hora_tancament" type="time" class="mt-1 block w-full" required />
-                </div>
+            <div v-if="municipios.length > 0" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="municipi">Municipi</label>
+                <select id="municipi" v-model="form.municipio_id" class="mt-1 block w-full" required>
+                    <option disabled value="">Select a Municipality</option>
+                    <option v-for="municipio in municipios" :key="municipio.id" :value="municipio.id">{{
+                            municipio.name
+                        }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="carrer">Carrer</label>
+                <input id="carrer" v-model="form.carrer" class="mt-1 block w-full" required type="text"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="hora_obertura">Hora d'Obertura</label>
+                <input id="hora_obertura" v-model="form.hora_obertura" class="mt-1 block w-full" required type="time"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="hora_tancament">Hora de Tancament</label>
+                <input id="hora_tancament" v-model="form.hora_tancament" class="mt-1 block w-full" required
+                       type="time"/>
+            </div>
 
 
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                    Guardar canvis
-                </button>
-            </form>
-        </div>
-    </layout>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
+                Guardar canvis
+            </button>
+
+        </form>
+    </div>
 </template>
 
 <script setup>
@@ -121,15 +124,27 @@ const fetchMunicipios = async () => {
 
 
 const submitAdminForm = () => {
-    form.transform(data => {
-        let formData = new FormData();
-        for (let key in data) {
-            formData.append(key, data[key] === null ? '' : data[key]);
-        }
-        return formData;
-    }).post(route('restaurants.update', { restaurant: props.restaurant.id }), {
+    const formData = new FormData();
+
+    // Add all text fields
+    formData.append('nom', form.nom);
+    formData.append('descripcio', form.descripcio);
+    formData.append('telefon', form.telefon);
+    formData.append('tipus_cuina', form.tipus_cuina);
+    formData.append('municipio_id', form.municipio_id);
+    formData.append('carrer', form.carrer);
+    formData.append('hora_obertura', form.hora_obertura);
+    formData.append('hora_tancament', form.hora_tancament);
+
+    // Only append profile_image if it's a File object (new upload)
+    if (form.profile_image instanceof File) {
+        formData.append('profile_image', form.profile_image);
+    }
+
+    Inertia.post(route('restaurants.update', {restaurant: props.restaurant.id}), formData, {
+        forceFormData: true,
         onSuccess: () => {
-            Inertia.visit(route('restaurants.show', { id: props.restaurant.id }));
+            Inertia.visit(route('restaurants.show', {id: props.restaurant.id}));
         },
         onError: (errors) => {
             console.error("Error updating restaurant:", errors);

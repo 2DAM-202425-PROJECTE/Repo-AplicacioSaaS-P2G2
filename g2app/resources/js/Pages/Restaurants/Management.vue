@@ -3,20 +3,6 @@
         <div class="max-w-4xl mx-auto p-6">
             <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Gestió del Restaurant</h1>
 
-            <!-- Informació del restaurant -->
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-semibold text-gray-700">{{ restaurant.nom }}</h2>
-                    <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="w-12 h-12 rounded-full object-cover mb-2 profile-image">
-                </div>
-                <p class="text-gray-600 mt-2">{{ restaurant.descripcio }}</p>
-                <div class="mt-4 text-gray-700">
-                    <p><strong>Telèfon:</strong> {{ restaurant.telefon }}</p>
-                    <p><strong>Tipus de Cuina:</strong> {{ restaurant.tipus_cuina }}</p>
-                </div>
-
-            </div>
 
             <!-- Accions -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

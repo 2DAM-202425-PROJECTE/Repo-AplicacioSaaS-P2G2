@@ -1,11 +1,6 @@
 <template>
-    <layout>
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md space-y-6">
-            <Link :href="route('restaurants.show', { id: restaurant.id })"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6">
-                <-Tornar
-            </Link>
-            <h1 class="text-3xl font-bold mb-4">Reserves de {{ restaurant.nom }}</h1>
+    <div>
+        <form @submit.prevent="submitAdminForm">
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead>
@@ -81,8 +76,8 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </layout>
+        </form>
+    </div>
 </template>
 
 <script setup>

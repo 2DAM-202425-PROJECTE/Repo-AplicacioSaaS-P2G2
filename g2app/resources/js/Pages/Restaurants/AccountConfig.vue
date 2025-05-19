@@ -26,7 +26,29 @@
                                     Gestiona el teu negoci
                                 </Link>
                             </div>
+                            <div class="mt-6">
+                                <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 text-white px-4 py-2 rounded" method="GET">
+                                    Eliminar Negoci
+                                </Link>
+                            </div>
                         </div>
+
+
+                        <!-- Informació del restaurant -->
+<!--                        <div v-if="restaurant" class="bg-white p-6 rounded-lg shadow-md mb-6">-->
+
+<!--                            <div class="flex items-center justify-between">-->
+<!--                                <h2 class="text-2xl font-semibold text-gray-700">{{ restaurant.nom }}</h2>-->
+<!--                                <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="w-12 h-12 rounded-full object-cover mb-2 profile-image">-->
+<!--                            </div>-->
+<!--                            <p class="text-gray-600 mt-2">{{ restaurant.descripcio }}</p>-->
+<!--                            <div class="mt-4 text-gray-700">-->
+<!--                                <p><strong>Telèfon:</strong> {{ restaurant.telefon }}</p>-->
+<!--                                <p><strong>Tipus de Cuina:</strong> {{ restaurant.tipus_cuina }}</p>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+
                         <!-- Si no té restaurant associat, mostrar la creació de negoci -->
                         <div v-else>
                             <p class="text-gray-600 text-lg">No tens cap negoci associat.</p>
@@ -47,6 +69,8 @@
                         <p class="text-gray-600 text-lg">No tens permisos per gestionar un negoci.</p>
                     </div>
 
+
+
 <!--                    &lt;!&ndash; Informació del restaurant associat &ndash;&gt;-->
 <!--                    <div v-if="restaurant" class="mt-8">-->
 <!--                        <RestaurantInfo :restaurant="restaurant" />-->
@@ -56,7 +80,11 @@
 
             <!-- Popup per crear un nou restaurant -->
             <PopupModal v-if="showPopup" @close="closePopup" @confirm="createRestaurant" />
+
+
         </div>
+
+
     </layout>
 </template>
 

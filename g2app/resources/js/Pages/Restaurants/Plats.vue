@@ -1,16 +1,9 @@
 <template>
-    <layout>
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-            <div class="mb-4">
-                <Link :href="route('restaurants.show', { id: restaurant.id })"
-                      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    <-Tornar
-                </Link>
-            </div>
-            <h1 class="text-2xl font-bold mb-4">Gestionar Plats</h1>
+    <div>
+        <form @submit.prevent="submitAdminForm">
 
             <div v-if="form.plats.length > 0" class="mb-8">
-                <h3 class="text-lg font-bold mb-2">Plats Existents:</h3>
+                <h3 class="text-lg font-bold mb-4 mt-4">Plats Existents:</h3>
                 <ul class="flex flex-wrap">
                     <li v-for="(plat, index) in form.plats" :key="plat.id || index"
                         class="border m-1 p-4 rounded relative"
@@ -39,7 +32,7 @@
                     </li>
                 </ul>
             </div>
-            <div v-else class="mb-8">
+            <div v-else class="mb-8 mt-6">
                 <p>No hi ha plats creats per aquest restaurant.</p>
             </div>
 
@@ -89,8 +82,8 @@
             </button>
 
 
+            </form>
         </div>
-    </layout>
 </template>
 
 <script setup>

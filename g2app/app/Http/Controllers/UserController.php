@@ -32,8 +32,10 @@ class UserController extends Controller
     public function showAccountConfig()
     {
         $user = auth()->user();
+        $restaurant = Restaurant::where('user_id', $user->id)->first();
         return Inertia::render('Restaurants/AccountConfig', [
             'user' => $user,
+            'restaurant' => $restaurant,
         ]);
     }
 
@@ -69,8 +71,7 @@ class UserController extends Controller
 
     public function getUserRestaurant($userId)
     {
-        $user = User::find($userId);
-        $restaurant = $user->restaurant;
+        $restaurant = Restaurant::where('user_id', $userId)->first();
 
         return response()->json([
             'restaurant' => $restaurant
