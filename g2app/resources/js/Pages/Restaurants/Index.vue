@@ -6,6 +6,14 @@
                 <div class="w-1/4 bg-gray-50 p-6 rounded-lg shadow-md border-r border-gray-200">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6">🍽️ Filtres</h2>
 
+                    <!-- Favorits -->
+                    <label class="block text-gray-700 font-medium mb-1">❤️ Favorits</label>
+                    <select v-model="filters.favorites" class="border p-3 rounded-lg mb-4 w-full bg-white focus:ring-2 focus:ring-gold">
+                        <option value="">Tots</option>
+                        <option value="true">Només favorits</option>
+                        <option value="false">Sense favorits</option>
+                    </select>
+
                     <!-- Municipi -->
                     <label class="block text-gray-700 font-medium mb-1">📍 Municipi</label>
                     <select v-model="filters.municipio" class="border p-3 rounded-lg mb-4 w-full bg-white focus:ring-2 focus:ring-gold">
@@ -40,7 +48,7 @@
                         <input
                             v-model="filters.nom"
                             type="text"
-                            placeholder="🔍 Cerca restaurants..."
+                            placeholder="Cerca restaurants..."
                             class="w-full p-3 text-lg border-none focus:ring-0 focus:outline-none"
                             @keyup.enter="applyFilters"
                             @blur="applyFilters"
@@ -48,16 +56,28 @@
                     </div>
 
                     <!-- Llistat de Restaurants -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <Link v-for="restaurant in paginatedRestaurants" :key="restaurant.id" :href="`/restaurants/${restaurant.id}`"
-                              class="bg-white p-6 shadow-lg rounded-lg transition-transform transform hover:scale-105 hover:shadow-2xl border border-gray-200">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
-                                <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="profile-image ml-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div v-for="restaurant in paginatedRestaurants" :key="restaurant.id"
+                             class="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl border border-gray-200">
+                            <Link :href="`/restaurants/${restaurant.id}`" class="block">
+                                <img :src="`/storage/${restaurant.profile_image}`" alt="Profile Image" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ restaurant.nom }}</h2>
+                                    <p class="text-gray-600 text-base mb-2"><i class="fas fa-map-marker-alt text-gold mr-1"></i> {{ restaurant.municipio.name }}</p>
+                                    <p class="text-gray-600 text-base"><i class="fas fa-utensils text-gold mr-1"></i> {{ restaurant.tipus_cuina }}</p>
+                                </div>
+                            </Link>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-end">
+                                <button @click.prevent="toggleFavorite(restaurant)" class="focus:outline-none">
+                                    <svg v-if="isFavorite(restaurant.id)" class="h-6 w-6 text-yellow-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z"/>
+                                    </svg>
+                                    <svg v-else class="h-6 w-6 text-gray-400 fill-current hover:text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M10 0 L13.09 6.26 L20 7.26 L15 12.14 L16.18 19 L10 15.77 L3.82 19 L5 12.14 L0 7.26 L6.91 6.26 L10 0 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </button>
                             </div>
-                            <p class="text-gray-600"><i class="fas fa-map-marker-alt text-gold"></i> {{ restaurant.municipio.name }}</p>
-                            <p class="text-gray-600"><i class="fas fa-utensils text-gold"></i> {{ restaurant.tipus_cuina }}</p>
-                        </Link>
+                        </div>
                     </div>
 
                     <!-- Paginació -->
@@ -70,11 +90,6 @@
                         </button>
                     </div>
 
-                    <div class="mt-6">
-                        <Link :href="route('restaurants.create')" class="bg-gold text-white px-6 py-3 rounded-lg shadow-lg hover:bg-yellow-600 transition">
-                            ➕ Afegir Restaurant
-                        </Link>
-                    </div>
                 </div>
             </div>
         </div>
@@ -99,12 +114,6 @@
     color: var(--gold);
 }
 
-.profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
 </style>
 
 <script>
@@ -112,7 +121,8 @@ import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
 import { usePage } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-
+import axios from 'axios';
+import {reactive, ref} from "vue";
 export default {
     components: {
         Layout,
@@ -130,10 +140,12 @@ export default {
                 municipio: '',
                 tipus_cuina: '',
                 tipus_plat: '',
+                favorites: '',
             },
             currentPage: 1,
             itemsPerPage: 9,
             filteredRestaurants: this.restaurants,
+            favoriteRestaurants: reactive({}),
         };
     },
     methods: {
@@ -143,18 +155,26 @@ export default {
 
             this.filteredRestaurants = this.restaurants.filter(restaurant => {
                 let platsValids = true; // Per defecte és true
+                let isFavorite = this.isFavorite(restaurant.id);
 
                 if (this.filters.tipus_plat) {
                     platsValids = Array.isArray(this.plats) && this.plats.some(plat => {
                         return plat.id_restaurant === restaurant.id && (plat[this.filters.tipus_plat] === 1 || plat[this.filters.tipus_plat] === true);
                     });
                 }
+                let favoritesFilter = true;
+                if (this.filters.favorites === 'true') {
+                    favoritesFilter = isFavorite;
+                } else if (this.filters.favorites === 'false') {
+                    favoritesFilter = !isFavorite;
+                }
 
                 return (
                     (!this.filters.nom || restaurant.nom.toLowerCase().includes(this.filters.nom.toLowerCase())) &&
                     (!this.filters.municipio || restaurant.municipio.name.trim() === String(this.filters.municipio).trim()) &&
                     (!this.filters.tipus_cuina || restaurant.tipus_cuina.trim() === String(this.filters.tipus_cuina).trim()) &&
-                    platsValids
+                    platsValids &&
+                    favoritesFilter
                 );
             });
 
@@ -169,7 +189,30 @@ export default {
             if (this.currentPage > 1) {
                 this.currentPage--;
             }
-        }
+        },
+
+        async toggleFavorite(restaurant) {
+            try {
+                const response = await axios.post(route('restaurants.favorite', { restaurant: restaurant.id }));
+                this.favoriteRestaurants[restaurant.id] = response.data.isFavorite;
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+            }
+        },
+        isFavorite(restaurantId) {
+            return this.favoriteRestaurants[restaurantId] !== undefined ? this.favoriteRestaurants[restaurantId] : false;
+        },
+        async fetchFavorites() {
+            try {
+                const response = await axios.get('/favorites');
+                const favorites = response.data.restaurants.map(restaurant => restaurant.id);
+                favorites.forEach(restaurantId => {
+                    this.favoriteRestaurants[restaurantId] = true;
+                });
+            } catch (error) {
+                console.error('Error fetching favorites:', error);
+            }
+        },
     },
     computed: {
         uniqueMunicipios() {
@@ -202,6 +245,7 @@ export default {
                 confirmButtonText: "Entès"
             });
         }
+        this.fetchFavorites();
     }
 };
 </script>

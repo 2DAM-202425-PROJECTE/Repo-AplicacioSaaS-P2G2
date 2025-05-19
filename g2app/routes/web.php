@@ -6,6 +6,7 @@ use App\Http\Controllers\PlatController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\ReservaUserController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\RestaurantFavoriteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,11 +34,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
     Route::get('/restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
     Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
-    Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
+    Route::post('/restaurants/{restaurant}', [RestaurantController::class, 'update'])->name('restaurants.update');
     Route::post('/restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
     Route::get('/restaurants/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurants.edit');
     Route::get('/get/municipios', [RestaurantController::class, 'getMunicipios'])->name('get.municipios');
     Route::get('/restaurants/{id}/delete', [RestaurantController::class, 'destroy'])->name('restaurants.delete');
+
+    //Restaurants preferits
+    Route::post('/restaurants/{restaurant}/favorite', [RestaurantFavoriteController::class, 'toggle'])->name('restaurants.favorite');
+    Route::get('/favorites', [UserController::class, 'favorites'])->name('favorites.index');
+    Route::get('/restaurants/{restaurant}/isFavorite', [RestaurantFavoriteController::class, 'isFavorite'])->name('restaurants.isFavorite');
+
 
     // Rutes per a la gestió del perfil d'usuari
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('user.profile');
@@ -67,8 +74,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rutes per a la gestió de plats
     Route::get('/restaurants/{restaurant}/plats', [PlatController::class, 'index'])->name('restaurants.plats');
-    Route::put('/restaurants/{restaurant}/plats', [PlatController::class, 'update'])->name('restaurants.plats.update');
-
+    Route::post('/restaurants/{restaurant}/plats', [PlatController::class, 'store'])->name('restaurants.plats.store');
+    Route::delete('/restaurants/{restaurant}/plats/{plat}', [PlatController::class, 'destroy'])->name('restaurants.plats.destroy');
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');

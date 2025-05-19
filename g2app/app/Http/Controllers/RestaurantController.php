@@ -136,15 +136,17 @@ class RestaurantController extends Controller
             'carrer' => 'required|string',
         ]);
 
+        $dataToUpdate = $request->only(['nom', 'descripcio', 'telefon', 'tipus_cuina', 'hora_obertura', 'hora_tancament', 'municipio_id', 'carrer']);
+
         if ($request->hasFile('profile_image')) {
             if ($restaurant->profile_image) {
                 Storage::disk('public')->delete($restaurant->profile_image);
             }
             $path = $request->file('profile_image')->store('profile_images', 'public');
-            $validatedData['profile_image'] = $path;
+            $dataToUpdate['profile_image'] = $path;
         }
 
-        $restaurant->update($validatedData);
+        $restaurant->update($dataToUpdate);
 
         return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
     }

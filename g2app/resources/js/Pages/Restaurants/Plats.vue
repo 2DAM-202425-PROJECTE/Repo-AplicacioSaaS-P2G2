@@ -1,4 +1,3 @@
-// g2app/resources/js/Pages/Restaurants/Plats.vue
 <template>
     <layout>
         <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -16,16 +15,23 @@
                     <li v-for="(plat, index) in form.plats" :key="plat.id || index"
                         class="border m-1 p-4 rounded relative"
                         :style="{ width: 'calc(50% - 0.5rem)' }">
-                        <span class="font-semibold">{{ plat.nom }}</span>
-                        <span class="text-gray-600 block">{{ plat.descripcio }}</span>
+                        <span class="font-semibold line-clamp-2">{{ plat.nom }}</span>
+                        <span class="text-gray-600 block text-sm line-clamp-2 overflow-hidden">{{ plat.descripcio }}</span>
                         <span>Preu: {{ plat.preu }} €</span>
-                        <div class="flex mt-2">
-                            <span v-if="plat.gluten" class="mr-2">Gluten</span>
-                            <span v-if="plat.lactics" class="mr-2">Lactics</span>
-                            <span v-if="plat.vegetaria" class="mr-2">Vegetarià</span>
-                            <span v-if="plat.vega" class="mr-2">Vegà</span>
+                        <div class="flex mt-2 flex-wrap">
+                            <span v-if="plat.gluten" class="mr-2 text-sm line-clamp-1">Gluten</span>
+                            <span v-if="plat.lactics" class="mr-2 text-sm line-clamp-1">Lactics</span>
+                            <span v-if="plat.vegetaria" class="mr-2 text-sm line-clamp-1">Vegetarià</span>
+                            <span v-if="plat.vega" class="mr-2 text-sm line-clamp-1">Vegà</span>
+                            <span v-if="plat.carn_vermella" class="mr-2 text-sm line-clamp-1">Carn Roja</span>
+                            <span v-if="plat.kosher" class="mr-2 text-sm line-clamp-1">Kosher</span>
+                            <span v-if="plat.halal" class="mr-2 text-sm line-clamp-1">Halal</span>
+                            <span v-if="plat.keto" class="mr-2 text-sm line-clamp-1">Keto</span>
+                            <span v-if="plat.crustaci" class="mr-2 text-sm line-clamp-1">Crustacis</span>
+                            <span v-if="plat.ous" class="mr-2 text-sm line-clamp-1">Ous</span>
+                            <span v-if="plat.lupines" class="mr-2 text-sm line-clamp-1">Lupines</span>
                         </div>
-                        <button type="button" @click="removePlat(index)" class="text-red-500 hover:text-red-700 absolute top-2 right-2">
+                        <button type="button" @click="removePlat(plat.id, index)" class="text-red-500 hover:text-red-700 absolute top-2 right-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
@@ -33,7 +39,9 @@
                     </li>
                 </ul>
             </div>
-
+            <div v-else class="mb-8">
+                <p>No hi ha plats creats per aquest restaurant.</p>
+            </div>
 
             <div class="mb-4">
                 <label for="plat_nom" class="block text-sm font-medium text-gray-700">Nom del Plat</label>
@@ -80,9 +88,7 @@
                 Afegir Plat
             </button>
 
-            <button type="button" @click="savePlats" class="bg-blue-500 text-white px-4 py-2 rounded">
-                Guardar Plats
-            </button>
+
         </div>
     </layout>
 </template>
@@ -94,6 +100,7 @@ import {route} from 'ziggy-js';
 import Layout from '@/Layouts/Layout.vue';
 import {Link} from "@inertiajs/vue3";
 import ToggleButton from '@/Components/CheckButton.vue';
+import axios from 'axios';
 
 const props = defineProps({
     restaurant: Object,
@@ -128,90 +135,45 @@ const isPlatEmpty = computed(() => {
 });
 
 const addPlat = () => {
-    form.plats.push({...newPlat});
-    // Reset newPlat
-    Object.assign(newPlat, {
-        nom: '',
-        descripcio: '',
-        preu: null,
-        gluten: true,
-        lactics: false,
-        crustaci: false,
-        ous: false,
-        lupines: false,
-        mostassa: false,
-        cacahuats: false,
-        soja: false,
-        vegetaria: false,
-        vega: false,
-        carn_vermella: false,
-        kosher: false,
-        halal: false,
-        keto: false,
-    });
+    axios.post(route('restaurants.plats.store', {restaurant: props.restaurant.id}), newPlat)
+        .then(response => {
+            form.plats.push(response.data);
+
+            // Reset form
+            Object.assign(newPlat, {
+                nom: '',
+                descripcio: '',
+                preu: null,
+                gluten: true,
+                lactics: false,
+                crustaci: false,
+                ous: false,
+                lupines: false,
+                mostassa: false,
+                cacahuats: false,
+                soja: false,
+                vegetaria: false,
+                vega: false,
+                carn_vermella: false,
+                kosher: false,
+                halal: false,
+                keto: false,
+            });
+        })
+        .catch(error => {
+            console.error("Error creating plat:", error);
+        });
 };
 
-const removePlat = (index) => {
-    form.plats.splice(index, 1);
+const removePlat = (platId, index) => {
+    axios.delete(route('restaurants.plats.destroy', {restaurant: props.restaurant.id, plat: platId}))
+        .then(() => {
+            form.plats.splice(index, 1);
+        })
+        .catch(error => {
+            console.error("Error deleting plat:", error);
+        });
 };
 
-const savePlats = () => {
-    const platsToSend = form.plats.map(plat => {
-        if (plat.id) {
-            // Plat existent
-            return {
-                id: plat.id,
-                nom: plat.nom,
-                descripcio: plat.descripcio,
-                preu: plat.preu,
-                gluten: plat.gluten,
-                lactics: plat.lactics,
-                crustaci: plat.crustaci,
-                ous: plat.ous,
-                lupines: plat.lupines,
-                mostassa: plat.mostassa,
-                cacahuats: plat.cacahuats,
-                soja: plat.soja,
-                vegetaria: plat.vegetaria,
-                vega: plat.vega,
-                carn_vermella: plat.carn_vermella,
-                kosher: plat.kosher,
-                halal: plat.halal,
-                keto: plat.keto,
-            };
-        } else {
-            // Nou plat
-            return {
-                nom: plat.nom,
-                descripcio: plat.descripcio,
-                preu: plat.preu,
-                gluten: plat.gluten,
-                lactics: plat.lactics,
-                crustaci: plat.crustaci,
-                ous: plat.ous,
-                lupines: plat.lupines,
-                mostassa: plat.mostassa,
-                cacahuats: plat.cacahuats,
-                soja: plat.soja,
-                vegetaria: plat.vegetaria,
-                vega: plat.vega,
-                carn_vermella: plat.carn_vermella,
-                kosher: plat.kosher,
-                halal: plat.halal,
-                keto: plat.keto,
-            };
-        }
-    });
 
-    Inertia.put(route('restaurants.plats.update', {restaurant: props.restaurant.id}), {
-        plats: platsToSend,
-    }, {
-        onSuccess: () => {
-            Inertia.visit(route('restaurants.show', {id: props.restaurant.id}));
-        },
-        onError: (errors) => {
-            console.error("Error updating restaurant:", errors);
-        },
-    });
-};
 </script>

@@ -29,7 +29,7 @@ onMounted(() => {
                         Gestiona el teu restaurant amb facilitat i permet als teus clients fer reserves de manera instantània
                     </p>
                     <div class="cta-buttons animate__animated animate__fadeIn animate__delay-3s">
-                        <a href="/restaurants" class="cta-btn user-btn">
+                        <a href="/images/restaurants" class="cta-btn user-btn">
                             Reserva Ara
                         </a>
                         <a href="/configuracio" class="cta-btn admin-btn">
