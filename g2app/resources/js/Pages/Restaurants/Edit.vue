@@ -112,10 +112,29 @@ const fetchMunicipios = async () => {
 
 
 const submitAdminForm = () => {
+    const formData = new FormData();
 
-    Inertia.put(route('restaurants.update', { restaurant: form.id }), {
-...form, plats: form.plats,
-    }, {
+    // Afegim els camps bàsics
+    formData.append('nom', form.nom);
+    formData.append('descripcio', form.descripcio);
+    formData.append('telefon', form.telefon);
+    formData.append('tipus_cuina', form.tipus_cuina);
+    formData.append('municipio_id', form.municipio_id);
+    formData.append('carrer', form.carrer);
+    formData.append('hora_obertura', form.hora_obertura);
+    formData.append('hora_tancament', form.hora_tancament);
+
+    if (form.profile_image) {
+        formData.append('profile_image', form.profile_image);
+    }
+
+    // Plats (serialitzats com a JSON)
+    formData.append('plats', JSON.stringify(form.plats));
+
+    formData.append('_method', 'PUT'); // perquè Laravel ho entengui com un PUT
+
+    Inertia.post(route('restaurants.update', { restaurant: form.id }), formData, {
+        forceFormData: true,
         onSuccess: () => {
             Inertia.visit(route('restaurants.show', { id: form.id }));
         },
@@ -124,6 +143,7 @@ const submitAdminForm = () => {
         },
     });
 };
+
 
 
 
