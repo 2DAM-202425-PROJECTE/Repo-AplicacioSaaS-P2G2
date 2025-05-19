@@ -14,8 +14,8 @@ class Reserva extends Model
 
     const PENDENT = 0;
     const CONFIRMAT = 1;
-    const COMPLETAT = 2;
-    const CANCELAT = 3;
+    const COMPLETAT = 3;
+    const CANCELAT = 2;
 
     protected $fillable = [
         //'id_usuari',
@@ -41,4 +41,14 @@ class Reserva extends Model
         return $this->belongsTo(Restaurant::class, 'id_restaurant');
     }
 
+    public function getNomEstatAttribute(): string
+    {
+        return match ($this->estat) {
+            self::PENDENT => 'Pendent',
+            self::CONFIRMAT => 'Confirmat',
+            self::COMPLETAT => 'Completat',
+            self::CANCELAT => 'Cancel·lat',
+            default => 'Desconegut',
+        };
+    }
 }
