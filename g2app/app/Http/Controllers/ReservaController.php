@@ -122,6 +122,8 @@ class ReservaController extends Controller
         ]);
 
         $reserva->update($validatedData);
+        // Enviar notificació a l’usuari de la reserva
+        $reserva->usuari->notify(new EstatReservaCanviada($reserva));
         return redirect()->back()->with('success', 'Reservation updated successfully');
     }
 

@@ -50,11 +50,12 @@ class EstatReservaCanviada extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'missatge' => "L'estat de la teva reserva ha canviat a: " . $this->reserva->estat,
+            'missatge' => "L'estat de la teva reserva ha canviat a: " . $this->reserva->nom_estat,
             'reserva_id' => $this->reserva->id,
             'restaurant_id' => $this->reserva->restaurant_id,
             'estat' => $this->nouEstat,
             'data' => now()->toDateTimeString(),
         ];
     }
+
 }
