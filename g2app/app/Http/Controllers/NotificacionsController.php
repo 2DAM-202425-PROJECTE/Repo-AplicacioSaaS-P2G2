@@ -9,9 +9,15 @@ class NotificacionsController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $notificacions = $user->notifications()->orderBy('created_at', 'desc')->get();
+        // Obtenim les notificacions de l'usuari autenticat
+        $notificacions = Auth::user()->notifications->map(function ($notificacio) {
+            return [
+                'missatge' => $notificacio->data['missatge'] ?? 'Missatge desconegut',
+                'data' => $notificacio->created_at->format('Y-m-d H:i'),
+            ];
+        });
 
+        // Retornem la vista Inertia amb les dades
         return Inertia::render('Notificacions/Index', [
             'notificacions' => $notificacions,
         ]);

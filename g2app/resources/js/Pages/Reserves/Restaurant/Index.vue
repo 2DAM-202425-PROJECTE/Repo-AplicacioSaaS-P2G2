@@ -195,8 +195,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </layout>
+        </form>
+    </div>
 </template>
 
 <script setup>

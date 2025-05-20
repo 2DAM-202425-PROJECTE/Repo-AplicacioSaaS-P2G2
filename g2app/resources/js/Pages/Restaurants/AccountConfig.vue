@@ -109,6 +109,11 @@
                                     Crear Restaurant
                                 </Link>
                             </div>
+                            <div class="mt-6">
+                                <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 text-white px-4 py-2 rounded" method="GET">
+                                    Eliminar Negoci
+                                </Link>
+                            </div>
                         </div>
 
                         <div v-else class="section client-section">
@@ -139,9 +144,19 @@
                             </div>
                         </div>
                     </div>
+
+<!--                    &lt;!&ndash; Informació del restaurant associat &ndash;&gt;-->
+<!--                    <div v-if="restaurant" class="mt-8">-->
+<!--                        <RestaurantInfo :restaurant="restaurant" />-->
+<!--                    </div>-->
                 </div>
             </div>
+
+            <!-- Popup per crear un nou restaurant -->
+            <PopupModal v-if="showPopup" @close="closePopup" @confirm="createRestaurant" />
         </div>
+
+
     </layout>
 </template>
 
