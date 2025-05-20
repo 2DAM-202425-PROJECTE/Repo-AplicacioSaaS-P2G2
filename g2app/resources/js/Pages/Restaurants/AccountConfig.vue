@@ -1,61 +1,146 @@
 <template>
     <layout>
-        <div class="flex justify-center items-center min-h-screen bg-gray-50">
-            <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full text-left">
-                <!-- Capçalera -->
-                <header class="mb-6">
-                    <h1 class="text-3xl font-bold text-gray-800">Configuració del Compte</h1>
-                    <p class="text-gray-600 text-lg mt-2">Actualitza les teves dades personals i configura el teu compte aquí.</p>
-                </header>
-
-                <!-- Informació de l'usuari -->
-                <div class="space-y-6">
-                    <div class="border-b pb-4">
-                        <h2 class="text-xl font-semibold text-gray-700">Informació Personal</h2>
-                        <!-- Aquí utilitzem el component UserInfo per mostrar la informació de l'usuari -->
-                        <UserInfo :user="user" />
+        <div class="account-config-page">
+            <div class="account-container">
+                <div class="account-header">
+                    <div class="header-content">
+                        <h1 class="page-title">Configuració del Compte</h1>
+                        <p class="page-subtitle">Gestiona les teves dades personals i preferències</p>
                     </div>
-
-                    <!-- Comprovació si és empresa i si té restaurant associat -->
-                    <div v-if="isEmpresa()" class="mt-6">
-                        <!-- Comprovació si l'usuari té un restaurant associat -->
-                        <div v-if="restaurant">
-
-                            <div class="mt-4">
-                                <Link :href="route('restaurant.management', { id: restaurant.id })" class="bg-blue-500 text-white px-4 py-2 rounded">
-                                    Gestiona el teu negoci
-                                </Link>
-                            </div>
+                    <div class="user-avatar">
+                        <div class="avatar-circle">
+                            {{ user.name.charAt(0).toUpperCase() }}
                         </div>
-                        <!-- Si no té restaurant associat, mostrar la creació de negoci -->
-                        <div v-else>
-                            <p class="text-gray-600 text-lg">No tens cap negoci associat.</p>
-                            <!--
-                            <SecondaryButton @click="showCreatePopup" class="w-full sm:w-auto mt-4">
-                                Crear negoci
-                            </SecondaryButton>
-                            -->
-                            <div class="mt-4">
-                                <Link :href="route('restaurants.create')" class="bg-blue-500 text-white px-4 py-2 rounded">
-                                    Crear Negoci
-                                </Link>
+                    </div>
+                </div>
+
+                <div class="account-content">
+                    <div class="account-sidebar">
+                        <div class="sidebar-menu">
+                            <div class="menu-item active">
+                                <span class="menu-icon">👤</span>
+                                <span>Informació Personal</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">🔒</span>
+                                <span>Seguretat</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">🔔</span>
+                                <span>Notificacions</span>
+                            </div>
+                            <div class="menu-item">
+                                <span class="menu-icon">💳</span>
+                                <span>Pagaments</span>
                             </div>
                         </div>
                     </div>
-                    <!-- Si l'usuari no és empresa, no mostra cap botó -->
-                    <div v-else>
-                        <p class="text-gray-600 text-lg">No tens permisos per gestionar un negoci.</p>
-                    </div>
 
-<!--                    &lt;!&ndash; Informació del restaurant associat &ndash;&gt;-->
-<!--                    <div v-if="restaurant" class="mt-8">-->
-<!--                        <RestaurantInfo :restaurant="restaurant" />-->
-<!--                    </div>-->
+                    <div class="account-main">
+                        <div class="section personal-info">
+                            <h2 class="section-title">Informació Personal</h2>
+
+                            <div class="info-card">
+                                <div class="info-row">
+                                    <div class="info-label">Nom</div>
+                                    <div class="info-value">{{ user.name }}</div>
+                                    <button class="edit-button">Editar</button>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-label">Correu electrònic</div>
+                                    <div class="info-value">{{ user.email }}</div>
+                                    <button class="edit-button">Editar</button>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-label">Tipus de compte</div>
+                                    <div class="info-value">{{ isEmpresa() ? 'Empresa' : 'Client' }}</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div v-if="isEmpresa()" class="section business-section">
+                            <h2 class="section-title">Gestió del Negoci</h2>
+
+                            <div v-if="restaurant" class="business-card">
+                                <div class="business-header">
+                                    <div class="business-info">
+                                        <h3 class="business-name">{{ restaurant.nom }}</h3>
+                                        <p class="business-type">{{ restaurant.tipus_cuina }}</p>
+                                    </div>
+                                    <img :src="`/storage/${restaurant.profile_image}`" alt="Restaurant" class="business-image" />
+                                </div>
+
+                                <div class="business-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-value">24</div>
+                                        <div class="stat-label">Reserves aquest mes</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">4.8</div>
+                                        <div class="stat-label">Valoració mitjana</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">86%</div>
+                                        <div class="stat-label">Ocupació</div>
+                                    </div>
+                                </div>
+
+                                <div class="business-actions">
+                                    <Link :href="route('restaurant.management', { id: restaurant.id })" class="action-button primary">
+                                        <span class="button-icon">⚙️</span>
+                                        Gestionar Restaurant
+                                    </Link>
+                                    <Link :href="route('restaurants.show', { id: restaurant.id })" class="action-button secondary">
+                                        <span class="button-icon">👁️</span>
+                                        Veure Perfil Públic
+                                    </Link>
+                                </div>
+                            </div>
+
+                            <div v-else class="empty-business">
+                                <div class="empty-icon">🍽️</div>
+                                <h3 class="empty-title">No tens cap restaurant registrat</h3>
+                                <p class="empty-description">Crea el teu primer restaurant per començar a gestionar el teu negoci i rebre reserves en línia.</p>
+                                <Link :href="route('restaurants.create')" class="action-button primary">
+                                    <span class="button-icon">➕</span>
+                                    Crear Restaurant
+                                </Link>
+                            </div>
+                        </div>
+
+                        <div v-else class="section client-section">
+                            <h2 class="section-title">El Meu Perfil de Client</h2>
+
+                            <div class="client-card">
+                                <div class="client-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-value">12</div>
+                                        <div class="stat-label">Reserves realitzades</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">5</div>
+                                        <div class="stat-label">Restaurants favorits</div>
+                                    </div>
+                                </div>
+
+                                <div class="client-actions">
+                                    <Link :href="route('user.reserves')" class="action-button primary">
+                                        <span class="button-icon">📅</span>
+                                        Les Meves Reserves
+                                    </Link>
+                                    <Link :href="route('restaurants.index')" class="action-button secondary">
+                                        <span class="button-icon">🔍</span>
+                                        Descobrir Restaurants
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Popup per crear un nou restaurant -->
-            <PopupModal v-if="showPopup" @close="closePopup" @confirm="createRestaurant" />
         </div>
     </layout>
 </template>
@@ -109,107 +194,364 @@ function closePopup() {
 </script>
 
 <style scoped>
-/* Estils Globals */
-.bg-gray-50 {
-    background-color: #f9fafb;
+.account-config-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 40px 20px;
 }
 
-.text-gray-800 {
-    color: #1f2937;
+.account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
 
-.text-gray-600 {
-    color: #4b5563;
+.account-header {
+    background: linear-gradient(135deg, #FF5A5F, #FF8A8E);
+    color: white;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.text-lg {
-    font-size: 1.125rem;
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
-.text-xl {
-    font-size: 1.25rem;
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
 }
 
-.font-semibold {
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    color: #FF5A5F;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-content {
+    display: flex;
+    min-height: 600px;
+}
+
+.account-sidebar {
+    width: 280px;
+    border-right: 1px solid #eee;
+    padding: 30px 0;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.menu-item.active {
+    background-color: rgba(255, 90, 95, 0.05);
+    border-left: 3px solid #FF5A5F;
+    color: #FF5A5F;
     font-weight: 600;
 }
 
-.shadow-lg {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+.menu-item:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
-.max-w-4xl {
-    max-width: 56rem;
+.menu-icon {
+    margin-right: 15px;
+    font-size: 1.2rem;
 }
 
-.w-full {
-    width: 100%;
+.account-main {
+    flex: 1;
+    padding: 30px;
 }
 
-.p-8 {
-    padding: 2rem;
+.section {
+    margin-bottom: 40px;
 }
 
-.rounded-lg {
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f1f1;
+}
+
+.info-card {
+    background-color: #f9f9f9;
     border-radius: 12px;
+    padding: 20px;
 }
 
-.mb-6 {
-    margin-bottom: 1.5rem;
+.info-row {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
 }
 
-.mt-2 {
-    margin-top: 0.5rem;
+.info-row:last-child {
+    border-bottom: none;
 }
 
-.mt-4 {
-    margin-top: 1rem;
+.info-label {
+    width: 200px;
+    font-weight: 600;
+    color: #666;
 }
 
-.mt-6 {
-    margin-top: 1.5rem;
+.info-value {
+    flex: 1;
+    color: #333;
 }
 
-.mt-8 {
-    margin-top: 2rem;
-}
-
-/* Estils dels botons */
-.bg-blue-500 {
-    background-color: #3b82f6;
-}
-
-.bg-gray-300 {
-    background-color: #e5e7eb;
-}
-
-.text-white {
-    color: white;
-}
-
-.text-gray-700 {
-    color: #374151;
-}
-
-.hover\:bg-blue-600:hover {
-    background-color: #2563eb;
-}
-
-.hover\:bg-gray-400:hover {
-    background-color: #d1d5db;
-}
-
-.transition {
+.edit-button {
+    background: none;
+    border: none;
+    color: #FF5A5F;
+    cursor: pointer;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-    .max-w-4xl {
-        max-width: 100%;
+.edit-button:hover {
+    text-decoration: underline;
+}
+
+.business-card, .client-card, .empty-business {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.business-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.business-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.business-type {
+    color: #666;
+}
+
+.business-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.business-stats, .client-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin: 0 5px;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #FF5A5F;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.business-actions, .client-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.action-button {
+    flex: 1;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-button.primary {
+    background-color: #FF5A5F;
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: #e5484d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 90, 95, 0.3);
+}
+
+.action-button.secondary {
+    background-color: white;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.action-button.secondary:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+    margin-right: 8px;
+}
+
+.empty-business {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.empty-description {
+    color: #666;
+    margin-bottom: 25px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 992px) {
+    .account-content {
+        flex-direction: column;
     }
-    .p-8 {
-        padding: 1.5rem;
+
+    .account-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 0;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 15px;
+    }
+
+    .menu-item {
+        padding: 10px 15px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+    }
+
+    .menu-item.active {
+        border-left: none;
+        border-bottom: 3px solid #FF5A5F;
+    }
+
+    .business-stats, .client-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .stat-item {
+        margin: 5px 0;
+    }
+
+    .business-actions, .client-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .account-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .user-avatar {
+        margin-top: 20px;
+    }
+
+    .info-row {
+        flex-direction: column;
+    }
+
+    .info-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .edit-button {
+        margin-top: 10px;
+        align-self: flex-start;
+    }
+
+    .business-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .business-image {
+        margin-top: 15px;
     }
 }
 </style>
