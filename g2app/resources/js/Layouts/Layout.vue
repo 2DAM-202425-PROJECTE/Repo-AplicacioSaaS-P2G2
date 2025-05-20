@@ -25,6 +25,11 @@
                             <span class="nav-text">Reserves</span>
                         </Link>
 
+                        <Link :href="route('notificacions.index')" class="nav-link" :class="{ 'active': isRoute('notificacions.index') }" @click="resetView">
+                            <span class="nav-icon">🔔</span>
+                            <span class="nav-text">Notificacions</span>
+                        </Link>
+
                         <div class="theme-toggle">
                             <button @click="toggleTheme" class="theme-button">
                                 <span v-if="isDarkMode" class="theme-icon">☀️</span>
@@ -135,6 +140,7 @@
             </div>
         </footer>
     </div>
+    
 </template>
 
 <script setup>

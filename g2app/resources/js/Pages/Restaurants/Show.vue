@@ -23,7 +23,6 @@
                             </div>
                             <button @click="toggleFavorite" class="favorite-button" :class="{ 'is-favorite': isFavorite }">
                                 <span class="favorite-icon">{{ isFavorite ? '❤️' : '🤍' }}</span>
-                                {{ isFavorite ? 'Eliminar de Favorits' : 'Afegir a Favorits' }}
                             </button>
                             <br>
                             <br>

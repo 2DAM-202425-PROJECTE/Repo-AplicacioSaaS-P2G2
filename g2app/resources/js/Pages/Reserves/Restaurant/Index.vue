@@ -195,9 +195,9 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-</template>
+        </div>
+    </layout>
+    </template>
 
 <script setup>
 import { defineProps, ref, computed } from 'vue';
