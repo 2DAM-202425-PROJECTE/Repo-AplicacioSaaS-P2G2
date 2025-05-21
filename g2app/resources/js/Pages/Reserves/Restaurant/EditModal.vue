@@ -180,7 +180,7 @@
                 </div>
             </form>
         </div>
-    </Modal>
+    </Modal v-slot="{ close }" max-width="xl" panel-classes="edit-modal">
 </template>
 
 <script setup>

@@ -144,9 +144,9 @@
                                     <td class="actions-cell">
                                         <div class="table-actions">
                                             <ModalLink :href="route('reserves.edit', { id: reserva.id })">
-                                                <button class="action-button edit-button" @click.stop>
+
                                                     <span class="action-icon">✏️</span>
-                                                </button>
+                                                <
                                             </ModalLink>
                                             <ModalLink :href="route('reserves.delete', { id: reserva.id })">
                                                 <button class="action-button delete-button" @click.stop>
@@ -204,7 +204,7 @@ import { defineProps, ref, computed } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
 import { Link, router } from "@inertiajs/vue3";
-import { ModalLink } from '@inertiaui/modal-vue';
+import { Modal, ModalLink } from '@inertiaui/modal-vue';
 
 const props = defineProps({
     restaurant: Object,

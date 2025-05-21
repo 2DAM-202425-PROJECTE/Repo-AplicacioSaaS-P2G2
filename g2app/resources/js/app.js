@@ -5,7 +5,7 @@ import { createApp, h } from 'vue';
 import {createInertiaApp, Head, Link} from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import {route} from 'ziggy-js';
-import {Modal, renderApp} from '@inertiaui/modal-vue'
+import {Modal, ModalLink, renderApp} from '@inertiaui/modal-vue'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -17,6 +17,8 @@ createInertiaApp({
             .use(plugin)
             .component('Head', Head)
             .component('Link', Link)
+            .component('Modal', Modal)
+            .component('ModalLink', ModalLink)
             .mixin({ methods: { route } })
             .use(Modal)
             .mount(el);

@@ -53,6 +53,10 @@
                                         <span>Configuració</span>
                                     </a>
 
+                                    <Link v-if="hasRestaurant" :href="route('restaurant.management', {id: restaurantId})" class="dropdown-item">
+                                        <span class="dropdown-icon">🏢</span>
+                                        <span>Gestionar Restaurant</span>
+                                    </Link>
                                     <div class="dropdown-divider"></div>
 
                                     <button @click="confirmLogout" class="dropdown-item logout-item">
@@ -140,7 +144,7 @@
             </div>
         </footer>
     </div>
-    
+
 </template>
 
 <script setup>
@@ -148,6 +152,17 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import axios from 'axios';
+
+const hasRestaurant = computed(() => {
+    return page.props.auth.user && page.props.auth.user.restaurant;
+});
+
+const restaurantId = computed(() => {
+    if (hasRestaurant.value) {
+        return page.props.auth.user.restaurant.id;
+    }
+    return null;
+});
 
 // Referencias para el DOM
 const appLayout = ref(null);

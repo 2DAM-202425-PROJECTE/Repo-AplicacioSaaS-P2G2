@@ -124,17 +124,24 @@ class RestaurantController extends Controller
             return redirect()->route('restaurants.index')->with('error', 'No tens permís per actualitzar aquest restaurant.');
         }
 
-        $validatedData = $request->validate([
+        $validationRules = [
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
             'municipio_id' => 'required|integer|exists:municipios,id',
             'carrer' => 'required|string',
-        ]);
+        ];
+
+        $dataToUpdate = $request->only(['nom', 'descripcio', 'telefon', 'tipus_cuina', 'hora_obertura', 'hora_tancament', 'municipio_id', 'carrer']);
+
+        if ($request->hasFile('profile_image')) {
+            $validationRules['profile_image'] = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+        }
+
+        $validatedData = $request->validate($validationRules);
 
         $dataToUpdate = $request->only(['nom', 'descripcio', 'telefon', 'tipus_cuina', 'hora_obertura', 'hora_tancament', 'municipio_id', 'carrer']);
 
