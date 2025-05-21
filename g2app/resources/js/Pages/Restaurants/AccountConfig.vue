@@ -21,18 +21,6 @@
                                 <span class="menu-icon">👤</span>
                                 <span>Informació Personal</span>
                             </div>
-                            <div class="menu-item">
-                                <span class="menu-icon">🔒</span>
-                                <span>Seguretat</span>
-                            </div>
-                            <div class="menu-item">
-                                <span class="menu-icon">🔔</span>
-                                <span>Notificacions</span>
-                            </div>
-                            <div class="menu-item">
-                                <span class="menu-icon">💳</span>
-                                <span>Pagaments</span>
-                            </div>
                         </div>
                     </div>
 
@@ -44,13 +32,11 @@
                                 <div class="info-row">
                                     <div class="info-label">Nom</div>
                                     <div class="info-value">{{ user.name }}</div>
-                                    <button class="edit-button">Editar</button>
                                 </div>
 
                                 <div class="info-row">
                                     <div class="info-label">Correu electrònic</div>
                                     <div class="info-value">{{ user.email }}</div>
-                                    <button class="edit-button">Editar</button>
                                 </div>
 
                                 <div class="info-row">
