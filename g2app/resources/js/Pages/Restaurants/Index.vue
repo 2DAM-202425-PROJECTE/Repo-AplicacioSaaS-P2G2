@@ -675,7 +675,7 @@ export default {
         },
         uniqueTipusPlat() {
             return [
-                'vegetaria', 'vega', 'kosher', 'halal', 'keto', 'carn_vermella', 'gluten', 'lactics', 'crustaci', 'ous', 'lupines', 'mostassa', 'cacahuats', 'soja'
+                'vegetaria', 'vega', 'kosher', 'halal', 'keto', 'carn_vermella'
             ];
         },
         totalPages() {

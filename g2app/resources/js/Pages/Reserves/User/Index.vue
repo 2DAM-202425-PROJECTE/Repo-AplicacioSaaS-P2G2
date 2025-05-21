@@ -148,7 +148,7 @@
 import { defineProps, ref, computed } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
-import { Link } from '@inertiajs/vue3';
+import { router, Link } from "@inertiajs/vue3";
 import { ModalLink } from "@inertiaui/modal-vue";
 
 const props = defineProps({
