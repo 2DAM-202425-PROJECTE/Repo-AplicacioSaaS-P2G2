@@ -352,7 +352,7 @@ const removePlat = (platId, index) => {
 }
 
 .plat-name {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #333;
     margin: 0;
@@ -367,7 +367,7 @@ const removePlat = (platId, index) => {
     font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
-    order: -1; /* Added */
+    order: -1;
 }
 
 .plat-description {

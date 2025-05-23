@@ -52,12 +52,12 @@
                                 </button>
 
                                 <div v-if="isOpen" class="dropdown-menu">
-                                    <a href="/configuracio" class="dropdown-item">
+                                    <Link href="/configuracio" class="dropdown-item">
                                         <span class="dropdown-icon">⚙️</span>
                                         <span>Configuració</span>
-                                    </a>
+                                    </Link>
                                     <Link v-if="userRestaurant" :href="route('restaurant.management', { id: userRestaurant.id })" class="dropdown-item">
-                                        <i class="fas fa-store dropdown-icon"></i>
+
                                         Gestió Restaurant
                                     </Link>
                                     <div class="dropdown-divider"></div>
