@@ -99,9 +99,10 @@
                                     </Link>
                                 </div>
                                 <div class="mt-6">
-                                <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 text-white px-4 py-2 rounded" method="GET">
-                                    Eliminar Negoci
-                                </Link>
+                                    <button @click="confirmDelete" class="delete-button">
+                                        <span class="delete-icon">🗑️</span>
+                                        Eliminar Negoci
+                                    </button>
                             </div>
                             </div>
 
@@ -170,6 +171,8 @@ import RestaurantInfo from '@/Components/RestaurantInfo.vue';
 import PopupModal from '@/Components/PopupModal.vue';
 import Layout from "@/Layouts/Layout.vue";
 import {route} from "ziggy-js";
+import Swal from 'sweetalert2';
+
 
 const { props } = usePage();
 const user = ref(props.user);
@@ -177,6 +180,61 @@ const restaurant = ref(props.restaurant || null);
 const showPopup = ref(false);
 
 
+
+const isDeleting = ref(false);
+const showDeleteDialog = ref(false);
+const confirmDelete = () => {
+    Swal.fire({
+        title: 'Estàs segur?',
+        text: "Aquesta acció és irreversible! Si continues, el teu restaurant serà eliminat permanentment.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, elimina\'l!',
+        cancelButtonText: 'Cancel·la'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteRestaurant();
+        }
+    });
+};
+
+const deleteRestaurant = () => {
+    isDeleting.value = true;
+
+    Inertia.delete(route('restaurants.destroy', { id: restaurant.value.id }), {
+        onSuccess: () => {
+            isDeleting.value = false;
+            showDeleteDialog.value = false;
+
+            // Show success notification
+            Swal.fire({
+                icon: 'success',
+                title: 'Restaurant eliminat',
+                text: 'El teu restaurant ha sigut eliminat correctament',
+                confirmButtonText: 'Acceptar'
+            });
+
+            // Redirect to home page after successful deletion
+            Inertia.visit(route('home'));
+        },
+        onError: (errors) => {
+            isDeleting.value = false;
+            showDeleteDialog.value = false;
+
+            // Show error notification
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No s\'ha pogut eliminar el restaurant. Intenta-ho més tard.',
+                confirmButtonText: 'Entès'
+            });
+
+            console.error('Error deleting restaurant:', errors);
+        }
+    });
+};
 onMounted(() => {
     fetchUserRestaurant(props.user.id);
 });
@@ -210,6 +268,24 @@ function closePopup() {
 </script>
 
 <style scoped>
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #da190b;
+}
+
+.delete-icon {
+    margin-right: 5px;
+}
 .account-config-page {
     background-color: #f8f9fa;
     min-height: 100vh;

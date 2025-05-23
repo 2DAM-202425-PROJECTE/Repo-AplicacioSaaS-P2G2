@@ -1,13 +1,7 @@
 <template>
 
-        <div class="plats-page">
-            <div class="plats-container">
                 <div class="page-header">
                     <div class="header-content">
-                        <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
-                            <span class="back-icon">←</span>
-                            <span>Tornar al Restaurant</span>
-                        </Link>
                         <h1 class="page-title">Gestionar Carta</h1>
                         <p class="page-subtitle">Afegeix i edita els plats del teu restaurant: {{ restaurant.nom }}</p>
                     </div>
@@ -149,9 +143,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
 </template>
 
 <script setup>
@@ -272,20 +263,7 @@ const removePlat = (platId, index) => {
 </script>
 
 <style scoped>
-.plats-page {
-    background-color: #f8f9fa;
-    min-height: 100vh;
-    padding: 40px 20px;
-}
 
-.plats-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-}
 
 .page-header {
     background: linear-gradient(135deg, #FF5A5F, #FF8A8E);
@@ -293,26 +271,6 @@ const removePlat = (platId, index) => {
     padding: 40px;
 }
 
-.back-button {
-    display: inline-flex;
-    align-items: center;
-    color: white;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: 30px;
-    margin-bottom: 15px;
-    transition: all 0.3s ease;
-}
-
-.back-button:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: translateX(-5px);
-}
-
-.back-icon {
-    margin-right: 8px;
-    font-size: 1.2rem;
-}
 
 .page-title {
     font-size: 2.5rem;
@@ -377,6 +335,8 @@ const removePlat = (platId, index) => {
     position: relative;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
 }
 
 .plat-card:hover {
@@ -407,6 +367,7 @@ const removePlat = (platId, index) => {
     font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
+    order: -1; /* Added */
 }
 
 .plat-description {
@@ -473,6 +434,7 @@ const removePlat = (platId, index) => {
     font-size: 1.2rem;
     opacity: 0.6;
     transition: all 0.3s ease;
+    order: -1;
 }
 
 .delete-button:hover {

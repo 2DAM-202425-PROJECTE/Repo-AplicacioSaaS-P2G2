@@ -245,22 +245,18 @@ export default {
         const submitForm = () => {
             isSubmitting.value = true;
 
-            // Crear un FormData para enviar archivos
-            const formData = new FormData();
+            let formData = new FormData();
             for (const key in form) {
-                if (form[key] !== null && form[key] !== undefined) {
-                    formData.append(key, form[key]);
-                }
+                formData.append(key, form[key]);
             }
 
             Inertia.post(route('restaurants.store'), formData, {
                 onSuccess: () => {
                     isSubmitting.value = false;
-                    Inertia.visit(route('restaurants.index'));
                 },
                 onError: (errors) => {
                     isSubmitting.value = false;
-                    console.error("Error creating restaurant:", errors);
+                    console.error('Error submitting form:', errors);
                 },
             });
         };

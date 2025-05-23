@@ -92,7 +92,12 @@
                         <div v-for="restaurant in paginatedRestaurants" :key="restaurant.id"
                              class="restaurant-card">
                             <div class="restaurant-image-container">
-                                <img :src="`/storage/${restaurant.profile_image}`" alt="Restaurant Image" class="restaurant-image">
+                                <img
+                                    :src="`/storage/${restaurant.profile_image}`"
+                                    class="restaurant-image"
+                                    :alt="restaurant.nom"
+                                    @error="handleImageError($event, restaurant)"
+                                >
                                 <button @click.prevent="toggleFavorite(restaurant)" class="favorite-button" :class="{ 'is-favorite': isFavorite(restaurant.id) }">
                                     <i class="fas fa-heart"></i>
                                 </button>
@@ -568,23 +573,27 @@
 
 <script>
 import Layout from '@/Layouts/Layout.vue';
-import { route } from "ziggy-js";
-import { usePage, Link } from "@inertiajs/vue3";
+import {route} from "ziggy-js";
+import {Link, usePage} from "@inertiajs/vue3";
 import Swal from "sweetalert2";
 import axios from 'axios';
-import { reactive, ref } from "vue";
+import {reactive} from "vue";
+
 
 export default {
     components: {
         Layout,
         Link
     },
+
+
     props: {
         restaurants: Array,
         municipios: Array,
         tipusCuina: Array,
         plats: Array,
     },
+
     data() {
         return {
             filters: {
@@ -632,6 +641,17 @@ export default {
 
             this.currentPage = 1;
         },
+        handleImageError(event, restaurant) {
+            if (event.target.src.includes('profile_images')) {
+                console.log(`Fixing path for ${restaurant.nom}`);
+                const newPath = event.target.src.replace('profile_images', 'restaurants');
+                event.target.src = newPath;
+                return;
+            }
+
+            // Default fallback image
+            event.target.src = '/images/restaurants/default-restaurant.jpg';
+        },
         nextPage() {
             if (this.currentPage < this.totalPages) {
                 this.currentPage++;
@@ -642,6 +662,7 @@ export default {
                 this.currentPage--;
             }
         },
+
 
         async toggleFavorite(restaurant) {
             try {

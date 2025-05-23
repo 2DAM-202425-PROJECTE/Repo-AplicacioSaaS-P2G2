@@ -1,3 +1,5 @@
+<!--Fitxer obsolet-->
+
 <template>
     <layout>
         <div class="management-page">

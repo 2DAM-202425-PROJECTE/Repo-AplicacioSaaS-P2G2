@@ -74,15 +74,15 @@ class RestaurantController extends Controller
         ]);
 
         if ($request->hasFile('profile_image')) {
-            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $path = $request->file('profile_image')->store('restaurants', 'public');
             $validatedData['profile_image'] = $path;
         }
         $validatedData['user_id'] = Auth::id();
-        Restaurant::create($validatedData);
+        $restaurant = Restaurant::create($validatedData);
 
 
 
-        return redirect()->route('restaurants.index');
+        return redirect()->route('restaurants.show', ['id' => $restaurant->id]);
     }
 
     public function show($id): Response
@@ -149,7 +149,7 @@ class RestaurantController extends Controller
             if ($restaurant->profile_image) {
                 Storage::disk('public')->delete($restaurant->profile_image);
             }
-            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $path = $request->file('profile_image')->store('restaurants', 'public');
             $dataToUpdate['profile_image'] = $path;
         }
 
