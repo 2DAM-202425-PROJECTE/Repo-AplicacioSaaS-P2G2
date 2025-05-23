@@ -1,210 +1,212 @@
 <template>
-    <layout>
-        <div class="restaurant-reservations-page">
-            <div class="container">
-                <div class="page-header">
-                    <div class="header-content">
-                        <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
-                            <span class="back-icon">←</span>
-                            <span>Tornar al Restaurant</span>
-                        </Link>
-                        <h1 class="page-title">Reserves de {{ restaurant.nom }}</h1>
-                        <p class="page-subtitle">Gestiona les reserves del teu restaurant</p>
+
+    <div class="restaurant-reservations-page">
+        <div class="container">
+            <div class="page-header">
+                <div class="header-content">
+                    <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
+                        <span class="back-icon">←</span>
+                        <span>Tornar al Restaurant</span>
+                    </Link>
+                    <h1 class="page-title">Reserves de {{ restaurant.nom }}</h1>
+                    <p class="page-subtitle">Gestiona les reserves del teu restaurant</p>
+                </div>
+            </div>
+
+            <div class="reservations-container">
+                <div class="reservations-filters">
+                    <div class="filters-section">
+                        <div class="filter-group">
+                            <label for="date-filter" class="filter-label">Filtrar per data</label>
+                            <div class="filter-input-container">
+                                <span class="filter-icon">📅</span>
+                                <input
+                                    type="date"
+                                    id="date-filter"
+                                    v-model="filters.date"
+                                    class="filter-input"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="status-filter" class="filter-label">Estat</label>
+                            <div class="filter-input-container">
+                                <span class="filter-icon">🔍</span>
+                                <select id="status-filter" v-model="filters.status" class="filter-input">
+                                    <option value="all">Tots els estats</option>
+                                    <option value="0">Pendents</option>
+                                    <option value="1">Confirmades</option>
+                                    <option value="2">Cancel·lades</option>
+                                    <option value="3">Completades</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="search-filter" class="filter-label">Cerca</label>
+                            <div class="filter-input-container">
+                                <span class="filter-icon">🔍</span>
+                                <input
+                                    type="text"
+                                    id="search-filter"
+                                    v-model="filters.search"
+                                    class="filter-input"
+                                    placeholder="Cerca per telèfon..."
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filters-actions">
+                        <button @click="resetFilters" class="reset-button">
+                            <span class="button-icon">↺</span>
+                            <span>Reiniciar</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="reservations-container">
-                    <div class="reservations-filters">
-                        <div class="filters-section">
-                            <div class="filter-group">
-                                <label for="date-filter" class="filter-label">Filtrar per data</label>
-                                <div class="filter-input-container">
-                                    <span class="filter-icon">📅</span>
-                                    <input
-                                        type="date"
-                                        id="date-filter"
-                                        v-model="filters.date"
-                                        class="filter-input"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="status-filter" class="filter-label">Estat</label>
-                                <div class="filter-input-container">
-                                    <span class="filter-icon">🔍</span>
-                                    <select id="status-filter" v-model="filters.status" class="filter-input">
-                                        <option value="all">Tots els estats</option>
-                                        <option value="0">Pendents</option>
-                                        <option value="1">Confirmades</option>
-                                        <option value="2">Cancel·lades</option>
-                                        <option value="3">Completades</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="search-filter" class="filter-label">Cerca</label>
-                                <div class="filter-input-container">
-                                    <span class="filter-icon">🔍</span>
-                                    <input
-                                        type="text"
-                                        id="search-filter"
-                                        v-model="filters.search"
-                                        class="filter-input"
-                                        placeholder="Cerca per telèfon..."
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="filters-actions">
-                            <button @click="resetFilters" class="reset-button">
-                                <span class="button-icon">↺</span>
-                                <span>Reiniciar</span>
-                            </button>
-                        </div>
+                <div class="reservations-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ countByStatus(0) }}</div>
+                        <div class="stat-label">Pendents</div>
                     </div>
-
-                    <div class="reservations-stats">
-                        <div class="stat-card">
-                            <div class="stat-value">{{ countByStatus(0) }}</div>
-                            <div class="stat-label">Pendents</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">{{ countByStatus(1) }}</div>
-                            <div class="stat-label">Confirmades</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">{{ countByStatus(2) }}</div>
-                            <div class="stat-label">Cancel·lades</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">{{ countByStatus(3) }}</div>
-                            <div class="stat-label">Completades</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">{{ countToday() }}</div>
-                            <div class="stat-label">Avui</div>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ countByStatus(1) }}</div>
+                        <div class="stat-label">Confirmades</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ countByStatus(2) }}</div>
+                        <div class="stat-label">Cancel·lades</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ countByStatus(3) }}</div>
+                        <div class="stat-label">Completades</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ countToday() }}</div>
+                        <div class="stat-label">Avui</div>
+                    </div>
+                </div>
 
-                    <div v-if="filteredReserves.length > 0" class="reservations-table-container">
-                        <table class="reservations-table">
-                            <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Hora</th>
-                                <th>Telèfon</th>
-                                <th>Persones</th>
-                                <th>Estat</th>
-                                <th>Ubicació</th>
-                                <th>Sol·licituds</th>
-                                <th>Accions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <template v-for="reserva in filteredReserves" :key="reserva.id">
-                                <tr
-                                    :class="{
+                <div v-if="filteredReserves.length > 0" class="reservations-table-container">
+                    <table class="reservations-table">
+                        <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Hora</th>
+                            <th>Telèfon</th>
+                            <th>Persones</th>
+                            <th>Estat</th>
+                            <th>Ubicació</th>
+                            <th>Sol·licituds</th>
+                            <th>Accions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template v-for="reserva in filteredReserves" :key="reserva.id">
+                            <tr
+                                :class="{
                                             'expanded': expandedRowId === reserva.id,
                                             'status-pending': reserva.estat === 0,
                                             'status-confirmed': reserva.estat === 1,
                                             'status-cancelled': reserva.estat === 2,
                                             'status-completed': reserva.estat === 3
                                         }"
-                                    @click="toggleExpanded(reserva.id)"
-                                >
-                                    <td>{{ formatDate(reserva.data) }}</td>
-                                    <td>{{ formatHour(reserva.hora) }}</td>
-                                    <td>{{ reserva.telefon }}</td>
-                                    <td>{{ reserva.num_persones }}</td>
-                                    <td>
-                                        <select
-                                            v-model="reserva.estat"
-                                            class="status-select"
-                                            :class="getStatusClass(reserva.estat)"
-                                            @change="updateStatus(reserva.id, reserva.estat)"
-                                            @click.stop
-                                        >
-                                            <option :value="0">Pendent</option>
-                                            <option :value="1">Confirmada</option>
-                                            <option :value="2">Cancel·lada</option>
-                                            <option :value="3">Completada</option>
-                                        </select>
-                                    </td>
-                                    <td>{{ reserva.terrassa ? 'Terrassa' : 'Interior' }}</td>
-                                    <td>
+                                @click="toggleExpanded(reserva.id)"
+                            >
+                                <td>{{ formatDate(reserva.data) }}</td>
+                                <td>{{ formatHour(reserva.hora) }}</td>
+                                <td>{{ reserva.telefon }}</td>
+                                <td>{{ reserva.num_persones }}</td>
+                                <td>
+                                    <select
+                                        v-model="reserva.estat"
+                                        class="status-select"
+                                        :class="getStatusClass(reserva.estat)"
+                                        @change="updateStatus(reserva.id, reserva.estat)"
+                                        @click.stop
+                                    >
+                                        <option :value="0">Pendent</option>
+                                        <option :value="1">Confirmada</option>
+                                        <option :value="2">Cancel·lada</option>
+                                        <option :value="3">Completada</option>
+                                    </select>
+                                </td>
+                                <td>{{ reserva.terrassa ? 'Terrassa' : 'Interior' }}</td>
+                                <td>
                                             <span v-if="reserva.solicituds" class="has-notes" @click.stop="toggleExpanded(reserva.id)">
                                                 <span class="notes-icon">📝</span>
                                                 <span>Veure notes</span>
                                             </span>
-                                        <span v-else>-</span>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="table-actions">
-                                            <ModalLink :href="route('reserves.edit', { id: reserva.id })">
-                                                <button class="action-button edit-button" @click.stop>
-                                                    <span class="action-icon">✏️</span>
-                                                </button>
-                                            </ModalLink>
-                                            <ModalLink :href="route('reserves.delete', { id: reserva.id })">
-                                                <button class="action-button delete-button" @click.stop>
-                                                    <span class="action-icon">🗑️</span>
-                                                </button>
-                                            </ModalLink>
+                                    <span v-else>-</span>
+                                </td>
+                                <td class="actions-cell">
+                                    <ModalLink
+                                        :href="route('reserves.edit', { id: reserva.id })"
+                                        class="rounded-md hover:bg-blue-200 py-2 px-1 mr-1"
+                                        @click.stop
+                                    >
+                                        <span class="action-icon">✏️</span>
+                                    </ModalLink>
+
+                                    <ModalLink
+                                        :href="route('reserves.delete', { id: reserva.id })"
+                                        class="rounded-md hover:bg-red-200 py-2 px-1"
+                                        @click.stop
+                                    >
+                                        <span class="action-icon">🗑️</span>
+                                    </ModalLink>
+                                </td>
+                            </tr>
+                            <tr v-if="expandedRowId === reserva.id" class="expanded-row">
+                                <td colspan="8">
+                                    <div class="expanded-content">
+                                        <div class="expanded-section">
+                                            <h3 class="expanded-title">Sol·licituds Especials</h3>
+                                            <p class="expanded-text">{{ reserva.solicituds || 'Cap sol·licitud especial' }}</p>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr v-if="expandedRowId === reserva.id" class="expanded-row">
-                                    <td colspan="8">
-                                        <div class="expanded-content">
-                                            <div class="expanded-section">
-                                                <h3 class="expanded-title">Sol·licituds Especials</h3>
-                                                <p class="expanded-text">{{ reserva.solicituds || 'Cap sol·licitud especial' }}</p>
-                                            </div>
-                                            <div class="expanded-section">
-                                                <h3 class="expanded-title">Informació Addicional</h3>
-                                                <div class="expanded-info">
-                                                    <div class="info-item">
-                                                        <span class="info-label">ID de Reserva:</span>
-                                                        <span class="info-value">{{ reserva.id }}</span>
-                                                    </div>
-                                                    <div class="info-item">
-                                                        <span class="info-label">Creada el:</span>
-                                                        <span class="info-value">{{ formatDateTime(reserva.created_at) }}</span>
-                                                    </div>
-                                                    <div class="info-item">
-                                                        <span class="info-label">Última actualització:</span>
-                                                        <span class="info-value">{{ formatDateTime(reserva.updated_at) }}</span>
-                                                    </div>
+                                        <div class="expanded-section">
+                                            <h3 class="expanded-title">Informació Addicional</h3>
+                                            <div class="expanded-info">
+                                                <div class="info-item">
+                                                    <span class="info-label">ID de Reserva:</span>
+                                                    <span class="info-value">{{ reserva.id }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Creada el:</span>
+                                                    <span class="info-value">{{ formatDateTime(reserva.created_at) }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Última actualització:</span>
+                                                    <span class="info-value">{{ formatDateTime(reserva.updated_at) }}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            </template>
-                            </tbody>
-                        </table>
-                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <div v-else class="empty-reservations">
-                        <div class="empty-icon">📅</div>
-                        <h3 class="empty-title">No hi ha reserves que coincideixin amb els filtres</h3>
-                        <p class="empty-text">Prova a canviar els filtres o espera a rebre noves reserves.</p>
-                    </div>
+                <div v-else class="empty-reservations">
+                    <div class="empty-icon">📅</div>
+                    <h3 class="empty-title">No hi ha reserves que coincideixin amb els filtres</h3>
+                    <p class="empty-text">Prova a canviar els filtres o espera a rebre noves reserves.</p>
                 </div>
             </div>
         </div>
-    </layout>
-    </template>
+    </div>
+</template>
 
 <script setup>
 import { defineProps, ref, computed } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
 import { Link, router } from "@inertiajs/vue3";
-import { ModalLink } from '@inertiaui/modal-vue';
+import { Modal, ModalLink } from '@inertiaui/modal-vue';
 
 const props = defineProps({
     restaurant: Object,
@@ -615,7 +617,7 @@ const updateStatus = (id, newStatus) => {
 }
 
 .action-icon {
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .expanded-row {

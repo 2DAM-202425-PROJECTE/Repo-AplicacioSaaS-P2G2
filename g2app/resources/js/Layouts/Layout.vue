@@ -140,7 +140,7 @@
             </div>
         </footer>
     </div>
-    
+
 </template>
 
 <script setup>
@@ -148,6 +148,16 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import axios from 'axios';
+
+const hasRestaurant = computed(() => {
+    return page.props.auth.user && page.props.auth.user.restaurant;
+});
+const restaurantId = computed(() => {
+    if (hasRestaurant.value) {
+        return page.props.auth.user.restaurant.id;
+    }
+    return null;
+});
 
 // Referencias para el DOM
 const appLayout = ref(null);

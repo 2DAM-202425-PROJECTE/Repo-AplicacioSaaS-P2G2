@@ -84,6 +84,11 @@
                                         Veure Perfil Públic
                                     </Link>
                                 </div>
+                                <div class="mt-6">
+                                <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 text-white px-4 py-2 rounded" method="GET">
+                                    Eliminar Negoci
+                                </Link>
+                            </div>
                             </div>
 
                             <div v-else class="empty-business">
@@ -95,11 +100,7 @@
                                     Crear Restaurant
                                 </Link>
                             </div>
-                            <div class="mt-6">
-                                <Link :href="route('restaurants.delete', { id: restaurant.id })" class="bg-red-500 text-white px-4 py-2 rounded" method="GET">
-                                    Eliminar Negoci
-                                </Link>
-                            </div>
+
                         </div>
 
                         <div v-else class="section client-section">

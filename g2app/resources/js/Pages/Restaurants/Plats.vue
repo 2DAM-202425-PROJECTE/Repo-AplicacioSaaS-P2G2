@@ -1,5 +1,5 @@
 <template>
-    <layout>
+
         <div class="plats-page">
             <div class="plats-container">
                 <div class="page-header">
@@ -151,7 +151,7 @@
                 </div>
             </div>
         </div>
-    </layout>
+
 </template>
 
 <script setup>

@@ -1,7 +1,7 @@
 <template>
-    <Modal v-slot="{ close }" max-width="xl" panel-classes="edit-modal">
+    <Modal v-slot="{ close }" max-width="xl" panel-classes="bg-white rounded-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header flex flex-row items-center justify-center">
                 <div class="modal-icon">✏️</div>
                 <h2 class="modal-title">Modificar Reserva</h2>
             </div>
@@ -140,25 +140,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="solicituds" class="form-label">Sol·licituds Especials</label>
-                        <textarea
-                            v-model="form.solicituds"
-                            id="solicituds"
-                            class="form-textarea"
-                            placeholder="Indica'ns qualsevol sol·licitud especial (al·lèrgies, celebracions, etc.)"
-                        ></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="notes_restaurant" class="form-label">Notes Internes (només visibles pel restaurant)</label>
-                        <textarea
-                            v-model="form.notes_restaurant"
-                            id="notes_restaurant"
-                            class="form-textarea"
-                            placeholder="Afegeix notes internes sobre aquesta reserva"
-                        ></textarea>
-                    </div>
                 </div>
 
                 <div class="modal-actions">
@@ -234,7 +215,7 @@ const updateReserva = (close) => {
 }
 
 .modal-icon {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 15px;
 }
 
@@ -281,7 +262,7 @@ const updateReserva = (close) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px 10px;
+    padding: 10px 5px;
     border: 2px solid #eee;
     border-radius: 10px;
     cursor: pointer;
@@ -299,7 +280,7 @@ const updateReserva = (close) => {
 }
 
 .status-icon {
-    font-size: 2rem;
+    font-size: 1rem;
     margin-bottom: 10px;
 }
 
