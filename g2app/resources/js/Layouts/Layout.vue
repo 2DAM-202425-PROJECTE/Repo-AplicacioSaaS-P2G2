@@ -1,4 +1,8 @@
 <template>
+    <Head>
+        <title>{{ pageTitle }}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
+    </Head>
     <div class="app-layout" ref="appLayout">
         <!-- Barra de navegación -->
         <nav class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
@@ -52,7 +56,10 @@
                                         <span class="dropdown-icon">⚙️</span>
                                         <span>Configuració</span>
                                     </a>
-
+                                    <Link v-if="userRestaurant" :href="route('restaurant.management', { id: userRestaurant.id })" class="dropdown-item">
+                                        <i class="fas fa-store dropdown-icon"></i>
+                                        Gestió Restaurant
+                                    </Link>
                                     <div class="dropdown-divider"></div>
 
                                     <button @click="confirmLogout" class="dropdown-item logout-item">
@@ -158,7 +165,17 @@ const restaurantId = computed(() => {
     }
     return null;
 });
+const props = defineProps({
+    title: {
+        type: String,
+        default: ''
+    }
+});
 
+// Create a computed property for the page title
+const pageTitle = computed(() => {
+    return props.title ? `G2Restaurants - ${props.title}` : 'G2Restaurants';
+});
 // Referencias para el DOM
 const appLayout = ref(null);
 const mainContent = ref(null);
@@ -171,6 +188,8 @@ const showLogoutConfirm = ref(false);
 const isDarkMode = ref(false);
 const dropdown = ref(null);
 const isNavigating = ref(false);
+const showDropdown = ref(false);
+const userRestaurant = ref(null);
 
 // Obtener información del usuario autenticado
 const page = usePage();
@@ -179,6 +198,16 @@ const userName = computed(() => isAuthenticated.value ? page.props.auth.user.nam
 const userInitials = computed(() => {
     if (!isAuthenticated.value) return '';
     return userName.value.split(' ').map(n => n[0]).join('').toUpperCase();
+});
+
+onMounted(async () => {
+    try {
+        const userId = usePage().props.auth.user.id;
+        const response = await axios.get(route('user.restaurant', { userId }));
+        userRestaurant.value = response.data.restaurant;
+    } catch (error) {
+        console.error('Error fetching user restaurant:', error);
+    }
 });
 
 // Comprobar si la ruta actual coincide con la proporcionada

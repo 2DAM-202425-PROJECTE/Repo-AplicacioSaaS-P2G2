@@ -1,10 +1,6 @@
 <template>
-    <Modal v-slot="{ close }" max-width="xl" panel-classes="cancel-modal">
+    <Modal v-slot="{ close }" max-width="xl" panel-classes="bg-white rounded-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-icon">⚠️</div>
-                <h2 class="modal-title">Cancel·lar Reserva</h2>
-            </div>
 
             <div class="modal-body">
                 <p class="modal-message">
@@ -44,7 +40,7 @@
 import { defineProps, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { Modal } from '@inertiaui/modal-vue';
-import { route } from 'vue-router'; // Import the route function
+import { route } from "ziggy-js"
 
 const props = defineProps({
     reservaId: {
@@ -91,7 +87,7 @@ const cancelReserva = (close) => {
 }
 
 .modal-icon {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 15px;
 }
 

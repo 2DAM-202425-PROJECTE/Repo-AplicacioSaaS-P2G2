@@ -268,7 +268,7 @@ const removePlat = (platId, index) => {
 .page-header {
     background: linear-gradient(135deg, #FF5A5F, #FF8A8E);
     color: white;
-    padding: 40px;
+    padding: 14px;
 }
 
 
