@@ -1,7 +1,7 @@
 <template>
-    <Modal v-slot="{ close }" max-width="xl" panel-classes="edit-modal">
+    <Modal v-slot="{ close }" max-width="xl" panel-classes="bg-white rounded-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header flex flex-row items-center justify-center">
                 <div class="modal-icon">✏️</div>
                 <h2 class="modal-title">Modificar Reserva</h2>
             </div>
@@ -133,7 +133,7 @@
 import { defineProps, reactive, ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { Modal } from '@inertiaui/modal-vue';
-import { route } from 'vue-router'; // Import the route function
+import { route } from "ziggy-js";
 
 const props = defineProps({
     reserva: {
@@ -186,8 +186,9 @@ const updateReserva = (close) => {
 }
 
 .modal-icon {
-    font-size: 3rem;
+    font-size: 1.5rem;
     margin-bottom: 15px;
+    margin-right: 10px;
 }
 
 .modal-title {

@@ -105,7 +105,7 @@
                                     <span>Veure Restaurant</span>
                                 </Link>
 
-                                <div class="action-buttons">
+
                                     <ModalLink
                                         v-if="canEdit(reserva.estat)"
                                         :href="route('user.reserves.edit', { id: reserva.id })"
@@ -123,7 +123,7 @@
                                         <span class="button-icon">❌</span>
                                         <span>Cancel·lar</span>
                                     </ModalLink>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
 import { defineProps, ref, computed } from 'vue';
 import Layout from '@/Layouts/Layout.vue';
 import { route } from "ziggy-js";
-import { router, Link } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import { ModalLink } from "@inertiaui/modal-vue";
 
 const props = defineProps({
@@ -343,13 +343,6 @@ const getEmptyMessage = () => {
     align-items: center;
 }
 
-.restaurant-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 15px;
-}
 
 .restaurant-name {
     font-size: 1.2rem;
@@ -371,25 +364,6 @@ const getEmptyMessage = () => {
     font-weight: 600;
 }
 
-.status-pending {
-    background-color: #fff8e1;
-    color: #f57f17;
-}
-
-.status-confirmed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.status-cancelled {
-    background-color: #ffebee;
-    color: #c62828;
-}
-
-.status-completed {
-    background-color: #e3f2fd;
-    color: #1565c0;
-}
 
 .reservation-details {
     display: grid;
@@ -453,10 +427,6 @@ const getEmptyMessage = () => {
     border-top: 1px solid #eee;
 }
 
-.action-buttons {
-    display: flex;
-    gap: 10px;
-}
 
 .action-button {
     display: inline-flex;
