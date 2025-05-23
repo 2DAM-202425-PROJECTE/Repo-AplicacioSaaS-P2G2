@@ -4,10 +4,6 @@
         <div class="container">
             <div class="page-header">
                 <div class="header-content">
-                    <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
-                        <span class="back-icon">←</span>
-                        <span>Tornar al Restaurant</span>
-                    </Link>
                     <h1 class="page-title">Reserves de {{ restaurant.nom }}</h1>
                     <p class="page-subtitle">Gestiona les reserves del teu restaurant</p>
                 </div>

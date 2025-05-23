@@ -1,6 +1,5 @@
 <template>
-        <div class="edit-restaurant-page">
-            <div class="edit-container">
+
                 <div class="page-header">
                     <div class="header-content">
                         <h1 class="page-title">Editar Restaurant</h1>
@@ -179,8 +178,7 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
+
 
 </template>
 
@@ -242,7 +240,7 @@ const submitAdminForm = () => {
     }).post(route('restaurants.update', { restaurant: props.restaurant.id }), {
         onSuccess: () => {
             isSubmitting.value = false;
-            Inertia.visit(route('restaurants.show', { id: props.restaurant.id }));
+            Inertia.reload(); // Reload the current page
         },
         onError: (errors) => {
             isSubmitting.value = false;
