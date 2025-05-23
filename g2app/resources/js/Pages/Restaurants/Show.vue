@@ -243,13 +243,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="restaurant-map">
-                            <div class="map-placeholder">
-                                <div class="map-icon">📍</div>
-                                <div class="map-text">Mapa de localització</div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

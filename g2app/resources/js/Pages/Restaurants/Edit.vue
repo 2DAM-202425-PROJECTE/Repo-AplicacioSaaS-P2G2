@@ -1,13 +1,8 @@
 <template>
-    <layout>
         <div class="edit-restaurant-page">
             <div class="edit-container">
                 <div class="page-header">
                     <div class="header-content">
-                        <Link :href="route('restaurants.show', { id: restaurant.id })" class="back-button">
-                            <span class="back-icon">←</span>
-                            <span>Tornar al Restaurant</span>
-                        </Link>
                         <h1 class="page-title">Editar Restaurant</h1>
                         <p class="page-subtitle">Actualitza la informació del teu restaurant</p>
                     </div>
@@ -186,7 +181,7 @@
                 </form>
             </div>
         </div>
-    </layout>
+
 </template>
 
 <script setup>

@@ -50,7 +50,6 @@
                         <div v-for="reserva in filteredReserves" :key="reserva.id" class="reservation-card">
                             <div class="reservation-header">
                                 <div class="restaurant-info">
-                                    <img :src="`/storage/${reserva.restaurant.profile_image}`" alt="Restaurant" class="restaurant-image" />
                                     <div class="restaurant-details">
                                         <h3 class="restaurant-name">{{ reserva.restaurant.nom }}</h3>
                                         <p class="restaurant-type">{{ reserva.restaurant.tipus_cuina }}</p>
