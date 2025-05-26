@@ -64,7 +64,6 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'descripcio' => 'required|string',
             'telefon' => 'required|string|max:20',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'tipus_cuina' => 'required|string',
             'hora_obertura' => 'required|date_format:H:i',
             'hora_tancament' => 'required|date_format:H:i',
@@ -76,6 +75,9 @@ class RestaurantController extends Controller
         if ($request->hasFile('profile_image')) {
             $path = $request->file('profile_image')->store('restaurants', 'public');
             $validatedData['profile_image'] = $path;
+        } else {
+
+            $validatedData['profile_image'] = 'restaurants/default-restaurant.jpg';
         }
         $validatedData['user_id'] = Auth::id();
         $restaurant = Restaurant::create($validatedData);
