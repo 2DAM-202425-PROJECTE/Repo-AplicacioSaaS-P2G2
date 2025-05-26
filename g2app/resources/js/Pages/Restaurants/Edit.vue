@@ -124,7 +124,7 @@
 
                             <div class="form-row">
                                 <div class="form-group half">
-                                    <label for="hora_obertura" class="form-label">Hora d'Obertura</label>
+                                    <label for="hora_obertura" class="form-label">Hora Obertura</label>
                                     <input
                                         v-model="form.hora_obertura"
                                         id="hora_obertura"
@@ -135,7 +135,7 @@
                                 </div>
 
                                 <div class="form-group half">
-                                    <label for="hora_tancament" class="form-label">Hora de Tancament</label>
+                                    <label for="hora_tancament" class="form-label">Hora Tancament</label>
                                     <input
                                         v-model="form.hora_tancament"
                                         id="hora_tancament"

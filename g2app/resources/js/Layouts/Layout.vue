@@ -57,7 +57,7 @@
                                         <span>Configuració</span>
                                     </Link>
                                     <Link v-if="userRestaurant" :href="route('restaurant.management', { id: userRestaurant.id })" class="dropdown-item">
-
+                                        <span class="dropdown-icon">🏢</span>
                                         Gestió Restaurant
                                     </Link>
                                     <div class="dropdown-divider"></div>
